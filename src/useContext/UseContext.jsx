@@ -25,7 +25,9 @@ const UseContext = ({children}) => {
 
     
     useEffect(()=>{
-
+         if (location.pathname === "/login") {
+            return;
+         }
       const HandelTryConnect   = async(data)=>{
          if(data.reason==="TOKEN_EXPIRED"){
 
@@ -61,7 +63,9 @@ const UseContext = ({children}) => {
        
         const initializeUserDataIFweNeedIt  = async () => {
         
-
+            if (location.pathname === "/login") {
+               return;
+            }
          try{
 
 
