@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./Card.css"
 import { useNavigate } from 'react-router-dom'
 import { JoystickIcon } from 'lucide-react'
@@ -7,14 +7,24 @@ import { useAuth } from '../useContext/UseContext'
 const Card = ({info}) => {
   
   const Nav = useNavigate()
-  const HandelJoin = ()=>{Nav("/home")}
+  const [load,setLoad] = useState(false)
+  
  
 
   const {id} = useAuth()
  
-
+  const   HandelRotueUser = ()=>{
+    setLoad(true)
+     Nav(`/home/Scores/${info.roomId}`)
+  
+  }
     
   return (
+
+   <>
+   
+
+
     <div className='Card'  
 
     style={{...(id == info.ownerId && {
@@ -82,7 +92,7 @@ const Card = ({info}) => {
         </div>
 
         <div className="__button_workingon">
-          <button onClick={()=>Nav(`/home/Scores/${info.roomId}`)}>Join</button>
+          <button onClick={()=>HandelRotueUser()}>{load ? 'waiting':'Join'}</button>
           {
             id==info.ownerId &&  <div className="divOption">
             <img src='/myteamPics/svgicon/option.svg'/>
@@ -92,6 +102,8 @@ const Card = ({info}) => {
  
 
     </div>
+    
+   </>
   )
 }
 

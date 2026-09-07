@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import   { useEffect, useState } from 'react'
 import "./MyTeam.css"
 import { useNavigate } from 'react-router-dom'
 import Card from '../Component/Card'
-import { ArrowBigDown, ArrowLeft, ArrowRight, Bitcoin, Compass, Cone, Plus, RefreshCcw, Search, X } from 'lucide-react'
+import {   ArrowRight,    Compass,   Plus,     X } from 'lucide-react'
 import { useAuth } from '../useContext/UseContext'
-import { RefreshTheToken } from '../RefreshToken/RefrshTokenL'
+ 
 import axiosClient from '../axios/endPoint'
-import socket from '../socketClient/socket'
+ 
 import Online from '../online/Online'
 import CardSkeleton from '../Loader/CardSkeleton'
 
 const MyTeam = () => {
     const [off,SetOff] = useState(true)
-    const {Username , id ,img , dispatch}  =  useAuth()
+    const {id}  =  useAuth()
     const [rooms,SetRooms] = useState([])
     const [isFollowRoom,SetisFollowRoom]= useState(false)
     const [Skeleton,SetSkeleten] = useState(false)
@@ -21,12 +21,7 @@ const MyTeam = () => {
 
 
     const Nav = useNavigate()
-    const HandelReturn = () =>{
-      if(id)return
-      Nav("/login")
-
-
-    }
+    
 
 
 
@@ -124,12 +119,12 @@ const MyTeam = () => {
 
         <div className="nav-option">
             <div className="first-nav-option">
-                <img src="./myTeamIcon/arrow.svg" alt="" onClick={()=>HandelReturn()} />
+                <img src="./myTeamIcon/arrow.svg" alt=""   />
                 <h1 onClick={()=>console.log("my id",id)}>My Team</h1>
             </div>
             <div className="seconde-nav-option">
 
-                 <img src="./myTeamIcon/search.svg" onPointerUp={()=>testRequest()} alt="" />
+                 <img src="./myTeamIcon/search.svg"  alt="" />
                  <img src="./myTeamIcon/Option.svg" alt="" />
 
             </div>
@@ -180,7 +175,7 @@ const MyTeam = () => {
 
 
   <div className="add__session bounce" onClick={()=>SetOff((prev)=>!prev)}>
-
+ 
     {off ?   <Plus size={25}/>  :  <X size={25}/>}
   </div>
 

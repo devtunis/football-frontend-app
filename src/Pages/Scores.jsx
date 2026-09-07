@@ -207,10 +207,11 @@ const Scores = () => {
         <h3>The pitch is waiting for your.⚽ </h3>
         <h3>Create a match and invite your freinds to play.</h3>
       </div>
-
-      <div className="content-button">
+ {
+  Permision && <div className="content-button">
         <button><Plus size={20}/> Create Match</button>
       </div>
+ }      
     </div>  
 </>
     }
@@ -245,26 +246,10 @@ const Scores = () => {
           
         }
   </div>
-  
-</>
-:<>
-<div className='findMatch-off'>
 
-  <img src='/finishedmatches/cup.png'/>
-  <h2>No finished matches yet</h2>
-  <p>Your post matches will appear here </p>
-  <p>after your complete a game</p>
- 
-</div>
 
-</>
-
- }
-
- 
       
-      
- {/* <div className="Section-cards">
+ <div className="Section-cards">
 
  
     <div className="news_card"> 
@@ -313,7 +298,26 @@ const Scores = () => {
  
  
  </div>
- */}
+
+
+</>
+:<>
+<div className='findMatch-off'>
+
+  <img src='/finishedmatches/cup.png'/>
+  <h2>No finished matches yet</h2>
+  <h3>Your post matches will appear here </h3>
+  <h3>after your complete a game</h3>
+ 
+</div>
+
+</>
+
+ }
+
+ 
+      
+
 
 
 {
