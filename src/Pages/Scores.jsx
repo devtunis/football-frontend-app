@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import   { useEffect, useState } from 'react'
 import "./scores.css"
 import CardInfo from "../Component/CardInfo.jsx"
 import FinshedMatches  from "../Component/FinshedMatches.jsx"
-import axios from "axios"
-import  use from "react"
-import { Cone, Plus, User } from 'lucide-react'
+ 
+ 
+import {  Plus   } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../useContext/UseContext.jsx'
 import PendingAcceptPersonRequest from './PendingAcceptPersonRequest.jsx'
-import axiosClient from '../axios/endPoint.js'
 import Online from '../online/Online.jsx'
+import  {use} from "../axios/usehook.js"
 const Scores = () => {
 
- const {Username , id ,img , dispatch}  =  useAuth()  
+ const {Username , id ,img }  =  useAuth()  
+ const [uncomingMatches,SetuncomingMatches]  = useState([])
+ const [finishedmatches,Setfinishedmatches]  = useState([])
+ const [Permision,SetPermision] = useState(false)
+
  const idRoom   = useParams()
   const Nav = useNavigate()
 
@@ -22,6 +26,33 @@ const Scores = () => {
       Nav("/login")
     }
   },[])
+
+
+  useEffect(()=>{
+  
+    const FetchUncomingMatches = async()=>{
+
+    const {err,data} = await use("/room/verifyAndBringData","post",{"roomId":idRoom.roomId})
+    if(err!=null)
+    {
+      console.log(err,"her")
+      if(!err.isMember){
+        Nav("/login")
+      }
+      return 
+    }
+
+    console.log(data)
+    SetuncomingMatches(data.uncomingMatches)
+    Setfinishedmatches(data.finishedmatches)
+    SetPermision(data.permision)
+    }
+
+    FetchUncomingMatches()
+    
+  },[])
+ 
+
 
  const [card,SetCard] = useState([
 
@@ -62,6 +93,10 @@ const Scores = () => {
 
  
 
+ 
+
+
+ 
  
 
     
@@ -151,9 +186,17 @@ const Scores = () => {
 
  
      <div className="viewAllList">
-{/*       
-       <CardInfo teamFull = {false}/>   */}
+      
+       
+       {
+        uncomingMatches.length>0  ? 
+        uncomingMatches.map((item)=>  <CardInfo key={item.matchId} data={item} teamFull = {false}/>    )
+        
+        
+        :
 
+        <>  
+   
 
     <div className="no-matches">
       <div className="logo-matches-assets">
@@ -168,14 +211,16 @@ const Scores = () => {
       <div className="content-button">
         <button><Plus size={20}/> Create Match</button>
       </div>
-    </div>
-
-
+    </div>  
+</>
+    }
 
 
       </div>  
 
 
+{
+  finishedmatches.length>0  ?  <>
 
     <div className="FinshedMatches">
       <div className="left">
@@ -191,22 +236,35 @@ const Scores = () => {
     </div>
 
   
-  <div className="Banner-Finsih">
-            <FinshedMatches/>
-            <FinshedMatches/>
-            <FinshedMatches/>
-            <FinshedMatches/>
-            <FinshedMatches/>
+  <div className="Banner-Finsih" >
+         
+      
+        {
+       
+          finishedmatches.map((item)=>    <FinshedMatches key={item.finishedId} data={item}/>)
+          
+        }
   </div>
+  
+</>
+:<>
+<div className='findMatch-off'>
 
-
-
+  <img src='/finishedmatches/cup.png'/>
+  <h2>No finished matches yet</h2>
+  <p>Your post matches will appear here </p>
+  <p>after your complete a game</p>
  
+</div>
+
+</>
+
+ }
 
  
       
       
- <div className="Section-cards">
+ {/* <div className="Section-cards">
 
  
     <div className="news_card"> 
@@ -255,34 +313,39 @@ const Scores = () => {
  
  
  </div>
+ */}
 
 
-
-
-<div className="container-card-choise">
- 
-
-
-
-
-
-
-  <div onClick={()=>Nav("/CreateMatche")}
-  className={`first_box_1 bounce ${off && 'disable'}`}>
-    <h1>Match</h1>
-    <img src='/myTeamIcon/blueCreate.svg'/>
+{
+  Permision && <>
+    <div className="container-card-choise" style={{cursor:"pointer"}}>
     
-  </div>
 
-  <div onClick={()=>Nav("/FinshedMatchComp")} className={`first_box_2 bounce  ${off && 'disable'}`}>
-    <h1>Finshed</h1>
-      <img src='/myTeamIcon/plus.svg'/>
-  </div>
 
-  <div className="plus_containr_i" onClick={()=>Setoff((prev)=>!prev)}>
-    <Plus size={20}/>
-  </div>
-</div>
+
+
+
+
+      <div onClick={()=>Nav(`/CreateMatche/${idRoom.roomId}`)}
+      className={`first_box_1 bounce ${off && 'disable'}`}>
+        <h1>Match</h1>
+        <img src='/myTeamIcon/blueCreate.svg'/>
+        
+      </div>
+
+      <div onClick={()=>Nav(`/FinshedMatchComp/${idRoom.roomId}`)} className={`first_box_2 bounce  ${off && 'disable'}`}>
+        <h1>Finshed</h1>
+          <img src='/myTeamIcon/plus.svg'/>
+      </div>
+
+      <div className="plus_containr_i" onClick={()=>Setoff((prev)=>!prev)}>
+        <Plus size={20}/>
+      </div>
+    </div>  
+  
+  </>
+}
+
 
  
 </div>

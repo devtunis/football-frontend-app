@@ -7,19 +7,19 @@
 body{
     overflow-x: hidden;
 }
-    
+
 
 .Session-groups::-webkit-scrollbar {
   display: none;
 }
- 
+
 .myTeam{
     position: absolute;
     top: 0;
     left: 0;
        width: 100%;
         height: 100dvh;
-          background: radial-gradient(
+           background: radial-gradient(
         circle at center,
         #163b25 0%,
         #0b1f16 35%,
@@ -27,7 +27,7 @@ body{
         #000000 100%
     );
 
-   
+
     }
 
     .navbar-header{
@@ -35,19 +35,19 @@ body{
         backdrop-filter: blur(3px);
         height: 8vh;
 
-   
+
             background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.15);
 
-        
+
 
     }
     .nav-option{
          display: flex;
- 
+
          width: 100%;
          background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
          backdrop-filter: blur(20px);
@@ -55,24 +55,24 @@ body{
          border-radius: 16px;
          /* border: 1px solid rgba(255, 255, 255, 0.15); */
          border-radius: 10px;
-          background: #0f0f0f;
-            background: linear-gradient(
-                5deg,
-                #000000 0%,
-                #111111 50%,
-                #39ff14 100%
-            );
-         
+            /*background: #0f0f0f;
+              background: linear-gradient(
+                  5deg,
+                  #000000 0%,
+                  #111111 50%,
+                  #39ff14 100%
+              );
+          */
 
 
-      
-           
+
+
     }
     .first-nav-option{
- 
-       
-         
-        width: 50%; 
+
+
+
+        width: 50%;
         height: 8vh;
         display: flex;
         align-items: center;
@@ -83,7 +83,7 @@ body{
             transform: translateX(10px);
              user-select: none;
         }
-        h1{ 
+        h1{
             transform: translateX(15px);
             font-size: 20px;
             color: #f3eaea;
@@ -91,29 +91,29 @@ body{
             font-family:sans-serif;
             letter-spacing:1.4px;
             user-select: none;
-                
+
             font-family: "Rubik Spray Paint", system-ui;
             font-weight: 400;
             letter-spacing: 1px;
             font-style: normal;
         }
-      
+
     }
     .seconde-nav-option{
          width: 50%;
          height: 8vh;
-       
+
          display: flex;
          align-items: center;
          justify-content: flex-end;
          gap: 10px;
-      
+
     }
     .seconde-nav-option img:first-child{
          width: 40px;
          height: 40px;
          user-select: none;
-      
+
     }
 
     .seconde-nav-option img:nth-child(2){
@@ -121,11 +121,11 @@ body{
          height: 25px;
          transform: translateY(1px);
          user-select: none;
-      
+
     }
     .nav-option img:hover{
         cursor: pointer;
-       
+
     }
   .nav-option img:active{
         cursor: pointer;
@@ -164,16 +164,16 @@ body{
          display: flex;
          flex-wrap: wrap;
          gap: 10px;
-         
-         
-       
+
+
+
     }
-     
+
 
     .add__session{
         width: 34px;
         height: 34px;
-       
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -181,7 +181,7 @@ body{
         position: absolute;
         bottom:50px;
         right: 180px;
-    
+
         background: rgba(37, 176, 245, 0.9); /* Semi-transparent */
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
@@ -199,7 +199,7 @@ body{
         position: absolute;
         bottom:30px;
         right: 20px;
-        
+
         width: 20%;
         height: 130px;
         display: flex;
@@ -207,13 +207,13 @@ body{
         gap: 10px;
         z-index: 999;
         user-select: none;
-                 
+
     }
     .create_session_card{
         width: 50%;
         height: 40%;
-         
-     
+
+
         border-radius: 30px;
 
             background: rgba(8, 10, 11, 0.90); /* Semi-transparent /
@@ -231,7 +231,7 @@ body{
         filter: drop-shadow(0 0 0.75rem var(--icon-color));
         transform: translateX(15px);
 
-        
+
 
     }
     .create_session_card h1{
@@ -245,7 +245,7 @@ body{
     .avatar_create__session_card{
         width: 30px;
         height: 30px;
-       
+
         border: 1px solid var(--icon-color);
         border-radius: 100%;
         display: flex;
@@ -266,7 +266,7 @@ body{
         to{
             transform: rotate(360deg);
         }
-        
+
 
     }
 
@@ -303,7 +303,7 @@ body{
         .create_session_card2{
         width: 40%;
         height: 40%;
-         
+
         filter: drop-shadow(0 0 0.75rem var(--icon-color2));
 
         border-radius: 30px;
@@ -332,7 +332,7 @@ body{
     .avatar_create__session_card2{
         width: 30px;
         height: 30px;
-       
+
         border: 1px solid var(--icon-color);
         border-radius: 100%;
         display: flex;
@@ -353,7 +353,7 @@ body{
         to{
             transform: rotate(360deg);
         }
-        
+
     }
 
 
@@ -376,7 +376,7 @@ body{
 .youdontfollowroomdes{
     width: 100%;
     height: 100%;
-    
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -385,27 +385,27 @@ body{
         width: 200px;
         height: 200px;
         filter: drop-shadow(0 0 0.75rem var(--icon-color));
-       
+
     }
 
 
-    
+
     h1{
         color: white;
-        
+
         text-transform: capitalize;
         font-size: 27px;
-       
+
           font-family: "Rubik Spray Paint", system-ui;
             font-weight: 400;
             letter-spacing: 1px;
             font-style: normal;
- 
+
     }
     h2{
            color: #7ECD6C;
-         
-      
+
+
            font-family: "Rubik Spray Paint", system-ui;
             font-weight: 400;
             letter-spacing: 1px;
@@ -414,11 +414,11 @@ body{
     }
     p{
             color: grey;
-         
+
             font-weight: 100;
             font-size: 15px;
             letter-spacing: .2px;
-            
+
             font-family: "Google Sans Flex", sans-serif;
             font-optical-sizing: auto;
             font-weight:600;
@@ -428,7 +428,7 @@ body{
                 "wdth" 100,
                 "GRAD" 0,
                 "ROND" 0;
-    
+
 }
 
 
@@ -448,7 +448,7 @@ body{
 
 
 
- 
+
 .button-session-desing{
     margin-top: 30px;
     border-radius: 10px;
@@ -460,7 +460,7 @@ body{
     font-size: 15px;
 
 
-  
+
 
     border: 1px solid rgba(80, 255, 100, 0.45);
     border-radius: 16px;
@@ -504,7 +504,7 @@ body{
 @media (max-width: 800px) {
 
     .myTeam{
-     
+
         width: 100%;
         height: 100dvh;
           background: radial-gradient(
@@ -514,11 +514,11 @@ body{
         #040708 75%,
         #000000 100%
     );
-        
+
     }
 
     .navbar-header{
-   
+
             backdrop-filter: blur(3px);
             height: 8vh;
             background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
@@ -526,8 +526,8 @@ body{
             -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            
-        
+
+
 
     }
     .nav-option{
@@ -546,14 +546,14 @@ body{
                 #111111 50%,
                 #39ff14 100%
             );
-         
-      
+
+
     }
     .first-nav-option{
- 
-       
-         
-        width: 50%; 
+
+
+
+        width: 50%;
         height: 8vh;
         display: flex;
         align-items: center;
@@ -564,7 +564,7 @@ body{
             transform: translateX(10px);
              user-select: none;
         }
-        h1{ 
+        h1{
             transform: translateX(15px);
             font-size: 20px;
             color: #f3eaea;
@@ -572,29 +572,29 @@ body{
             font-family:sans-serif;
             letter-spacing:1.4px;
             user-select: none;
-            
+
             font-family: "Rubik Spray Paint", system-ui;
             font-weight: 400;
             letter-spacing: 1px;
             font-style: normal;
         }
-      
+
     }
     .seconde-nav-option{
          width: 50%;
          height: 8vh;
-        
+
          display: flex;
          align-items: center;
          justify-content: flex-end;
          gap: 10px;
-      
+
     }
     .seconde-nav-option img:first-child{
          width: 40px;
          height: 40px;
          user-select: none;
-      
+
     }
 
     .seconde-nav-option img:nth-child(2){
@@ -602,11 +602,11 @@ body{
          height: 25px;
          transform: translateY(1px);
          user-select: none;
-      
+
     }
     .nav-option img:hover{
         cursor: pointer;
-       
+
     }
   .nav-option img:active{
         cursor: pointer;
@@ -616,30 +616,30 @@ body{
     }
 
     .Session-groups{
-       
-       
+
+
          margin-top: 2px;
-       
+
          height: 85vh;
          overflow: auto;
-      
+
          border-radius: 10px;
-        
+
          background-color: rgb(0,0,0,0.5);
          backdrop-filter: blur(3px);
          display: flex;
          flex-wrap: wrap;
 
-         
-         
-       
+
+
+
     }
-     
+
 
     .add__session{
         width: 34px;
         height: 34px;
-       
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -647,7 +647,7 @@ body{
         position: absolute;
         bottom:50px;
         right: 0px;
-    
+
         background: rgba(37, 176, 245, 0.9); /* Semi-transparent */
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
@@ -665,7 +665,7 @@ body{
         position: absolute;
         bottom:30px;
         right: 20px;
-        
+
         width: 50%;
         height: 130px;
         display: flex;
@@ -673,13 +673,13 @@ body{
         gap: 10px;
         z-index: 999;
         user-select: none;
-        
+
     }
     .create_session_card{
         width: 80%;
         height: 40%;
-         
-     
+
+
         border-radius: 30px;
 
             background: rgba(8, 10, 11, 0.90); /* Semi-transparent /
@@ -697,7 +697,7 @@ body{
         filter: drop-shadow(0 0 0.75rem var(--icon-color));
         transform: translateX(15px);
 
-        
+
 
     }
     .create_session_card h1{
@@ -711,7 +711,7 @@ body{
     .avatar_create__session_card{
         width: 30px;
         height: 30px;
-       
+
         border: 1px solid var(--icon-color);
         border-radius: 100%;
         display: flex;
@@ -732,7 +732,7 @@ body{
         to{
             transform: rotate(360deg);
         }
-        
+
 
     }
 
@@ -769,7 +769,7 @@ body{
         .create_session_card2{
         width: 80%;
         height: 40%;
-         
+
         filter: drop-shadow(0 0 0.75rem var(--icon-color2));
 
         border-radius: 30px;
@@ -798,7 +798,7 @@ body{
     .avatar_create__session_card2{
         width: 30px;
         height: 30px;
-       
+
         border: 1px solid var(--icon-color);
         border-radius: 100%;
         display: flex;
@@ -819,7 +819,7 @@ body{
         to{
             transform: rotate(360deg);
         }
-        
+
     }
 
 
@@ -836,4 +836,3 @@ body{
         display: none;
     }
 }
-

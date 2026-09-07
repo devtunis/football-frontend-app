@@ -1,11 +1,11 @@
-import React, { lazy, Suspense } from 'react'
+import  { lazy, Suspense } from 'react'
 import { Route as Path, Routes as Routers } from 'react-router-dom'
 
 import SocketProvider from './socketClient/SocketProvider'
 import FirstView from './Loader/FirstView'
 import CardSkeleton from './Loader/CardSkeleton'
 
- 
+
 const Login = lazy(() => import('./Auth/Login'))
 const MyTeam = lazy(() => import('./MyTeam/MyTeam'))
 const CreateAccount = lazy(() => import('./Auth/CreateAccount'))
@@ -31,7 +31,7 @@ const Achievements = lazy(() => import('./Pages/Achievements'))
 const All = lazy(() => import('./Component/All'))
 const Unlocked = lazy(() => import('./Component/Unlocked'))
 const Locked = lazy(() => import('./Component/Locked'))
-const Loading = lazy(()=>import("./Loader/FirstView"))
+ 
 const App = () => {
   return (
     <>
@@ -47,10 +47,10 @@ const App = () => {
             <Path path={'/CreateSession'} element={<CreateSession />} />
             <Path path={'/LoginAccount'} element={<LoginYourAccount />} />
             <Path
-              path={'/FinshedMatchComp'}
+              path={'/FinshedMatchComp/:roomid'}
               element={<FinshedMatchComp />}
             />
-            <Path path={'/CreateMatche'} element={<CreateMatch />} />
+            <Path path={'/CreateMatche/:roomId'} element={<CreateMatch />} />
             <Path path={'/requestTest'} element={<TestRequest />} />
             <Path
               path={'/testInterceptor'}
@@ -70,7 +70,7 @@ const App = () => {
               element={<PendingAcceptPersonRequest />}
             />
            <Path path={'/test'} element={<CardSkeleton/>}/>
-               
+
             <Path path={'/achievements'} element={<Achievements />}>
               <Path index element={<All />} />
               <Path path="all" element={<All />} />
@@ -78,11 +78,11 @@ const App = () => {
               <Path path="Locked" element={<Locked />} />
             </Path>
 
-            
+
           </Routers>
-       
+
         </Suspense>
-          
+
       </SocketProvider>
     </>
   )

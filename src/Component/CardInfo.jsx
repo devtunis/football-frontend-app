@@ -2,10 +2,11 @@ import React from 'react'
 import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate } from 'react-router-dom'
-const CardInfo = ({teamFull}) => {
+const CardInfo = ({data,teamFull}) => {
   
   const Nav = useNavigate()
 const handleVibrate = () => {
+  console.log("working")
  navigator.vibrate(700);
  
  
@@ -15,9 +16,9 @@ const handleVibrate = () => {
     
      <div className="left-card-info-data">
         <div className='start-in'><h1>STARTING IN</h1></div>
-        <div className="timeStart sp"><h1>Tomorrow , 18:00</h1> <img src='/myTeamIcon/time.svg'/></div>
-        <div className="timeStart"><img src='/myTeamIcon/location.svg'/> <h1>Tunis City Arena</h1> </div>
-        <div className="timeStart"><img src='/myTeamIcon/owner.svg'/> <h1>Created by Ghaith</h1> </div>
+        <div className="timeStart sp"><h1>{data ?data.time :"Tomorrow , 18:00" }</h1> <img src='/myTeamIcon/time.svg'/></div>
+        <div className="timeStart"><img src='/myTeamIcon/location.svg'/>{data ?data.location :<h1>Tunis City Arena</h1>}  </div>
+        <div className="timeStart"><img src='/myTeamIcon/owner.svg'/> <h1>Created by {data? data.author: "author"}</h1> </div>
         
      </div>
 
@@ -29,9 +30,9 @@ const handleVibrate = () => {
 
          <div className='Player'><h1>Players</h1></div>
          <div className="numberOfPlayer-in-room">
-            <span className='firstn'>11</span>
+            <span className='firstn'>{data?data.maxplayer:0}</span>
             <span className='divn'>/</span>
-            <span className='seconden'>6</span>
+            <span className='seconden'>{data?data.currentPlayer:6}</span>
          </div>
 
          <div className="personJoin">
@@ -73,7 +74,7 @@ const handleVibrate = () => {
 
 
           <div className="butttonSession">
-          <button onClick={()=>handleVibrate()}>Join Session</button>
+          <button style={{cursor:"pointer"}} onMouseUp={()=>handleVibrate()}>Join Session</button>
          </div>
             }
      </div>

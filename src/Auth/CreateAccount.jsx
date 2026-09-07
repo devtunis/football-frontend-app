@@ -13,7 +13,7 @@ const CreateAccount = () => {
 
 
 
-     
+
 
 
 
@@ -27,8 +27,8 @@ const CreateAccount = () => {
       theme: "colored",
     })
     const Nav = useNavigate()
-   const {Username , id  , dispatch}  =  useAuth() 
-     
+   const {Username , id  , dispatch}  =  useAuth()
+
     const navigate = useNavigate();
     const inputRef = useRef(null)
     const username = useRef(null)
@@ -55,7 +55,7 @@ const CreateAccount = () => {
 
 
     const HandelLogin =  async ()=>{
-       
+
         const dataPerson = {
          username : username.current.value ,
          password : password.current.value ,
@@ -64,31 +64,31 @@ const CreateAccount = () => {
 
 
 
-        // if(!image){
-        //     alert("Put image")
-        //     return
-        // }
-        // if(username?.current.value.length<5){
-        //    SetError(true)
-        //    setTimeout(() => {
-        //         SetError(false)
-        //    }, 3000);
-        //    return
-        // }
-        // if(username?.current.value.length>5){
-        //    SetError(false)
-        // }
-        // if(password?.current.value.length<8){
-        //    SetErrorPass(true)
-        //    setTimeout(() => {
-        //         SetErrorPass(false)
-        //    }, 3000);
-        //    return 
-        // }
-        // if(password?.current.value.length>=8){
-        //    SetErrorPass(false)
+        if(!image){
+            alert("Put image")
+            return
+        }
+        if(username?.current.value.length<5){
+           SetError(true)
+           setTimeout(() => {
+                SetError(false)
+           }, 3000);
+           return
+        }
+        if(username?.current.value.length>5){
+           SetError(false)
+        }
+        if(password?.current.value.length<8){
+           SetErrorPass(true)
+           setTimeout(() => {
+                SetErrorPass(false)
+           }, 3000);
+           return
+        }
+        if(password?.current.value.length>=8){
+           SetErrorPass(false)
 
-        // }
+        }
 
         try{
 
@@ -97,14 +97,14 @@ const CreateAccount = () => {
             const formData = new FormData();
             formData.append("file", File);
             formData.append("upload_preset", 'football-app');
-           
+
             const uploadResponse = await axios.post(
-                APICloudinary,  
+                APICloudinary,
                 formData
                 );
-         
+
             let  CloudinaryImage = uploadResponse.data.secure_url
-           
+
             if(CloudinaryImage){
                 secureImage.current = CloudinaryImage
                 SetLoading(false)
@@ -120,7 +120,7 @@ const CreateAccount = () => {
         catch(error){
             SetLoading(false)
             console.log("error cloudinary",error.message)
-        } 
+        }
 
 
         try{
@@ -129,42 +129,36 @@ const CreateAccount = () => {
                 "user_img":  secureImage.current,
                 "user_password": dataPerson.password
                 }
-            
+
             ,
-        
+
         {
              withCredentials: true,
         })
 
                 SetLoading(true)
-  
-            
+
+
             if(CreatePerson){
                 console.log(CreatePerson ," <== creat person")
                  const {id, user_name , img}=  CreatePerson.data.user
                  dispatch({
                     type:"ADD_ID",
                     payload :{
-                        id , 
+                        id ,
                         UserName : user_name,
-                        img 
+                        img
 
                     }
                  })
 
-                 
-                  
+
+
                  notify()
                  SetUserExist(false)
                  SetLoading(false)
-               
-                 Nav("/myTeam")
 
-
-
-               
-
- 
+                 Nav("/login")
 
 
 
@@ -173,35 +167,41 @@ const CreateAccount = () => {
 
 
 
-            } 
+
+
+
+
+
+
+            }
 
 
         }catch(err){
             SetLoading(false)
-            
+
             if(err.message =="Request failed with status code 409"){
                 SetUserExist(true)
-               
-                   
-                
+
+
+
             }
 
         }
 
-        
 
 
-       
+
+
     }
 
   useEffect(()=>{
         const HandelRefeshPage  =(e)=>{
             e.preventDefault()
- 
+
             console.log("the user refreh the page")
 
         }
-        
+
 
         window.addEventListener("beforeunload",HandelRefeshPage)
         return()=>{
@@ -209,7 +209,7 @@ const CreateAccount = () => {
         }
     },[])
     return (
-        <> 
+        <>
         <ToastContainer />
 
         <div className="createAccount"  >
@@ -229,16 +229,16 @@ const CreateAccount = () => {
 
                 <p>
                     Join Sky Sports and start your football journey.
-                    
+
                 </p>
-              
+
 
                 {
 
-                    UserExisit &&  
+                    UserExisit &&
 
                       <p style={{color:"red",fontFamily:"sans-serif",letterSpacing:"1px",fontSize:"23px"}}>
-                    Already exisit {username?.current?.value} 
+                    Already exisit {username?.current?.value}
                 </p>
 
 
@@ -273,7 +273,7 @@ const CreateAccount = () => {
                 <div className="inputBox">
                     <User size={20}/>
                     <input
-                       
+
                         type="text"
                         placeholder="Username"
                           style={{color:Error && "red"}}
@@ -308,14 +308,14 @@ const CreateAccount = () => {
         </div>
 
         {
-            Loading  &&  
+            Loading  &&
          <div className="div_spinner">
             <Spinner/>
-         </div>  
-         
+         </div>
 
-        }   
-    
+
+        }
+
         </>
 
 

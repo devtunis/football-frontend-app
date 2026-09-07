@@ -42,7 +42,7 @@ const UseContext = ({children}) => {
          
                await axiosClient.post("/api/deleteCookies")
               
-               Nav("/login")
+             //   Nav("/login")
             }
 
 
@@ -63,7 +63,7 @@ const UseContext = ({children}) => {
        
         const initializeUserDataIFweNeedIt  = async () => {
         
-            if (location.pathname === "/login") {
+            if (location.pathname === "/login" ||location.pathname === "/register") {
                return;
             }
          try{
@@ -103,7 +103,7 @@ const UseContext = ({children}) => {
             {
                await axiosClient.post("/api/deleteCookies")
                 
-               Nav("/login")
+             //  Nav("/login")
              
             }
          }

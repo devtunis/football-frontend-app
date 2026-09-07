@@ -5,7 +5,7 @@
       
 
 .card-info{
-    width: 20%;
+    width: auto;
     height: 160px;
     background: rgba(8, 10, 11, 0.45); /* Semi-transparent */
     backdrop-filter: blur(20px);

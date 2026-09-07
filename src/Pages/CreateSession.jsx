@@ -1,6 +1,6 @@
 import React from "react";
 import "./CreateSession.css";
-import { Camera, Cone, PlusCircle } from "lucide-react";
+import { Camera,  PlusCircle } from "lucide-react";
 import { useState } from "react";
 import axiosClient from "../axios/endPoint";
 import axios from "axios";

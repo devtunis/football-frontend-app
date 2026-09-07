@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./CreateMatch.css";
 
 import {
@@ -8,9 +9,39 @@ import {
     FileText,
     Sparkles
 } from "lucide-react";
-
+import {use} from "../axios/usehook.js"
+import { useParams } from "react-router-dom";
 const CreateMatch = () => {
+    const {roomId} = useParams()
+    const [state,setState]= useState({
+        time:'',
+        location:'',
+        maxPlayer:0,
+        desc:''
+    })
+    const HandeLCreateMatch  = async()=>{
+         
+        const {err,data} = await use("/create/match","post",
 
+            {
+            "roomId": roomId,
+            "time": state.time,
+            "location": state.location,
+            "maxplayer": state.maxPlayer,
+            "description":state.desc
+            
+            
+            }
+
+
+
+        )
+        if(err!=null){
+            console.log(err)
+            return 
+        }
+        console.log(data)
+    }
     return (
 
         <div className="cm__container">
@@ -50,6 +81,10 @@ const CreateMatch = () => {
 
                     <input
                         placeholder="Tomorrow,18:00"
+                        onChange={(e)=>setState({
+                            ...state ,
+                            time:e.target.value
+                        })}
                     />
 
                 </div>
@@ -60,6 +95,11 @@ const CreateMatch = () => {
 
                     <input
                         placeholder="Match Location"
+                        onChange={(e)=>setState({
+                            ...state ,
+                            location:e.target.value
+                        })}
+
                     />
 
                 </div>
@@ -71,6 +111,11 @@ const CreateMatch = () => {
                     <input
                         type="number"
                         placeholder="Maximum Players"
+                        onChange={(e)=>setState({
+                            ...state ,
+                            maxPlayer:e.target.value
+                        })}
+
                     />
 
                 </div>
@@ -81,11 +126,15 @@ const CreateMatch = () => {
 
                     <textarea
                         placeholder="Match description..."
+                        onChange={(e)=>setState({
+                            ...state ,
+                            desc:e.target.value
+                        })}
                     />
 
                 </div>
 
-                <button className="cm__button">
+                <button className="cm__button" onMouseUp  ={()=>HandeLCreateMatch()}>
 
                     Create Match
 

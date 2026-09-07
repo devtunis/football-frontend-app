@@ -1,31 +1,31 @@
 import React from 'react'
 import "./FinshedMatches.css"
-const FinshedMatches = () => {
+const FinshedMatches = ({data}) => {
   return (
     <div className='FinshedMatchesS'>
 
         <div className="top">
             <div className="left">
                 <div className="avtarVlag">
-                    <img src='/TeamIcon/barcelona.png'/>
+                    <img src={data.imgA}/>
                 </div>
-                <h1>barcelona</h1>
+                <h1>{data.nameA}</h1>
             </div>
             
-            <div className="middle-score"><h1>3-2</h1></div>
+            <div className="middle-score"><h1>{data.result}</h1></div>
             <div className="right">
 
                   <div className="avtarVlag">
-                    <img src='/TeamIcon/real_madrid.png'/>
+                    <img src={data.imgB}/>
                 </div>
-               <h1>Reall </h1>
+               <h1>{data.nameB} </h1>
 
 
             </div>
         </div>
 
         <div className="down">
-            <h1>Yestarday</h1>
+            <h1>{`${data.date.split("T")[0] }` }</h1>
         </div>
     </div>
   )
