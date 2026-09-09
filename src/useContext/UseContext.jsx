@@ -1,7 +1,7 @@
 import { useContext , useEffect, useReducer  } from "react"
 import { reducer } from "./reducer"
 import { createContext } from "react"
-import axios from "axios"
+
 import axiosClient from "../axios/endPoint"
 import { useNavigate } from "react-router-dom"
 import socket from "../socketClient/socket"
@@ -11,19 +11,27 @@ import { RefreshTheToken } from "../RefreshToken/RefrshTokenL"
 const initialState = {
     id : null,
     UserName :null,
-    img  : null, 
+    img  : null,
 
 }
 export const useGlobalContext = createContext()
 
 
+
+
 const UseContext = ({children}) => {
     const [state,dispatch] = useReducer(reducer , initialState)
     const Nav = useNavigate()
-   
+
+  useEffect(() => {
+    if (location.pathname == "/login") return;
+
+      localStorage.setItem("pathname", location.pathname);
+    }, [location.pathname])
 
 
-    
+
+
     useEffect(()=>{
          if (location.pathname === "/login") {
             return;
@@ -32,26 +40,26 @@ const UseContext = ({children}) => {
          if(data.reason==="TOKEN_EXPIRED"){
 
 
- 
+
             const res =   await RefreshTheToken()
             if(res.status===200){
                socket.disconnect().connect()
                console.log("we try to connect again")
             }
             else{
-         
+
                await axiosClient.post("/api/deleteCookies")
-              
-             //   Nav("/login")
+
+                Nav("/login")
             }
 
 
          }
 
-  
+
 
       }
-      socket.on("auth_error",HandelTryConnect) 
+      socket.on("auth_error",HandelTryConnect)
 
 
       return()=>{
@@ -60,68 +68,65 @@ const UseContext = ({children}) => {
 
     },[])
     useEffect(() => {
-       
-        const initializeUserDataIFweNeedIt  = async () => {
-        
-            if (location.pathname === "/login" ||location.pathname === "/register") {
+
+        const intializeData  = async () => {
+
+            if ( location.pathname === "/register") {
                return;
             }
          try{
 
 
                if (!state.UserName || !state.id || !state.img ) {
-                  
-  
-                 const {data}= await axiosClient.get("/getmydata")
-              
-                // console.log(data)
-                 // fix issues here
-                 
-   
-  
-  
+
+
+                 const { data } = await axiosClient.get("/getmydata")
+
+
+
+
+
+
+
                  if (data) {
-                    dispatch({
-                       type: "ADD_ID",
-                       payload: {
-                          id: data.id,
-                          UserName: data.user_name,
-                          img: data.img
-  
-                       }
-                    })
+
+                    dispatch({   type: "ADD_ID",  payload: {  id: data.id, UserName: data.user_name,  img: data.img   } })
+
+                    const { pathname } = localStorage
+                    if(pathname) Nav(pathname)
+
                  }
-  
-  
+
+
                }
 
 
          }catch(err){
             console.log(err.message ,"temp")
-          
+
             if(err.message==="missing Token"  ||err.message =="expired Refresh token")
             {
                await axiosClient.post("/api/deleteCookies")
-                
-             //  Nav("/login")
-             
+
+               Nav("/login")
+
             }
          }
-      
- 
+
+
         }
-  
-        initializeUserDataIFweNeedIt ()
+
+        intializeData ()
      }, [])
-    
 
 
 
-     
-    
+
+
+
   return (
      <>
-     
+
      <useGlobalContext.Provider value={{
           dispatch,
           id:state.id,
@@ -131,10 +136,10 @@ const UseContext = ({children}) => {
             {children}
 
      </useGlobalContext.Provider>
-       
-        
-         
-     
+
+
+
+
      </>
   )
 }

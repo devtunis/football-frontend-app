@@ -13,9 +13,12 @@ const HomeScore = () => {
 
 
 
-            <div className='switch-bar' >
+        <div className='switch-bar' >
+          
+          
 
                 <div className="content-icon">
+                  
                
                    
                     <NavLink 

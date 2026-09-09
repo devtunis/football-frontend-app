@@ -1,6 +1,7 @@
 import "./login.css";
 import { LogIn, UserPlus } from "lucide-react";
- 
+import { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 const  Login =()=> {
   const Nav = useNavigate()
@@ -11,7 +12,8 @@ const  Login =()=> {
   const CreateAccount = ()=>{
     Nav("/CreateAccount")
   }
-  
+
+
 
 
 
