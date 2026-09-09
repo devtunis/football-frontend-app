@@ -16,6 +16,10 @@ const Scores = () => {
  const [uncomingMatches,SetuncomingMatches]  = useState([])
  const [finishedmatches,Setfinishedmatches]  = useState([])
  const [Permision,SetPermision] = useState(false)
+ const [TheirNews , SetTheirNews] =  useState(false)
+ const [messageNews,SetMessagesNews] = useState("")
+ const [count,seetCount] = useState(33)
+ const [off,Setoff] = useState(false)
 
  const idRoom   = useParams()
   const Nav = useNavigate()
@@ -54,41 +58,35 @@ const Scores = () => {
  
 
 
- const [card,SetCard] = useState([
 
+    useEffect(()=>{
+  
+    const HandelGetLastNews = async()=>{
+
+    const {err,data} = await use("/room/getlastnews","post",{"roomId":idRoom.roomId})
+    if(err!=null)
     {
-    id: 1,
-    title: "Big summer transfers confirmed today",
-    category: "TRANSFER",
-    time: "2h ago",
-    image:
-      "https://images.unsplash.com/photo-1547347298-4074fc3086f0",
-  },
-  {
-    id: 2,
-    title: "City wins in the last minute!",
-    category: "CHAMPIONS LEAGUE",
-    time: "5h ago",
-    image:
-      "https://images.unsplash.com/photo-1517466787929-bc90951d0974",
-  },
-  {
-    id: 3,
-    title: "Controversial goal sparks debate",
-    category: "VAR DECISION",
-    time: "1d ago",
-    image:
-      "https://images.unsplash.com/photo-1547347298-4074fc3086f0",
-  },
+     
+     
+      return 
+    }
+
+    console.log(data)
+    SetMessagesNews(data.news)
+    }
+
+    HandelGetLastNews()
+    
+  },[])
+ 
 
 
   
- ])
- const [TheirNews , SetTheirNews] =  useState(false)
- const [count,seetCount] = useState(33)
 
- const [off,Setoff] = useState(false)
 
+
+ 
+ 
  
 
  
@@ -113,7 +111,7 @@ const Scores = () => {
 
 
         <div className="logo-content-container">
-          <div className="avatar-logo">
+          <div className="avatar-logo" style={{cursor:"pointer"}} onClick={()=>Nav("/myTeam")}>
            <img src="/navbaricon/Koura.png"  alt="Ghaith"/>  
           </div>
   
@@ -136,7 +134,7 @@ const Scores = () => {
           <div className="avatar-user">
           <span className="popup2"></span>
 
-            <img src={img ? img : "/testpic/man2.png"}/>
+             <img src={img ? img : "/testpic/man2.png"}/>
               
 
           </div>
@@ -149,10 +147,10 @@ const Scores = () => {
         <img src="/testpic/bbg.png" loading="lazy" />
         
           {
-            TheirNews?   
+            messageNews!="no"?   
               <>
               <div className="breaknews"><h1>News</h1></div>
-                <p className="description2"> wey koul we7d ijib 500 zeyda  </p>  
+                <p className="description2"> {messageNews}  </p>  
               
               </>
            

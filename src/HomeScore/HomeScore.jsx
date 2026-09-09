@@ -1,8 +1,9 @@
-import React from 'react'
+
 import "./HomeScore.css"
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useParams } from 'react-router-dom'
 
 const HomeScore = () => {
+    const {roomId} = useParams()
     const HandelVibrate = ()=>{
         navigator.vibrate(100)
     }
@@ -18,7 +19,7 @@ const HomeScore = () => {
                
                    
                     <NavLink 
-                    to="Scores"
+                    to={`Scores/${roomId}`}
                     className={({ isActive }) =>
                         isActive ? "active-link" : "normal-link"
                     }
@@ -42,7 +43,7 @@ const HomeScore = () => {
 
 
                      <NavLink 
-                    to="news"
+                    to={`news/${roomId}`}
                     className={({ isActive }) =>
                         isActive ? "active-link" : "normal-link"
                     }
@@ -74,7 +75,7 @@ const HomeScore = () => {
                  
 
                       <NavLink 
-                        to="shorts"
+                        to={`shorts/${roomId}`}
                         className={({ isActive }) =>
                             isActive ? "active-link" : "normal-link"
                         }
@@ -94,7 +95,7 @@ const HomeScore = () => {
 
                     
                       <NavLink 
-                        to="profile"
+                        to={`profile/${roomId}`}
                         className={({ isActive }) =>
                             isActive ? "active-link" : "normal-link"
                         }

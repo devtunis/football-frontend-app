@@ -89,7 +89,7 @@ const CreateSession = () => {
 
         }catch(error){
           setLoading(false)
-          console.log(error.message)
+          console.log(error.response)
         }
       }
 

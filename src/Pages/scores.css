@@ -25,8 +25,8 @@
      flex-direction: column;
      justify-content: center;
      align-items: center;
-    height: 35vh;
-  
+     height: 35vh;
+     user-select: none;
 }
 
  
@@ -49,6 +49,7 @@
  width: 100px;
  height: 100px;
  object-fit: contain;
+
  
  
 }

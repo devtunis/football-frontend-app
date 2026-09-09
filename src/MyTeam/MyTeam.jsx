@@ -137,7 +137,6 @@ const MyTeam = () => {
                   <img src="./myTeamIcon/refresh.svg" alt="" onClick={()=>HandelRefresh()} />
          </div>
 
-
         <div className="Session-groups">
 
                     {isFollowRoom ?
@@ -174,12 +173,12 @@ const MyTeam = () => {
         </div>
 
 
-  <div className="add__session bounce" onClick={()=>SetOff((prev)=>!prev)}>
+  <div className="add__session bounce" style={{cursor:"pointer"}} onClick={()=>SetOff((prev)=>!prev)}>
  
     {off ?   <Plus size={25}/>  :  <X size={25}/>}
   </div>
 
-<div className="ContainerSessionadding" style={{ zIndex:off&& -1}}>
+<div className="ContainerSessionadding" style={{ zIndex:off&& -1 ,cursor:"pointer"}}>
 
 
   <div
