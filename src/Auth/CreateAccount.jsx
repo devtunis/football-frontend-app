@@ -1,287 +1,235 @@
 import "./CreateAccount.css";
-import { User, Mail, Lock, Camera, ArrowLeft, Cone, Percent } from "lucide-react";
-import { data, useNavigate } from "react-router-dom";
+import {
+  User,
+  Lock,
+  Camera,
+  ArrowLeft,
+  Cone,
+  Percent,
+  RefreshCw,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import axios from "axios";
 import Spinner from "../Loader/Spinner";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../useContext/UseContext";
 import axiosClient from "../axios/endPoint";
 import { useEffect } from "react";
+import { generateUsername } from "../utils/generateUsername";
 const APICloudinary = import.meta.env.VITE_API_KEY;
+
 const CreateAccount = () => {
+  const [conslift, SetConslift] = useState(false);
 
-
-
-
-
-
-
-
-
-
-
-
-
-    const notify = () =>   toast.success("Account Created!", {
+  const notify = () =>
+    toast.success("Account Created!", {
       theme: "colored",
-    })
-    const Nav = useNavigate()
-   const {Username , id  , dispatch}  =  useAuth()
+    });
+  const Nav = useNavigate();
+  const { dispatch } = useAuth();
 
-    const navigate = useNavigate();
-    const inputRef = useRef(null)
-    const username = useRef(null)
-    const password = useRef(null)
+  const navigate = useNavigate();
 
-    const [image,setImage] = useState(null);
-    const [File , SetFile] = useState(null)
-    const  secureImage = useRef(null)
-    const [UserExisit , SetUserExist] = useState(false)
+  const inputRef = useRef(null);
+  const username = useRef(null);
+  const password = useRef(null);
+  const originalUsername = useRef(null);
 
-    const HandleImage = (e)=>{
+  const [image, setImage] = useState(null);
+  const [File, SetFile] = useState(null);
+  const secureImage = useRef(null);
+  const [UserExisit, SetUserExist] = useState(false);
 
-        const file = e.target.files[0];
+  const HandleImage = (e) => {
+    const file = e.target.files[0];
 
-        if(file){
-            SetFile(file)
-            setImage(URL.createObjectURL(file));
-        }
-
+    if (file) {
+      SetFile(file);
+      setImage(URL.createObjectURL(file));
     }
-    const [Error,SetError] =useState(false)
-    const [ErrorPass,SetErrorPass] =useState(false)
-    const [Loading,SetLoading]  = useState(false)
+  };
+  const [Error, SetError] = useState(false);
+  const [ErrorPass, SetErrorPass] = useState(false);
+  const [Loading, SetLoading] = useState(false);
 
+  const HandelLogin = async () => {
+    const dataPerson = {
+      username: username.current.value,
+      password: password.current.value,
+      image,
+    };
 
-    const HandelLogin =  async ()=>{
+    console.log(username.current.value);
+    originalUsername.current = "ghaith";
+    if (!image) {
+      alert("Put image");
+      return;
+    }
+    if (username?.current.value.length < 5) {
+      SetError(true);
+      setTimeout(() => {
+        SetError(false);
+      }, 3000);
+      return;
+    }
+    if (username?.current.value.length > 5) {
+      SetError(false);
+    }
+    if (password?.current.value.length < 8) {
+      SetErrorPass(true);
+      setTimeout(() => {
+        SetErrorPass(false);
+      }, 3000);
+      return;
+    }
+    if (password?.current.value.length >= 8) {
+      SetErrorPass(false);
+    }
 
-        const dataPerson = {
-         username : username.current.value ,
-         password : password.current.value ,
-         image
-        }
+    try {
+      SetLoading(true);
+      const formData = new FormData();
+      formData.append("file", File);
+      formData.append("upload_preset", "football-app");
 
+      const uploadResponse = await axios.post(APICloudinary, formData);
 
+      let CloudinaryImage = uploadResponse.data.secure_url;
 
-        if(!image){
-            alert("Put image")
-            return
-        }
-        if(username?.current.value.length<5){
-           SetError(true)
-           setTimeout(() => {
-                SetError(false)
-           }, 3000);
-           return
-        }
-        if(username?.current.value.length>5){
-           SetError(false)
-        }
-        if(password?.current.value.length<8){
-           SetErrorPass(true)
-           setTimeout(() => {
-                SetErrorPass(false)
-           }, 3000);
-           return
-        }
-        if(password?.current.value.length>=8){
-           SetErrorPass(false)
+      if (CloudinaryImage) {
+        secureImage.current = CloudinaryImage;
+        SetLoading(false);
+      }
+    } catch (error) {
+      SetLoading(false);
+      console.log("error cloudinary", error.message);
+    }
 
-        }
-
-        try{
-
-
-            SetLoading(true)
-            const formData = new FormData();
-            formData.append("file", File);
-            formData.append("upload_preset", 'football-app');
-
-            const uploadResponse = await axios.post(
-                APICloudinary,
-                formData
-                );
-
-            let  CloudinaryImage = uploadResponse.data.secure_url
-
-            if(CloudinaryImage){
-                secureImage.current = CloudinaryImage
-                SetLoading(false)
-            }
-
-
-
-
-
-
-        }
-
-        catch(error){
-            SetLoading(false)
-            console.log("error cloudinary",error.message)
-        }
-
-
-        try{
-            const CreatePerson  = await axiosClient.post(`/create`,{
-                "user_name":dataPerson.username,
-                "user_img":  secureImage.current,
-                "user_password": dataPerson.password
-                }
-
-            ,
+    try {
+      const CreatePerson = await axiosClient.post(
+        `/create`,
+        {
+          user_name: dataPerson.username,
+          user_img: secureImage.current,
+          user_password: dataPerson.password,
+        },
 
         {
-             withCredentials: true,
-        })
+          withCredentials: true,
+        },
+      );
 
-                SetLoading(true)
+      SetLoading(true);
 
+      if (CreatePerson) {
+        console.log(CreatePerson, " <== creat person");
+        const { id, user_name, img } = CreatePerson.data.user;
+        dispatch({
+          type: "ADD_ID",
+          payload: {
+            id,
+            UserName: user_name,
+            img,
+          },
+        });
 
-            if(CreatePerson){
-                console.log(CreatePerson ," <== creat person")
-                 const {id, user_name , img}=  CreatePerson.data.user
-                 dispatch({
-                    type:"ADD_ID",
-                    payload :{
-                        id ,
-                        UserName : user_name,
-                        img
+        notify();
+        SetUserExist(false);
+        SetLoading(false);
 
-                    }
-                 })
+        Nav("/login");
+      }
+    } catch (err) {
+      SetLoading(false);
 
+      if (err?.response?.status === 409) {
+        console.log("conflit");
+        username.current.value = generateUsername(username.current.value);
+        SetConslift(true);
+      }
 
-
-                 notify()
-                 SetUserExist(false)
-                 SetLoading(false)
-
-                 Nav("/login")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            }
-
-
-        }catch(err){
-            SetLoading(false)
-
-            if(err.message =="Request failed with status code 409"){
-                SetUserExist(true)
-
-
-
-            }
-
-        }
-
-
-
-
-
+      if (err.message == "Request failed with status code 409") {
+        SetUserExist(true);
+      }
     }
+  };
 
-  useEffect(()=>{
-        const HandelRefeshPage  =(e)=>{
-            e.preventDefault()
+  useEffect(() => {
+    const HandelRefeshPage = (e) => {
+      e.preventDefault();
 
-            console.log("the user refreh the page")
+      console.log("the user refreh the page");
+    };
 
-        }
+    window.addEventListener("beforeunload", HandelRefeshPage);
+    return () => {
+      window.removeEventListener("beforeunload", HandelRefeshPage);
+    };
+  }, []);
 
+  const HandleRefeshPage = () => {
+    username.current.value = generateUsername(originalUsername.current);
+  };
+  return (
+    <>
+      <ToastContainer />
 
-        window.addEventListener("beforeunload",HandelRefeshPage)
-        return()=>{
-            window.removeEventListener("beforeunload",HandelRefeshPage)
-        }
-    },[])
-    return (
-        <>
-        <ToastContainer />
+      <div className="createAccount">
+        <div className="overlay" />
 
-        <div className="createAccount"  >
+        <div className="card">
+          <button className="backBtn" onClick={() => navigate("/login")}>
+            <ArrowLeft size={18} />
+          </button>
 
-            <div className="overlay"/>
+          <h1>
+            Create <span>Account</span>
+          </h1>
 
-            <div className="card">
+          <p>Join Sky Sports and start your football journey.</p>
 
-                <button
-                    className="backBtn"
-                    onClick={()=>navigate("/login")}
-                >
-                    <ArrowLeft size={18}/>
-                </button>
+          {UserExisit && (
+            <p
+              style={{
+                color: "red",
+                fontFamily: "sans-serif",
+                letterSpacing: "1px",
+                fontSize: "23px",
+              }}
+            >
+              Already exisit
+            </p>
+          )}
 
-                <h1>Create <span>Account</span></h1>
+          <div className="avatar" onClick={() => inputRef.current.click()}>
+            {image ? <img src={image} alt="profile" /> : <Camera size={35} />}
+          </div>
 
-                <p>
-                    Join Sky Sports and start your football journey.
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={HandleImage}
+          />
 
-                </p>
+          <div className="inputBox">
+            {conslift ? (
+              <RefreshCw onClick={() => HandleRefeshPage()} size={20} />
+            ) : (
+              <User size={20} />
+            )}
 
+            <input
+              type="text"
+              placeholder="Username"
+              style={{ color: Error && "red" }}
+              ref={username}
+            />
+          </div>
 
-                {
-
-                    UserExisit &&
-
-                      <p style={{color:"red",fontFamily:"sans-serif",letterSpacing:"1px",fontSize:"23px"}}>
-                    Already exisit {username?.current?.value}
-                </p>
-
-
-                }
-
-                <div
-                    className="avatar"
-                    onClick={()=>inputRef.current.click()}
-                >
-
-                    {
-                        image
-                        ?
-
-                        <img src={image} alt="profile"/>
-
-                        :
-
-                        <Camera size={35}/>
-                    }
-
-                </div>
-
-                <input
-                    ref={inputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={HandleImage}
-                />
-
-                <div className="inputBox">
-                    <User size={20}/>
-                    <input
-
-                        type="text"
-                        placeholder="Username"
-                          style={{color:Error && "red"}}
-                        ref={username}
-                    />
-                </div>
-
-                {/* <div className="inputBox">
+          {/* <div className="inputBox">
                     <Mail size={20}/>
                     <input
                         type="email"
@@ -289,37 +237,29 @@ const CreateAccount = () => {
                     />
                 </div> */}
 
-                <div className="inputBox">
-                    <Lock size={20}/>
-                    <input
-                    style={{color : ErrorPass && "red"}}
-                        type="password"
-                        placeholder="Password"
-                        ref={password}
-                    />
-                </div>
+          <div className="inputBox">
+            <Lock size={20} />
+            <input
+              style={{ color: ErrorPass && "red" }}
+              type="password"
+              placeholder="Password"
+              ref={password}
+            />
+          </div>
 
-                <button className="createBtn" onClick={()=>HandelLogin()}>
-                    Create Account
-                </button>
-
-            </div>
-
+          <button className="createBtn" onClick={() => HandelLogin()}>
+            Create Account
+          </button>
         </div>
+      </div>
 
-        {
-            Loading  &&
-         <div className="div_spinner">
-            <Spinner/>
-         </div>
-
-
-        }
-
-        </>
-
-
-    )
-}
+      {Loading && (
+        <div className="div_spinner">
+          <Spinner />
+        </div>
+      )}
+    </>
+  );
+};
 
 export default CreateAccount;

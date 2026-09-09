@@ -131,7 +131,7 @@ const Scores = () => {
                 <img src="/myTeamIcon/notifaction.svg"/>
           </div>
 
-          <div className="avatar-user">
+          <div className="avatar-user" onClick={()=>{Nav(`/home/profile/${idRoom.roomId}`)}}>
           <span className="popup2"></span>
 
              <img src={img ? img : "/testpic/man2.png"}/>

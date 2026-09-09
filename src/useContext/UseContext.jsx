@@ -71,9 +71,8 @@ const UseContext = ({children}) => {
 
         const intializeData  = async () => {
 
-            if ( location.pathname === "/register") {
-               return;
-            }
+         if ( location.pathname === "/CreateAccount")  return
+
          try{
 
 
@@ -102,7 +101,7 @@ const UseContext = ({children}) => {
 
 
          }catch(err){
-            console.log(err.message ,"temp")
+
 
             if(err.message==="missing Token"  ||err.message =="expired Refresh token")
             {
