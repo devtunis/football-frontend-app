@@ -1,148 +1,103 @@
-import { useContext , useEffect, useReducer  } from "react"
-import { reducer } from "./reducer"
-import { createContext } from "react"
+import { useContext, useEffect, useReducer } from "react";
+import { reducer } from "./reducer";
+import { createContext } from "react";
 
-import axiosClient from "../axios/endPoint"
-import { useNavigate } from "react-router-dom"
-import socket from "../socketClient/socket"
-import { RefreshTheToken } from "../RefreshToken/RefrshTokenL"
+import axiosClient from "../axios/endPoint";
+import { useNavigate } from "react-router-dom";
+import socket from "../socketClient/socket";
+import { RefreshTheToken } from "../RefreshToken/RefrshTokenL";
 // off the connection tcp socket when the user leave the sessions
 
 const initialState = {
-    id : null,
-    UserName :null,
-    img  : null,
+  id: null,
+  UserName: null,
+  img: null,
+};
+export const useGlobalContext = createContext();
 
-}
-export const useGlobalContext = createContext()
-
-
-
-
-const UseContext = ({children}) => {
-    const [state,dispatch] = useReducer(reducer , initialState)
-    const Nav = useNavigate()
+const UseContext = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const Nav = useNavigate();
 
   useEffect(() => {
     if (location.pathname == "/login") return;
+  // check if the pathname is already  exist in my routes  :[login,register,CreateAccount,logout]
+    localStorage.setItem("pathname", location.pathname);
+  }, [location.pathname]);
 
-      localStorage.setItem("pathname", location.pathname);
-    }, [location.pathname])
+  useEffect(() => {
+    if (location.pathname === "/login") {
+      return;
+    }
+    const HandelTryConnect = async (data) => {
+      if (data.reason === "TOKEN_EXPIRED") {
+        const res = await RefreshTheToken();
+        if (res.status === 200) {
+          socket.disconnect().connect();
+          console.log("we try to connect again");
+        } else {
+          await axiosClient.post("/api/deleteCookies");
 
-
-
-
-    useEffect(()=>{
-         if (location.pathname === "/login") {
-            return;
-         }
-      const HandelTryConnect   = async(data)=>{
-         if(data.reason==="TOKEN_EXPIRED"){
-
-
-
-            const res =   await RefreshTheToken()
-            if(res.status===200){
-               socket.disconnect().connect()
-               console.log("we try to connect again")
-            }
-            else{
-
-               await axiosClient.post("/api/deleteCookies")
-
-                Nav("/login")
-            }
-
-
-         }
-
-
-
-      }
-      socket.on("auth_error",HandelTryConnect)
-
-
-      return()=>{
-         socket.off("auth_error",HandelTryConnect)
-      }
-
-    },[])
-    useEffect(() => {
-
-        const intializeData  = async () => {
-
-         if ( location.pathname === "/CreateAccount")  return
-
-         try{
-
-
-               if (!state.UserName || !state.id || !state.img ) {
-
-
-                 const { data } = await axiosClient.get("/getmydata")
-
-
-
-
-
-
-
-                 if (data) {
-
-                    dispatch({   type: "ADD_ID",  payload: {  id: data.id, UserName: data.user_name,  img: data.img   } })
-
-                    const { pathname } = localStorage
-                    if(pathname) Nav(pathname)
-
-                 }
-
-
-               }
-
-
-         }catch(err){
-
-
-            if(err.message==="missing Token"  ||err.message =="expired Refresh token")
-            {
-               await axiosClient.post("/api/deleteCookies")
-
-               Nav("/login")
-
-            }
-         }
-
-
+          Nav("/login");
         }
+      }
+    };
+    socket.on("auth_error", HandelTryConnect);
 
-        intializeData ()
-     }, [])
+    return () => {
+      socket.off("auth_error", HandelTryConnect);
+    };
+  }, []);
+  useEffect(() => {
+    const intializeData = async () => {
+      if (location.pathname === "/CreateAccount") return;
 
+      try {
+        if (!state.UserName || !state.id || !state.img) {
+          const { data } = await axiosClient.get("/getmydata");
 
+          if (data) {
+            dispatch({
+              type: "ADD_ID",
+              payload: { id: data.id, UserName: data.user_name, img: data.img },
+            });
 
+            const { pathname } = localStorage;
+            if (pathname) Nav(pathname);
+          }
+        }
+      } catch (err) {
 
+        if (
+          err.message === "missing Token" ||
+          err.message == "expired Refresh token"
+        ) {
+          await axiosClient.post("/api/deleteCookies");
 
+          Nav("/login");
+        }
+      }
+    };
+
+    intializeData();
+  }, []);
 
   return (
-     <>
-
-     <useGlobalContext.Provider value={{
+    <>
+      <useGlobalContext.Provider
+        value={{
           dispatch,
-          id:state.id,
-          Username : state.UserName,
-         img : state.img}}>
-
-            {children}
-
-     </useGlobalContext.Provider>
-
-
-
-
-     </>
-  )
-}
-export const useAuth = ()=>{
-    return useContext(useGlobalContext)
-}
-export default UseContext
+          id: state.id,
+          Username: state.UserName,
+          img: state.img,
+        }}
+      >
+        {children}
+      </useGlobalContext.Provider>
+    </>
+  );
+};
+export const useAuth = () => {
+  return useContext(useGlobalContext);
+};
+export default UseContext;

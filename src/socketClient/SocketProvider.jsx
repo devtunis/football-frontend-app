@@ -2,26 +2,24 @@ import { useEffect } from "react";
 import socket from "./socket";
 import { useAuth } from "../useContext/UseContext";
 import axiosClient from "../axios/endPoint";
- 
+
 const SocketProvider =  ({ children }) => {
-  
+
 
    useEffect(()=>{
-    
+
     const checkUserExist = async()=>{
       try{
       const user = await axiosClient.get("/getmydata")
-      
+
       if(user.status===200){
         socket.connect()
       }
       }
       catch(err){
-         if(err.message == "missing Token"){
-          console.log("nothing gonna work")
-          return 
+         if(err.message == "missing Token")   return
 
-         }
+
       }
 
    }
@@ -35,7 +33,7 @@ const SocketProvider =  ({ children }) => {
    },[])
 
 
- 
+
 
   return <>{children}</>;
 };
