@@ -1,4 +1,4 @@
-import React from "react";
+ 
 import "./CreateSession.css";
 import { Camera,  PlusCircle } from "lucide-react";
 import { useState } from "react";

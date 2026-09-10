@@ -2,13 +2,14 @@ import   { useEffect, useState } from 'react'
 import "./MyTeam.css"
 import { useNavigate } from 'react-router-dom'
 import Card from '../Component/Card'
-import {   ArrowRight,    Compass,   Plus,     X } from 'lucide-react'
+import {   ArrowRight,    Compass,   LogIn,   Plus,     X } from 'lucide-react'
 import { useAuth } from '../useContext/UseContext'
- 
+
 import axiosClient from '../axios/endPoint'
- 
+
 import Online from '../online/Online'
 import CardSkeleton from '../Loader/CardSkeleton'
+import { use } from '../axios/usehook'
 
 const MyTeam = () => {
     const [off,SetOff] = useState(true)
@@ -21,7 +22,7 @@ const MyTeam = () => {
 
 
     const Nav = useNavigate()
-    
+
 
 
 
@@ -61,6 +62,9 @@ const MyTeam = () => {
       }catch(err){
         SetSkeleten(false)
         console.log(err.message)
+        if (err.message == "missing Token") {
+          Nav("/login")
+        }
       }
       finally{
          SetSkeleten(false)
@@ -99,7 +103,9 @@ const MyTeam = () => {
 
       }catch(err){
           SetSkeleten(false)
-        console.log(err.message)
+ if (err.message == "missing Token") {
+          Nav("/login")
+        }
       }
       finally{
           SetSkeleten(false)
@@ -107,8 +113,18 @@ const MyTeam = () => {
 
   }
 
+ ;
+  const Logout = async () => {
+    const { err, data } = await use("/api/deleteCookies", "post", {})
+    if (err != null) {
+      console.log(err)
+      return
+    }
 
+    localStorage.clear()
+    Nav("/login")
 
+}
 
 
   return (
@@ -124,8 +140,9 @@ const MyTeam = () => {
             </div>
             <div className="seconde-nav-option">
 
-                 <img src="./myTeamIcon/search.svg"  alt="" />
-                 <img src="./myTeamIcon/Option.svg" alt="" />
+            <img src="./myTeamIcon/search.svg" alt="" />
+             <LogIn size={30} style={{color:"#DEDEDE",cursor:"pointer"}} onClick={()=>Logout()}  />
+                 {/* <img src="./myTeamIcon/Option.svg" onClick={()=>Logout()}  alt="" />*/}
 
             </div>
         </div>
@@ -174,7 +191,7 @@ const MyTeam = () => {
 
 
   <div className="add__session bounce" style={{cursor:"pointer"}} onClick={()=>SetOff((prev)=>!prev)}>
- 
+
     {off ?   <Plus size={25}/>  :  <X size={25}/>}
   </div>
 
