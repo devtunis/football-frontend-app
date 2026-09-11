@@ -10,6 +10,7 @@ import axiosClient from '../axios/endPoint'
 import Online from '../online/Online'
 import CardSkeleton from '../Loader/CardSkeleton'
 import { use } from '../axios/usehook'
+import socket from '../socketClient/socket'
 
 const MyTeam = () => {
     const [off,SetOff] = useState(true)
@@ -51,7 +52,7 @@ const MyTeam = () => {
 
       }
       if(roomListResponse?.data?.info?.length>0){
-         console.log(roomListResponse.data)
+
          SetisFollowRoom(false)
          SetRooms(roomListResponse.data.info)
          SetSkeleten(false)
@@ -81,7 +82,7 @@ const MyTeam = () => {
       const roomListResponse =  await axiosClient.get("/room/getrooms")
 
       if(roomListResponse.data.err =="you dont follow any rooms ."){
-        console.log("no room ")
+
         SetisFollowRoom(true)
         SetSkeleten(false)
       }
@@ -93,7 +94,7 @@ const MyTeam = () => {
 
       }
       if(roomListResponse?.data?.info?.length>0){
-         console.log(roomListResponse.data)
+
          SetisFollowRoom(false)
          SetSkeleten(false)
          SetRooms(roomListResponse.data.info)
@@ -122,6 +123,8 @@ const MyTeam = () => {
     }
 
     localStorage.clear()
+    socket.disconnect()
+
     Nav("/login")
 
 }
@@ -169,19 +172,9 @@ const MyTeam = () => {
 
 
                     :
-                    Skeleton?
-                    <>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    <CardSkeleton/>
-                    </>
+                    Skeleton?  rooms.map((_)=><CardSkeleton key={_.roomId}/>)
+
+
                     :
                       rooms.map((item)=><Card info={item} key={item.roomId}/>)
                     }

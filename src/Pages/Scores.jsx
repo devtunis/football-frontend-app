@@ -39,14 +39,14 @@ const Scores = () => {
     const {err,data} = await use("/room/verifyAndBringData","post",{"roomId":idRoom.roomId})
     if(err!=null)
     {
-      console.log(err,"her")
+
       if(!err.isMember){
         Nav("/login")
       }
       return
     }
 
-    console.log(data)
+
     SetuncomingMatches(data.uncomingMatches)
     Setfinishedmatches(data.finishedmatches)
     SetPermision(data.permision)
@@ -71,7 +71,7 @@ const Scores = () => {
       return
     }
 
-    console.log(data)
+
     SetMessagesNews(data.news)
     }
 
