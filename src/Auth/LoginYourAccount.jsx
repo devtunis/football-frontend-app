@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginYourAccount.css";
-import { Mail, Lock, LogIn, AwardIcon, User, LampFloor } from "lucide-react";
+import { Mail, Lock, LogIn, AwardIcon, User, LampFloor, TabletSmartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../useContext/UseContext";
 
@@ -15,10 +15,14 @@ const LoginYourAccount = () => {
 
 
     const Nav = useNavigate()
-    const {Username , id ,dispatch}  =  useAuth()
+    const {dispatch}  =  useAuth()
     const [Loading,setLoading] = useState(false)
     const [LoadingUsP,setLoadingUsp] = useState(false)
-    const [istypePassworsd,SetIsTypePassword] = useState(true)
+    const [istypePassworsd, SetIsTypePassword] = useState(true)
+  const [autoCompliNames] = useState(() => JSON.parse(localStorage.getItem("names")) || [])
+
+
+
 
 
 
@@ -29,20 +33,22 @@ const LoginYourAccount = () => {
 
     const HandelLogin  = async () => {
 
-      try{
-        if(!State.username ||!State.password){
 
+      try {
+        if (!State.username || !State.password) {
+           console.log(State)
           return
         }
 
-         setLoading(true)
-         const {username , password} = State
+        setLoading(true)
+        const { username, password } = State
+        const tableSname = localStorage.getItem("names")
 
-         const LoginRequest = await axiosClient.post("/login",{
-          Username:username,
-          password:password},{
-            withCredentials:true
-        })
+        tableSname ? localStorage.setItem("names", JSON.stringify([...new Set([...JSON.parse(tableSname), username])]))
+          : localStorage.setItem("names", JSON.stringify([username]))
+
+
+        const LoginRequest = await axiosClient.post("/login", {  Username: username, password: password } )
 
         if(LoginRequest.statusText ==="OK"){
 
@@ -56,7 +62,7 @@ const LoginYourAccount = () => {
 
             }
           })
-          console.log("sucess login")
+
 
           socket.connect()
 
@@ -68,7 +74,7 @@ const LoginYourAccount = () => {
       }
 
       catch(err){
-        console.log(err.response)
+
         setLoading(false)
         if(err.response){
           if(err.response.data.message=="username or password incorrect"){
@@ -86,12 +92,36 @@ const LoginYourAccount = () => {
 
      finally{
             setLoading(false)
-            setLoadingUsp(true)
+
      }
 
 
 
     }
+
+
+  useEffect(() => {
+
+      const HandelCLick =async (e) => {
+
+
+
+        if (e.key == "Enter") {
+
+          try {
+            await  HandelLogin()
+            }
+          catch (err) {
+            console.log(err)
+            }
+          }
+
+     }
+    window.addEventListener("keydown", HandelCLick)
+    return () => {
+      window.removeEventListener("keydown", HandelCLick)
+    }
+   },[State])
 
 
   return (
@@ -132,7 +162,8 @@ const LoginYourAccount = () => {
 
         <div className="input_box">
           <User size={20} />
-          <input
+            <input
+              list="browsers"
             type="text"
             placeholder="user name"
             onInput={(e)=>SetState({
@@ -140,19 +171,46 @@ const LoginYourAccount = () => {
               username : e.target.value
 
             })}
-          />
+
+            />
+
+
+
+    {
+              autoCompliNames?.length > 0 &&
+
+          <datalist id="browsers">
+
+                  {
+                    autoCompliNames.map((item) => <option key={item} value={item} />)
+               }
+              </datalist>
+
+}
+
+
         </div>
 
         <div className="input_box">
-          <Lock size={20} />
-          <input
-            type="password"
+          <Lock size={20} onClick={()=>SetIsTypePassword((p)=>!p)} />
+            <input
+
+            type={istypePassworsd ? "password" :"text"}
             placeholder="Password"
             onInput={(e)=>SetState({
               ...State ,
               password : e.target.value
             })}
-          />
+            />
+
+
+
+
+
+
+
+
+
         </div>
 
         <button className="login_btn" onClick={()=>HandelLogin()}>

@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
- 
+
 
 
 html{
@@ -28,7 +28,7 @@ body{
 }
 
 .errorPasswordIncorret{
- color: red; 
+ color: red;
  font-weight: bold;
  animation: shake 0.5s   ;
 }
@@ -125,6 +125,7 @@ body{
     border:1px solid transparent;
 
     transition:.3s;
+    cursor: pointer;
 }
 
 .input_box:focus-within{
