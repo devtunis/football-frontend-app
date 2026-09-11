@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import socket from "./socket";
-import { useAuth } from "../useContext/UseContext";
+
 import axiosClient from "../axios/endPoint";
 
 const SocketProvider =  ({ children }) => {
@@ -8,7 +8,9 @@ const SocketProvider =  ({ children }) => {
 
    useEffect(()=>{
 
-    const checkUserExist = async()=>{
+     const checkUserExist = async () => {
+       if (["/LoginAccount", "/login", "/CreateAccount"].includes(location.pathname)) return
+
       try{
       const user = await axiosClient.get("/getmydata")
 
