@@ -1,35 +1,40 @@
 import   { useState } from 'react'
 import "./Profile.css"
 import Badge from '../Component/Badge'
-import {
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Tooltip
-} from "recharts";
+
 
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { use } from '../axios/usehook';
+
 const Profile = () => {
 
-const Nav = useNavigate()
-    const [data,SetData] = useState([
+
+  const Nav = useNavigate()
+  const [online,Setonline]  = useState(true)
+  const [isVervied, SetisVerfied] = useState(true)
+  const [profile,SetProfile] =useState({})
 
 
 
-  { stat: "Pace", value: 90 },
-  { stat: "Shooting", value: 85 },
-  { stat: "Passing", value: 80 },
-  { stat: "Dribbling", value: 95 },
+  useEffect(() => {
+
+    const LoadProfile = async () => {
+      const { err, data } = await  use("/profile/details", "get", {})
+      if (err != null) {
+        return
+      }
+
+      SetProfile(data)
+      console.log(data)
+    }
+    LoadProfile()
+  },[])
 
 
 
-    ])
 
-    const [online,Setonline]  = useState(true)
-    const [isVervied, SetisVerfied] = useState(true)
+
   return (
     <div className='profile'>
 
@@ -45,7 +50,7 @@ const Nav = useNavigate()
                 <div className="avtar_wallet">
                      <img src='/public/profile_icon/coins/2.png'/>
                 </div>
-                <h1>100k</h1>
+          <h1>{profile.coins}k</h1>
             </div>
 
             <div className="profile_left">
@@ -53,7 +58,7 @@ const Nav = useNavigate()
                {/* premium_ring */}
                 <div className="Avart_profile ">
 
-                    <img src='/Memories/a.jpg' className='imgPictuerAvatar'/>
+                    <img src={profile.img} className='imgPictuerAvatar'/>
                     <small className={online ?'online_profile_user' : 'offline_profile_user'}></small>
 
                      {/* <div className="crown_avatar ">
@@ -65,8 +70,8 @@ const Nav = useNavigate()
 
             <div className="profile_right">
 
-                <h1 className='nickName'>Ghaith</h1>
-                <h1 className='idName'>@ghaith_7  {isVervied && <img src='/VerfiedIcon/blue.svg'/>}</h1>
+                <h1 className='nickName'>{profile.psuedoName}</h1>
+                   <h1 className='idName'>@{profile.user_name}  {!profile.verifed  && <img src='/VerfiedIcon/blue.svg'/>}</h1>
                 <div className='badgesContainer'>
                  <Badge img={"/myTeamIcon/player.png"} title={"Best Player"} />
                 {/* <Badge img={"/myTeamIcon/star.svg"} title={"MVP"} />
@@ -85,22 +90,22 @@ const Nav = useNavigate()
 
         <div className="view_box">
             <h2>Matches</h2>
-            <h1>24</h1>
+          <h1>{profile.matches}</h1>
         </div>
 
          <div className="view_box">
             <h2>wins</h2>
-            <h1>43</h1>
+          <h1>{profile.wins }</h1>
         </div>
 
         <div className="view_box">
             <h2>Goal</h2>
-            <h1>999</h1>
+          <h1>{profile.Goals}</h1>
         </div>
 
        <div className="view_box">
             <h2>Assists</h2>
-            <h1>433</h1>
+            <h1>{profile.Assists}</h1>
         </div>
 
     </div>

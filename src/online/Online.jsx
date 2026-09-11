@@ -4,14 +4,14 @@ import socket from '../socketClient/socket'
 const Online = () => {
     const [users,setUsers] = useState(()=>JSON.parse(localStorage.getItem("online")) || 0 )
     const [bounce,setBounce] = useState(false)
- 
+
     useEffect(()=>{
-        const HandelOnline = (data)=>{ 
-           
+        const HandelOnline = (data)=>{
+
               setUsers(data.length)
-              console.log(data)
-          
-            
+
+
+
              localStorage.setItem("online",JSON.stringify(data.length))
              setBounce(true)
              setTimeout(() => {setBounce(false)  }, 1000);
@@ -23,7 +23,7 @@ const Online = () => {
            socket.off("online",HandelOnline)
         }
     },[])
- 
+
 
 
   return (
@@ -31,7 +31,7 @@ const Online = () => {
          <div className={`onlineIcon ${bounce && 'bounceOnline'}`}></div>
         <h1>{users}</h1>
         <h1>online</h1>
-       
+
     </div>
   )
 }
