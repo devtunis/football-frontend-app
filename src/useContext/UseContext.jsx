@@ -50,7 +50,10 @@ const UseContext = ({ children }) => {
   }, []);
   useEffect(() => {
     const intializeData = async () => {
-      if (location.pathname === "/CreateAccount") return;
+
+      if (["/login","/LoginAccount", "/CreateAccount"].includes(location.pathname)) return
+
+
 
       try {
         if (!state.UserName || !state.id || !state.img) {
