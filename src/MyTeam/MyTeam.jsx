@@ -122,7 +122,10 @@ const MyTeam = () => {
       return
     }
 
-    localStorage.clear()
+
+    localStorage.removeItem('pathname');
+    localStorage.removeItem('online');
+
     socket.disconnect()
 
     Nav("/login")
