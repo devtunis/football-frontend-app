@@ -38,6 +38,10 @@ const Unlocked = lazy(() => import("./Component/Unlocked"));
 const Locked = lazy(() => import("./Component/Locked"));
 
 const App = () => {
+
+
+
+
   return (
     <SocketProvider>
       <Suspense fallback={<FirstView />}>
