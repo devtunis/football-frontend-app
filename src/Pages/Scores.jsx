@@ -184,7 +184,7 @@ const Scores = () => {
 
        {
         uncomingMatches.length>0  ?
-        uncomingMatches.map((item)=>  <CardInfo key={item.matchId} data={item} teamFull = {false}/>    )
+        uncomingMatches.map((item)=>  <CardInfo key={item.matchId} data={item} teamFull = {true}/>    )
 
 
         :

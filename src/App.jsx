@@ -16,6 +16,7 @@ import FinshedMatchComp from "./Component/FinshedMatchComp";
 import CreateMatch from "./Component/CreateMatch";
 import TestRequest from "./Pages/TestRequest";
 import TestInterceptor from "./Pages/TestInterceptor";
+import Terrain from "./Pages/Terrain";
 
 import HomeScore from "./HomeScore/HomeScore";
 import Scores from "./Pages/Scores";
@@ -36,7 +37,6 @@ const All = lazy(() => import("./Component/All"));
 const Unlocked = lazy(() => import("./Component/Unlocked"));
 
 const Locked = lazy(() => import("./Component/Locked"));
-
 const App = () => {
 
 
@@ -46,6 +46,7 @@ const App = () => {
     <SocketProvider>
       <Suspense fallback={<FirstView />}>
         <Routers>
+          <Path path="/terrain/:id" element={<Terrain />} />
           <Path path="/login" element={<Login />} />
           <Path path="/myTeam" element={<MyTeam />} />
           <Path path="/CreateAccount" element={<CreateAccount />} />

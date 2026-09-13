@@ -42,16 +42,16 @@ const SocketProvider = ({ children }) => {
   useEffect(() => {
     let timeoutId
     const HandeLScoketTabs = () => {
-
+        if (["/LoginAccount", "/login", "/CreateAccount"].includes(location.pathname)) return
       if (document.visibilityState === 'hidden') {
 
         socket.disconnect()
-        SetIsOnline(false)
+       // SetIsOnline(false)
 
       }  else {
 
         socket.connect()
-        SetIsOnline(true)
+       // SetIsOnline(true)
 
           timeoutId = setTimeout(() => {
             SetIsOnline(false)

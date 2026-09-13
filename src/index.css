@@ -11,10 +11,24 @@
 }
 
 html, body {
-  margin: 0;
-    padding: 0;
-  background-color: #040708;
-  overflow: hidden;
+     margin: 0;
+     padding: 0;
+     background-color: #040708;
+     overflow: hidden;
+
+      /* Prevent Safari text selection */
+     -webkit-user-select: none;
+     user-select: none;
+
+    /* Prevent Safari long-press menu */
+     -webkit-touch-callout: none;
+
+    /* Reduce browser gesture handling */
+     touch-action: manipulation;
+      touch-action: none;
+    -webkit-user-select: none;
+
+
 }
 
 button:active{
