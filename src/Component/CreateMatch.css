@@ -1,5 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
+.edit-mode {
+width: 400px;
+height: 200px;
+border-radius: 10px;
+border: 1px solid grey;
+background-color: #0C1215;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%,-50%);
+z-index: 99;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+}
+.close-edit-mode{
+background-color: red;
+color: white;
+border-radius: 10px;
+position: absolute;
+top: 0;
+right: 0;
+transform: translate(-5px,5px);
+cursor: pointer;
+}
+
+.edit-mode .custom-player-button , .return-home-button{
+   width: 150px;
+   padding: 5px;
+   border-radius: 10px;
+   margin: 5px;
+   color: #0B1205;
+   font-weight: bold;
+   letter-spacing: .4px;
+   border: none;
+   background-color: var(--icon-color);
+   cursor: pointer;
+
+}
 .cm__container{
     min-height:100dvh;
     width:100%;

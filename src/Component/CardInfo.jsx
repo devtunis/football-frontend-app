@@ -3,23 +3,19 @@ import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate } from 'react-router-dom'
 const CardInfo = ({data,teamFull}) => {
-  
+
   const Nav = useNavigate()
-const handleVibrate = () => {
-  console.log("working")
- navigator.vibrate(700);
- 
- 
-};
+  const handleVibrate = () => { navigator.vibrate(700) }
+
   return (
     <div className='card-info'>
-    
+
      <div className="left-card-info-data">
         <div className='start-in'><h1>STARTING IN</h1></div>
-        <div className="timeStart sp"><h1>{data ?data.time :"Tomorrow , 18:00" }</h1> <img src='/myTeamIcon/time.svg'/></div>
+        <div className="timeStart ">  <img src='/myTeamIcon/time.svg'/> <h1>{data ?data.time :"Tomorrow , 18:00" }</h1>  </div>
         <div className="timeStart"><img src='/myTeamIcon/location.svg'/>{data ?data.location :<h1>Tunis City Arena</h1>}  </div>
         <div className="timeStart"><img src='/myTeamIcon/owner.svg'/> <h1>Created by {data? data.author: "author"}</h1> </div>
-        
+
      </div>
 
 
@@ -42,13 +38,13 @@ const handleVibrate = () => {
         <Avtar url="https://randomuser.me/api/portraits/women/4.jpg" />
         <Avtar url="https://randomuser.me/api/portraits/men/5.jpg" />
         <Avtar url="plus6" />
-        
+
          </div>
 
 
-   
+
          {teamFull ?  <>
-         
+
          <div className="inforamtionLockedProfile">
 
            <div className="TeamFull">
@@ -69,7 +65,7 @@ const handleVibrate = () => {
          <div className="butttonSession2">
           <button onClick={()=>handleVibrate()}>View Details</button>
          </div>
-         
+
          </>:
 
 

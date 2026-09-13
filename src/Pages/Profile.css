@@ -45,6 +45,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
 
     padding: 20px;
+    margin-top: 10px;
 
 
 
@@ -919,7 +920,7 @@
  }
 
  .view_box{
-    width:130px;
+    width:120px;
 
     height: 80%;
 
@@ -942,16 +943,16 @@
 
 
 
-    gap: 6px;
+    gap: 0px;
     h2{
         font-size: 15px;
         color: var(--nest-text-color);
 
     }
     h1{
-        font-size: 20px;
+        font-size: 14px;
         color: var(--text-color);
-        letter-spacing: 2px;
+
     }
  }
 

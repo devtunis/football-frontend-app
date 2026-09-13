@@ -8,14 +8,17 @@ import {
   Users,
   FileText,
   Sparkles,
+  X,
 } from "lucide-react";
 import { use } from "../axios/usehook.js";
 import { useParams } from "react-router-dom";
 import GhostLoad from "../Loader/Ghost.jsx";
+import { useNavigate } from "react-router-dom";
 const CreateMatch = () => {
   const { roomId } = useParams();
   const [load, setLoad] = useState(false);
-
+  const [showModal, SetshowModal] = useState(false)
+  const Nav = useNavigate()
   const [state, setState] = useState({
     time: "",
     location: "",
@@ -32,7 +35,7 @@ const CreateMatch = () => {
         time: state.time,
         location: state.location,
         maxplayer: state.maxPlayer,
-        description: state.desc,
+        description: "no description"
       },
       setLoad,
     );
@@ -41,10 +44,26 @@ const CreateMatch = () => {
       return;
     }
     console.log(data);
+    if (data) {
+     SetshowModal(true)
+    }
   };
+  // Nav(`/home/Scores/${roomId}`)
   return (
     <>
+
       {load && <GhostLoad />}
+      {
+        showModal &&
+
+          <div className="edit-mode">
+          <X size={19} className="close-edit-mode" onClick={()=>SetshowModal(false)}/>
+        <button className="custom-player-button">Custom Player</button>
+        <button className="return-home-button" onClick={()=> Nav(`/home/Scores/${roomId}`)}>return  Home</button>
+        </div>
+
+      }
+
       <div className="cm__container">
         <div className="cm__backgroundGlow" />
 
@@ -107,7 +126,7 @@ const CreateMatch = () => {
             />
           </div>
 
-          <div className="cm__textarea">
+          {/* <div className="cm__textarea">
             <FileText size={20} />
 
             <textarea
@@ -119,11 +138,12 @@ const CreateMatch = () => {
                 })
               }
             />
-          </div>
+          </div>*/}
 
           <button className="cm__button" onMouseUp={() => HandeLCreateMatch()}>
-            Create Match
+           Create Match
           </button>
+
         </div>
       </div>
     </>

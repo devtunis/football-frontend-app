@@ -1,4 +1,4 @@
-import React from 'react'
+
 import "./FinshedMatches.css"
 const FinshedMatches = ({data}) => {
   return (
@@ -11,7 +11,7 @@ const FinshedMatches = ({data}) => {
                 </div>
                 <h1>{data.nameA}</h1>
             </div>
-            
+
             <div className="middle-score"><h1>{data.result}</h1></div>
             <div className="right">
 

@@ -1,12 +1,31 @@
 
 import "./HomeScore.css"
 import { NavLink, Outlet, useParams } from 'react-router-dom'
-
+import { use } from "../axios/usehook"
+import socket from "../socketClient/socket"
+import { useNavigate } from "react-router-dom"
 const HomeScore = () => {
-    const {roomId} = useParams()
+  const { roomId } = useParams()
+  const Nav = useNavigate()
     const HandelVibrate = ()=>{
         navigator.vibrate(100)
+  }
+  const HandelLogout = async() => {
+     const { err, data } = await use("/api/deleteCookies", "post", {})
+    if (err != null) {
+      console.log(err)
+      return
     }
+
+
+    localStorage.removeItem('pathname');
+    localStorage.removeItem('online');
+
+    socket.disconnect()
+
+    Nav("/login")
+
+  }
     return (
 
         <>
@@ -14,22 +33,22 @@ const HomeScore = () => {
 
 
         <div className='switch-bar' >
-          
-          
+
+
 
                 <div className="content-icon">
-                  
-               
-                   
-                    <NavLink 
+
+
+
+                    <NavLink
                     to={`Scores/${roomId}`}
                     className={({ isActive }) =>
                         isActive ? "active-link" : "normal-link"
                     }
-                    
+
                     >
                      <img onClick={()=>HandelVibrate()} src='/myTeamIcon/homee.svg' />
-                         
+
                      </NavLink>
 
 
@@ -41,19 +60,19 @@ const HomeScore = () => {
 
 
                 <div className="content-icon">
-                  
 
 
 
-                     <NavLink 
+
+                     <NavLink
                     to={`news/${roomId}`}
                     className={({ isActive }) =>
                         isActive ? "active-link" : "normal-link"
                     }
-                    
+
                     >
                        <img  onClick={()=>HandelVibrate()} src='/pictuerSwitchBar/social.svg' />
-                         
+
                      </NavLink>
 
 
@@ -74,46 +93,40 @@ const HomeScore = () => {
 
 
                 <div className="content-icon">
-                  
-                 
 
-                      <NavLink 
+
+
+                      <NavLink
                         to={`shorts/${roomId}`}
                         className={({ isActive }) =>
                             isActive ? "active-link" : "normal-link"
                         }
-                    
+
                     >
                    <img onClick={()=>HandelVibrate()}  src='/myTeamIcon/shorts.png' />
 
-                
-                         
+
+
                     </NavLink>
                      <span>shorts</span>
 
 
                 </div>
 
-                <div className="content-icon">
+                <div className="content-icon" onClick={()=>HandelLogout()}>
 
-                    
-                      <NavLink 
-                        to={`profile/${roomId}`}
-                        className={({ isActive }) =>
-                            isActive ? "active-link" : "normal-link"
-                        }
-                    
-                    >
-                    <img  onClick={()=>HandelVibrate()}  src='/myTeamIcon/user__profile.svg' />
-                
-                         
-                    </NavLink>
+
+
+                    <img  onClick={()=>HandelVibrate()}  src='/myTeamIcon/log.svg' />
 
 
 
 
-                  
-                    <span>Profile</span>
+
+
+
+
+                    <span>Log out</span>
                 </div>
             </div>
 
