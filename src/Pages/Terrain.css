@@ -41,7 +41,7 @@
     }
 .specialFloat{
 transform: scale(1.1);
-filter: brightness(130%);
+filter: brightness(120%);
 box-shadow:
   0 25px 50px rgba(0, 0, 0, 0.55),
   0 10px 20px rgba(0, 0, 0, 0.40),
@@ -60,6 +60,8 @@ border-radius: 30px 30px 0px 0px;
 z-index: 9999;
 
 
+
+
 }
 .holiding-swiper{
   width: 90px;
@@ -74,6 +76,7 @@ z-index: 9999;
   transform: translate(-50%,-50%);
   z-index: 9999;
   margin-top: 4px;
+
 
 }
 
@@ -91,14 +94,21 @@ z-index: 9999;
     gap: 10px;
     overflow-y: auto;
     border-radius: 0px 0px 10px 10px;
+    background: rgba(8, 10, 11, 0.30); /* Semi-transparent */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari/iOS */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+
 
      .floatAvtar{
         margin: 6px;
         flex-shrink: 0;
-        }
+         }
         .floatAvtar:active{
         transform: scale(1.1);
-         filter: brightness(1.75);
+         filter: brightness(1.2);
         }
 }
 
@@ -116,7 +126,11 @@ height: 25px;
 display: flex;
 justify-content: center;
 align-items: center;
-
+background: rgba(8, 10, 11, 0.3); /* Semi-transparent */
+backdrop-filter: blur(2px);
+-webkit-backdrop-filter: blur(2px); /* Safari/iOS */
+border-radius: 16px;
+border: 1px solid rgba(255, 255, 255, 0.15);
 
  }
  .close-terrain:active{
@@ -134,13 +148,30 @@ width: 100%;
 height: 40px;
 background-color: black;
 
-border-radius: 10px 10px 0px 0px;
+
 
 display: flex;
 align-items: center;
 gap: 10px;
 
+    background: rgba(8, 10, 11, 0.30); /* Semi-transparent */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari/iOS */
+
+
+
 }
+
+
+.glass {
+  background: rgba(8, 10, 11, 0.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
 .clear-holding button{
 width: 100px;
 padding: 5px;
@@ -158,4 +189,86 @@ color: grey;
 font-weight: bold;
 }
 
+.clear-holding img{
+    width: 17px;
+    height: 17px;
+
+}
+.clear-holding h1{
+     color: grey;
+     font-size: 17px;
+
+}
+.overNumberClose{
+
+width:70px;
+display: flex;
+align-items: center;
+border-radius: 10px;
+justify-content: space-around;
+transform: translate(10px,-0.6px);
+background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px); /* Safari/iOS */
+border-radius: 16px;
+border: 1px solid rgba(255, 255, 255, 0.15);
+padding: 2px;
+}
+
+.Pop-up-delete{
+
+
+            width: 160px;
+            border-radius: 10px;
+            height:40px;
+            background-color: black;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            background: rgba(8, 10, 11, 0.4);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border-radius: 16px;
+            border: 1px solid #344053;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            user-select: none;
+            cursor: pointer;
+
+
+            animation: move  400ms  ease   ;
+
+
+
+
+
+            h1{
+            color: grey;
+            font-size: 13.4px;
+
+            }
+            img{
+            transform: translateY(1.5px);
+            width: 34px;
+            height: 34px;
+            }
+
+
+
+}
+}
+
+
+@keyframes move  {
+0%{
+transform: translateX(0px) ;
+}
+50%{
+transform: translateX(30px) ;
+}
+100%{
+transform: translateX(0px) ;
+}
 }

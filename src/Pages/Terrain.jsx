@@ -8,13 +8,7 @@ const Terrain = () => {
   const [_, setx] = useState(0)
   const TerrainRef = useRef(null)
 
-  useEffect(() => {
-    if (TerrainRef.current) {
-        let get  = TerrainRef?.current?.getBoundingClientRect()
 
-
-    }
-  },[])
 
   const [Deck, SetDeck] = useState([
 
@@ -42,34 +36,20 @@ const Terrain = () => {
 
   ])
   const [MapPlayer, SetMapPlayer] = useState([])
-
-
-
   const isHoldingItem = useRef(false)
   const isHoldingSwiper = useRef(false)
   const currentHoldingId = useRef(null)
   const currentHeight = useRef(50)
-  const offModelWheel = useRef(false)
+  const offModelWheel = useRef(true)
   const ContainerScrollRef =useRef(null)
   const offset = useRef({ x: null, y: null })
-
   const tranisationOn = useRef(false)
-
-  const HandelFirstDrag = (e,item) => {
-      isHoldingItem.current = true
-      currentHoldingId.current = item.id
-      offset.current.x = e.clientX
-      offset.current.y = e.clientY
+  const popRef = useRef(false)
+  const popRefsucces = useRef(false)
 
 
 
-  }
-  const HandelEnableSwiper = (e) => {
-      isHoldingSwiper.current = true
-      offset.current.x = e.clientX
-      offset.current.y = e.clientY
 
-  }
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -114,10 +94,9 @@ const Terrain = () => {
 
 
 
-
         const dy = (clientY - offset.current.y) * 0.25
 
-         //do trick velocity smotth by whiteboard
+
 
           currentHeight.current = Math.min(Math.max((currentHeight.current + (dy * -1)),4 ) ,50)
           setx((p)=>p+1)
@@ -150,9 +129,6 @@ const Terrain = () => {
      window.removeEventListener("pointermove", HandelPointer)
    }
    },[])
-
-
-
   useEffect(() => {
     const HandelPointerOff = () => {
 
@@ -169,24 +145,6 @@ const Terrain = () => {
      window.removeEventListener("pointerup", HandelPointerOff)
    }
   }, [])
-
-  const AddPlayerToDeck = (item) => {
-    let get = TerrainRef?.current?.getBoundingClientRect()
-    let right = get.right - 50
-    let bottom  =  (get.bottom /2)-100
-
-    let RandomX = Math.floor(Math.random() * right)
-    let RandomY = Math.floor(Math.random() *bottom)
-
-
-
-
-    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY}])
-    SetDeck((p)=> [...p].filter((x) => x.id != item.id))
-
-
-  }
-
   useEffect(() => {
     const HandelWheel = (e) => {
       if (offModelWheel.current)
@@ -206,13 +164,60 @@ const Terrain = () => {
         window.removeEventListener("wheel", HandelWheel)
     }
   }, [])
+  useEffect(() => {
+    const HandelMouseOn = () => {
+      offModelWheel.current = false
+      setx(p=>p+1)
 
+    }
+      const HandelMouseLeave = () => {
+        offModelWheel.current = true
+          setx(p=>p+1)
+    }
+
+    ContainerScrollRef.current.addEventListener("mouseover", HandelMouseOn)
+    ContainerScrollRef.current.addEventListener("mouseleave", HandelMouseLeave)
+
+    return () => {
+    ContainerScrollRef.current.removeEventListener("mouseover", HandelMouseOn)
+    ContainerScrollRef.current.removeEventListener("mouseleave", HandelMouseLeave)
+    }
+  }, [])
+
+
+
+  const AddPlayerToDeck = (item) => {
+    let get = TerrainRef?.current?.getBoundingClientRect()
+    let right = get.right - 50
+    let bottom = (get.bottom / 2) - 100
+
+    let RandomX = Math.floor(Math.random() * right)
+    let RandomY = Math.floor(Math.random() * bottom)
+
+    popRefsucces.current = true
+    setTimeout(() => {
+      popRefsucces.current = false
+      setx(p=>p+1)
+    },600)
+
+
+
+    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY}])
+    SetDeck((p)=> [...p].filter((x) => x.id != item.id))
+
+
+  }
   const HandelRemovePlayer = (item) => {
-    console.log(item)
-    SetDeck((p) => [...p, item])
-     SetMapPlayer((p)=>[...p].filter(player=>player.id!=item.id))
-}
 
+    SetDeck((p) => [...p, item])
+    SetMapPlayer((p) => [...p].filter(player => player.id != item.id))
+    popRef.current = true
+    setTimeout(() => {
+      popRef.current = false
+      setx(p=>p+1)
+    }, 600)
+
+}
   const HnadelClearDeck = () => {
 
     SetDeck(p=>[...p,...MapPlayer])
@@ -234,34 +239,46 @@ const Terrain = () => {
     })
 
   }
+  const HandelEnableSwiper = (e) => {
+      isHoldingSwiper.current = true
+      offset.current.x = e.clientX
+      offset.current.y = e.clientY
+
+  }
+  const HandelFirstDrag = (e,item) => {
+      isHoldingItem.current = true
+      currentHoldingId.current = item.id
+      offset.current.x = e.clientX
+      offset.current.y = e.clientY
 
 
-  useEffect(() => {
-    const HandelMouseOn = () => {
-      offModelWheel.current = false
-      setx(p=>p+1)
 
-    }
-      const HandelMouseLeave = () => {
-        offModelWheel.current = true
-          setx(p=>p+1)
-    }
+  }
 
-    ContainerScrollRef.current.addEventListener("mouseover", HandelMouseOn)
-    ContainerScrollRef.current.addEventListener("mouseleave", HandelMouseLeave)
 
-    return () => {
-    ContainerScrollRef.current.removeEventListener("mouseover", HandelMouseOn)
-    ContainerScrollRef.current.removeEventListener("mouseleave", HandelMouseLeave)
-    }
-  },[])
+
+
   return (
       <>
+      {
+        popRef.current &&
+         <div className="Pop-up-delete">
+        <h1>remove  succes</h1>
+        <img src="/terrainAssets/trash.svg"/>
+        </div>
 
+    }
+ {
+        popRefsucces.current &&
+         <div className="Pop-up-delete">
+        <h1>add  succes</h1>
+        <img src="/terrainAssets/check.svg" style={{width:"18px",height:"18px",transform:"translate(0px,1px)"}}/>
+        </div>
 
+    }
 
         <div className="terrain-container" ref={TerrainRef}>
-        <img className="terrain-wallpaper"  fetchPriority="high"  src="/CustomMatchesPictuers/terrain.jpg" />
+        <img className="terrain-wallpaper"  fetchPriority="high"  src="/CustomMatchesPictuers/pitchTerrain.jpg" />
 
 
         {
@@ -269,7 +286,9 @@ const Terrain = () => {
             <div
 
               onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${item.id == currentHoldingId.current && 'specialFloat'}`} style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>
-              <div className="close-terrain" onClick={()=>HandelRemovePlayer(item)}>x</div>
+              <div className="close-terrain" onClick={() => HandelRemovePlayer(item)}>
+                  <img src="/terrainAssets/red-trash.svg" loading="lazy"/>
+              </div>
             <img src={item.img}/>
           </div >)
        }
@@ -282,8 +301,14 @@ const Terrain = () => {
 
         <div className={`holiding-swiper ${isHoldingSwiper.current && 'specialSwiper'}`} ></div>
         <div className="clear-holding">
+          <div className="overNumberClose ">
+
+           <img src="/terrainAssets/user.svg"/>
+            <h1>{Deck.length}</h1>
+          </div>
           <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
-          <button onClick={()=>HandelAddAll()}>Add All</button>
+          <button onClick={() => HandelAddAll()}>Add All</button>
+
         </div>
 
         <div className="img-holiding" ref={ContainerScrollRef}  >
