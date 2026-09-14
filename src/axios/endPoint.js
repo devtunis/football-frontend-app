@@ -21,7 +21,6 @@ let isRefreshing = false
 
 let logoutButtonTitle = "Log-out"
 let missingTokenErrorMessage = "Token missing"
-let Tokenmissing= "Token missing"
 
 
 
@@ -141,16 +140,16 @@ axiosClient.interceptors.response.use(
 
    if(message===logoutButtonTitle){
 
-
-
-        throw Error("expired Refresh token")
+     await  axiosClient.post("/api/deleteCookies")
+     location.href="/login"
+     throw Error("expired Refresh token")
 
     }
 
    if(message === missingTokenErrorMessage){
-
-
-       throw Error("missing Token")
+        await  axiosClient.post("/api/deleteCookies")
+        location.href="/login"
+        throw Error("missing Token")
 
 
 

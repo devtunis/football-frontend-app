@@ -10,75 +10,38 @@ const Terrain = () => {
 
   useEffect(() => {
     if (TerrainRef.current) {
-      const getBoundries = TerrainRef.current.getBoundingClientRect()
-      console.log(getBoundries.bottom/2)
+        let get  = TerrainRef?.current?.getBoundingClientRect()
+
 
     }
   },[])
 
-  const [MapPlayer, SetMapPlayer] = useState(
-    [
-      {
+  const [Deck, SetDeck] = useState([
 
-        id: 0,
-        x: 200, y: 200,
-        img: "/CustomMatchesPictuers/demoPlayers/a.PNG"
-      }
-  //     ,
 
-  //     {
-
-  //       id: 1,
-  //       x: 200, y: 100, img: "/CustomMatchesPictuers/demoPlayers/b.PNG"
-
-  //     }
-  //     ,
-  //     {
-
-  //       id: 2,
-  //       x: 300, y: 100,
-  //          img:"/CustomMatchesPictuers/demoPlayers/c.PNG"
-
-  //     },
-
-  //           {
-
-  //       id: 3,
-  //       x: 200, y: 200,
-  //       img: "/CustomMatchesPictuers/demoPlayers/a.PNG"
-  //     }
-  //     ,
-
-  //     {
-
-  //       id: 4,
-  //       x: 200, y: 100, img: "/CustomMatchesPictuers/demoPlayers/b.PNG"
-
-  //     }
-  //     ,
-  //     {
-
-  //       id: 5,
-  //       x: 300, y: 100,
-  //          img:"/CustomMatchesPictuers/demoPlayers/c.PNG"
-
-  //     }
-  //     ,
-  // {
-
-  //       id: 6,
-  //       x: 300, y: 100,
-  //          img:"/CustomMatchesPictuers/demoPlayers/c.PNG"
-
-  //     }
+    { id: 1, img: "/Player-Pictuers/ghaith.png"},
+    {id: 2, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    {id: 3,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 4, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    {id: 5,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 6, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    { id: 11, img: "/Player-Pictuers/ghaith.png"},
+    {id: 21, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    {id: 33,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 44, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    {id: 35,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 16, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+     {id: 213, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    {id: 4333,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 414, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    {id: 353,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 316, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
 
 
 
 
-
- ]
-
-  )
+  ])
+  const [MapPlayer, SetMapPlayer] = useState([])
 
 
 
@@ -86,7 +49,10 @@ const Terrain = () => {
   const isHoldingSwiper = useRef(false)
   const currentHoldingId = useRef(null)
   const currentHeight = useRef(50)
+  const offModelWheel = useRef(false)
+  const ContainerScrollRef =useRef(null)
   const offset = useRef({ x: null, y: null })
+
   const tranisationOn = useRef(false)
 
   const HandelFirstDrag = (e,item) => {
@@ -131,7 +97,7 @@ const Terrain = () => {
 
 
 
-        if (velocity >= 3) {
+        if (velocity >= 2) {
 
           tranisationOn.current = true
 
@@ -150,7 +116,7 @@ const Terrain = () => {
 
 
         const dy = (clientY - offset.current.y) * 0.25
-        console.log(dy )
+
          //do trick velocity smotth by whiteboard
 
           currentHeight.current = Math.min(Math.max((currentHeight.current + (dy * -1)),4 ) ,50)
@@ -169,11 +135,10 @@ const Terrain = () => {
 
         const dx = (clientX - offset.current.x)
         const dy = (clientY - offset.current.y)
-        console.log(dy)
 
 
-
-        SetMapPlayer((prev) =>  [...prev].map((item) => item.id == currentHoldingId.current ? { ...item, x: item.x+dx, y: item.y+dy } : item))
+        let getPrespective = TerrainRef?.current?.getBoundingClientRect()
+        SetMapPlayer((prev) => [...prev].map((item) => item.id == currentHoldingId.current ? { ...item, x: Math.min(Math.max(item.x ,0) + dx,getPrespective.right-50), y: Math.min(Math.max(item.y + dy,0),getPrespective.bottom-80) } : item))
 
         offset.current.x = clientX
         offset.current.y  = clientY
@@ -205,8 +170,91 @@ const Terrain = () => {
    }
   }, [])
 
+  const AddPlayerToDeck = (item) => {
+    let get = TerrainRef?.current?.getBoundingClientRect()
+    let right = get.right - 50
+    let bottom  =  (get.bottom /2)-100
+
+    let RandomX = Math.floor(Math.random() * right)
+    let RandomY = Math.floor(Math.random() *bottom)
 
 
+
+
+    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY}])
+    SetDeck((p)=> [...p].filter((x) => x.id != item.id))
+
+
+  }
+
+  useEffect(() => {
+    const HandelWheel = (e) => {
+      if (offModelWheel.current)
+       {
+          tranisationOn.current = true
+          e.deltaY < 0 ? currentHeight.current = 50 : currentHeight.current = 4
+          setx(p => p + 1)
+        }
+
+
+
+
+    }
+
+    window.addEventListener("wheel", HandelWheel)
+    return () => {
+        window.removeEventListener("wheel", HandelWheel)
+    }
+  }, [])
+
+  const HandelRemovePlayer = (item) => {
+    console.log(item)
+    SetDeck((p) => [...p, item])
+     SetMapPlayer((p)=>[...p].filter(player=>player.id!=item.id))
+}
+
+  const HnadelClearDeck = () => {
+
+    SetDeck(p=>[...p,...MapPlayer])
+    SetMapPlayer([])
+
+  }
+  const HandelAddAll = () => {
+    SetDeck([])
+    let get = TerrainRef?.current?.getBoundingClientRect()
+    let right = get.right - 50
+    let bottom  =  (get.bottom /2)-100
+
+
+
+    Deck.forEach((item) => {
+      let RandomX = Math.floor(Math.random() * right)
+    let RandomY = Math.floor(Math.random() *bottom)
+    SetMapPlayer(p=>[...p,{...item , x:RandomX ,y:RandomY}])
+    })
+
+  }
+
+
+  useEffect(() => {
+    const HandelMouseOn = () => {
+      offModelWheel.current = false
+      setx(p=>p+1)
+
+    }
+      const HandelMouseLeave = () => {
+        offModelWheel.current = true
+          setx(p=>p+1)
+    }
+
+    ContainerScrollRef.current.addEventListener("mouseover", HandelMouseOn)
+    ContainerScrollRef.current.addEventListener("mouseleave", HandelMouseLeave)
+
+    return () => {
+    ContainerScrollRef.current.removeEventListener("mouseover", HandelMouseOn)
+    ContainerScrollRef.current.removeEventListener("mouseleave", HandelMouseLeave)
+    }
+  },[])
   return (
       <>
 
@@ -219,7 +267,9 @@ const Terrain = () => {
         {
           MapPlayer.map((item) =>
             <div
-            onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${ item.id == currentHoldingId.current && 'specialFloat'}`}style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>
+
+              onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${item.id == currentHoldingId.current && 'specialFloat'}`} style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>
+              <div className="close-terrain" onClick={()=>HandelRemovePlayer(item)}>x</div>
             <img src={item.img}/>
           </div >)
        }
@@ -228,32 +278,25 @@ const Terrain = () => {
 
 
 
-      <div className={`swiper-slide ${tranisationOn.current && 'animationSmoothSwiper'}`} style={{ height: `${currentHeight.current}%` }}  >
+      <div   onPointerDown={(e) => HandelEnableSwiper(e)}   className={`swiper-slide ${tranisationOn.current && 'animationSmoothSwiper'}`} style={{ height: `${currentHeight.current}%` }}  >
 
-        <div className="holiding-swiper" onPointerDown={(e) => HandelEnableSwiper(e)}></div>
+        <div className={`holiding-swiper ${isHoldingSwiper.current && 'specialSwiper'}`} ></div>
+        <div className="clear-holding">
+          <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
+          <button onClick={()=>HandelAddAll()}>Add All</button>
+        </div>
 
-        <div className="img-holiding"  >
+        <div className="img-holiding" ref={ContainerScrollRef}  >
 
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
-          <div className="floatAvtar" >  <img src="/CustomMatchesPictuers/demoPlayers/a.PNG" /></div>
 
+          {
+            Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.id} >  <img    src={item.img} loading="lazy" /></div>)
+           }
 
 
         </div>
+
+
 
 
 
