@@ -161,6 +161,17 @@ gap: 10px;
 
 
 }
+
+
+.glass {
+  background: rgba(8, 10, 11, 0.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
 .clear-holding button{
 width: 100px;
 padding: 5px;
@@ -178,6 +189,31 @@ color: grey;
 font-weight: bold;
 }
 
+.clear-holding img{
+    width: 17px;
+    height: 17px;
+
+}
+.clear-holding h1{
+     color: grey;
+     font-size: 17px;
+
+}
+.overNumberClose{
+
+width:70px;
+display: flex;
+align-items: center;
+border-radius: 10px;
+justify-content: space-around;
+transform: translate(10px,-0.6px);
+background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px); /* Safari/iOS */
+border-radius: 16px;
+border: 1px solid rgba(255, 255, 255, 0.15);
+padding: 2px;
+}
 
 .Pop-up-delete{
 

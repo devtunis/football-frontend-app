@@ -278,7 +278,7 @@ const Terrain = () => {
     }
 
         <div className="terrain-container" ref={TerrainRef}>
-        <img className="terrain-wallpaper"  fetchPriority="high"  src="/CustomMatchesPictuers/terrain.jpg" />
+        <img className="terrain-wallpaper"  fetchPriority="high"  src="/CustomMatchesPictuers/pitchTerrain.jpg" />
 
 
         {
@@ -287,7 +287,7 @@ const Terrain = () => {
 
               onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${item.id == currentHoldingId.current && 'specialFloat'}`} style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>
               <div className="close-terrain" onClick={() => HandelRemovePlayer(item)}>
-                  <img src="/terrainAssets/red-trash.svg"/>
+                  <img src="/terrainAssets/red-trash.svg" loading="lazy"/>
               </div>
             <img src={item.img}/>
           </div >)
@@ -301,8 +301,14 @@ const Terrain = () => {
 
         <div className={`holiding-swiper ${isHoldingSwiper.current && 'specialSwiper'}`} ></div>
         <div className="clear-holding">
+          <div className="overNumberClose ">
+
+           <img src="/terrainAssets/user.svg"/>
+            <h1>{Deck.length}</h1>
+          </div>
           <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
-          <button onClick={()=>HandelAddAll()}>Add All</button>
+          <button onClick={() => HandelAddAll()}>Add All</button>
+
         </div>
 
         <div className="img-holiding" ref={ContainerScrollRef}  >
