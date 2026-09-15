@@ -20,8 +20,8 @@ const UseContext = ({ children }) => {
   const Nav = useNavigate();
 
   useEffect(() => {
-    if (location.pathname == "/login") return;
-  // check if the pathname is already  exist in my routes  :[login,register,CreateAccount,logout]
+    if (location.pathname.includes["/login", "/LoginAccount", "/CreateAccount"]) return;
+
     localStorage.setItem("pathname", location.pathname);
   }, [location.pathname]);
 
@@ -51,13 +51,15 @@ const UseContext = ({ children }) => {
   useEffect(() => {
     const intializeData = async () => {
 
-      if (["/login","/LoginAccount", "/CreateAccount"].includes(location.pathname)) return
+      if (["/login", "/LoginAccount", "/CreateAccount"].includes(location.pathname)) return
+      // fix this
 
 
 
       try {
         if (!state.UserName || !state.id || !state.img) {
           const { data } = await axiosClient.get("/getmydata");
+
 
           if (data) {
             dispatch({
@@ -66,6 +68,7 @@ const UseContext = ({ children }) => {
             });
 
             const { pathname } = localStorage;
+
             if (pathname) Nav(pathname);
           }
         }

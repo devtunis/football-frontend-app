@@ -13,22 +13,22 @@ const Terrain = () => {
   const [Deck, SetDeck] = useState([
 
 
-    { id: 1, img: "/Player-Pictuers/ghaith.png"},
-    {id: 2, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    {id: 3,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 1, img: "/Player-Pictuers/ghaith.png" },
+    { id: 2, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    { id: 3, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
     { id: 4, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    {id: 5,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 5, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
     { id: 6, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 11, img: "/Player-Pictuers/ghaith.png"},
-    {id: 21, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    {id: 33,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 11, img: "/Player-Pictuers/ghaith.png" },
+    { id: 21, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    { id: 33, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
     { id: 44, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    {id: 35,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 35, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
     { id: 16, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-     {id: 213, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    {id: 4333,  img: "/CustomMatchesPictuers/demoPlayers/a.PNG"  } ,
+    { id: 213, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    { id: 4333, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
     { id: 414, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    {id: 353,  img:"/CustomMatchesPictuers/demoPlayers/c.PNG"},
+    { id: 353, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
     { id: 316, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
 
 
@@ -41,15 +41,15 @@ const Terrain = () => {
   const currentHoldingId = useRef(null)
   const currentHeight = useRef(50)
   const offModelWheel = useRef(true)
-  const ContainerScrollRef =useRef(null)
+  const ContainerScrollRef = useRef(null)
   const offset = useRef({ x: null, y: null })
   const tranisationOn = useRef(false)
   const popRef = useRef(false)
   const popRefsucces = useRef(false)
 
-
-
-
+  useEffect(() => {
+    console.log(TerrainRef.current.getBoundingClientRect())
+  }, [])
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -77,7 +77,7 @@ const Terrain = () => {
 
 
 
-        if (velocity >= 2) {
+        if (velocity >= 4) {
 
           tranisationOn.current = true
 
@@ -116,8 +116,10 @@ const Terrain = () => {
         const dy = (clientY - offset.current.y)
 
 
+
+
         let getPrespective = TerrainRef?.current?.getBoundingClientRect()
-        SetMapPlayer((prev) => [...prev].map((item) => item.id == currentHoldingId.current ? { ...item, x: Math.min(Math.max(item.x ,0) + dx,getPrespective.right-50), y: Math.min(Math.max(item.y + dy,0),getPrespective.bottom-80) } : item))
+        SetMapPlayer((prev) => [...prev].map((item) => item.id == currentHoldingId.current ? { ...item, x: Math.min(Math.max(item.x ,0) + dx,getPrespective.width-50), y: Math.min(Math.max(item.y + dy,0),getPrespective.bottom-80) } : item))
 
         offset.current.x = clientX
         offset.current.y  = clientY
@@ -166,21 +168,34 @@ const Terrain = () => {
   }, [])
   useEffect(() => {
     const HandelMouseOn = () => {
+
       offModelWheel.current = false
       setx(p=>p+1)
 
     }
-      const HandelMouseLeave = () => {
-        offModelWheel.current = true
+    const HandelMouseLeave = () => {
+
+         offModelWheel.current = true
+          setx(p=>p+1)
+    }
+    const HandelMouseDown = () => {
+
+
+          offModelWheel.current = true
           setx(p=>p+1)
     }
 
-    ContainerScrollRef.current.addEventListener("mouseover", HandelMouseOn)
-    ContainerScrollRef.current.addEventListener("mouseleave", HandelMouseLeave)
+
+    ContainerScrollRef.current.addEventListener("wheel", HandelMouseOn)
+    ContainerScrollRef.current.addEventListener("pointerleave", HandelMouseLeave)
+    ContainerScrollRef.current.addEventListener("pointerdown", HandelMouseDown)
+
+
 
     return () => {
-    ContainerScrollRef.current.removeEventListener("mouseover", HandelMouseOn)
-    ContainerScrollRef.current.removeEventListener("mouseleave", HandelMouseLeave)
+         ContainerScrollRef.current.removeEventListener("wheel", HandelMouseOn)
+         ContainerScrollRef.current.removeEventListener("pointerleave", HandelMouseLeave)
+         ContainerScrollRef.current.removeEventListener("pointerdown", HandelMouseDown)
     }
   }, [])
 
@@ -188,17 +203,20 @@ const Terrain = () => {
 
   const AddPlayerToDeck = (item) => {
     let get = TerrainRef?.current?.getBoundingClientRect()
-    let right = get.right - 50
+
+
+    let width = get.width - 50
     let bottom = (get.bottom / 2) - 100
 
-    let RandomX = Math.floor(Math.random() * right)
+    let RandomX = Math.floor(Math.random() * width)
     let RandomY = Math.floor(Math.random() * bottom)
+    console.log(RandomX)
 
     popRefsucces.current = true
     setTimeout(() => {
       popRefsucces.current = false
       setx(p=>p+1)
-    },600)
+    },1000)
 
 
 
@@ -215,7 +233,7 @@ const Terrain = () => {
     setTimeout(() => {
       popRef.current = false
       setx(p=>p+1)
-    }, 600)
+    }, 1000)
 
 }
   const HnadelClearDeck = () => {
@@ -277,7 +295,8 @@ const Terrain = () => {
 
     }
 
-        <div className="terrain-container" ref={TerrainRef}>
+      <div className="terrain-container" ref={TerrainRef}>
+
         <img className="terrain-wallpaper"  fetchPriority="high"  src="/CustomMatchesPictuers/pitchTerrain.jpg" />
 
 
