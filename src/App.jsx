@@ -46,7 +46,7 @@ const App = () => {
     <SocketProvider>
       <Suspense fallback={<FirstView />}>
         <Routers>
-          <Path path="/terrain/:id" element={<Terrain />} />
+          <Path path="/terrain/:id/:matchId/:type" element={<Terrain />} />
           <Path path="/login" element={<Login />} />
           <Path path="/myTeam" element={<MyTeam />} />
           <Path path="/CreateAccount" element={<CreateAccount />} />

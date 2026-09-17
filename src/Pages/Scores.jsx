@@ -17,7 +17,7 @@ const Scores = () => {
  const [finishedmatches,Setfinishedmatches]  = useState([])
  const [Permision,SetPermision] = useState(false)
  const [TheirNews , SetTheirNews] =  useState(false)
- const [messageNews,SetMessagesNews] = useState("")
+ const [messageNews,SetMessagesNews] = useState("no")
  const [count,seetCount] = useState(33)
  const [off,Setoff] = useState(false)
 
@@ -46,6 +46,7 @@ const Scores = () => {
       return
     }
 
+    console.log(data,"here the best moment")
 
     SetuncomingMatches(data.uncomingMatches)
     Setfinishedmatches(data.finishedmatches)

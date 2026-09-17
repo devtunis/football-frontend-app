@@ -2,34 +2,38 @@ import { useState } from "react";
 import "./Terrain.css"
 import { useRef } from "react";
 import { useEffect } from "react";
-
+import SimpleLoader from "../Loader/SimpleLoader";
+import {use} from "../axios/usehook"
+import { useParams } from "react-router-dom";
 const Terrain = () => {
 
   const [_, setx] = useState(0)
   const TerrainRef = useRef(null)
+  const {id,matchId  ,type} = useParams()
+ 
 
 
 
   const [Deck, SetDeck] = useState([
 
 
-    { id: 1, img: "/Player-Pictuers/ghaith.png" },
-    { id: 2, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 3, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
-    { id: 4, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    { id: 5, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 6, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 11, img: "/Player-Pictuers/ghaith.png" },
-    { id: 21, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 33, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
-    { id: 44, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    { id: 35, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 16, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 213, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 4333, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
-    { id: 414, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
-    { id: 353, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
-    { id: 316, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 1, img: "/Player-Pictuers/ghaith.png" },
+    // { id: 2, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 3, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
+    // { id: 4, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    // { id: 5, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 6, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 11, img: "/Player-Pictuers/ghaith.png" },
+    // { id: 21, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 33, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
+    // { id: 44, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    // { id: 35, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 16, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 213, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 4333, img: "/CustomMatchesPictuers/demoPlayers/a.PNG" },
+    // { id: 414, img: "/CustomMatchesPictuers/demoPlayers/b.PNG" },
+    // { id: 353, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
+    // { id: 316, img: "/CustomMatchesPictuers/demoPlayers/c.PNG" },
 
 
 
@@ -46,10 +50,31 @@ const Terrain = () => {
   const tranisationOn = useRef(false)
   const popRef = useRef(false)
   const popRefsucces = useRef(false)
+  const popRefIssue = useRef(false)
+  const popSucess2  = useRef(false)
+  const [loading,setloading] = useState(false)
 
-  useEffect(() => {
-    console.log(TerrainRef.current.getBoundingClientRect())
-  }, [])
+  useEffect(()=>{
+    if(type=="custom")
+    {
+      const fetchmyDeck = async()=>{
+            const  {err,data} = await use("/create/match/getUsersCustomDeck","post",{"roomId":id})
+            if(err!=null){
+              console.log(err)
+              
+              return
+            }
+            console.log(data)
+            if(data){
+              SetDeck(data.members)
+            }
+      } 
+
+      fetchmyDeck()
+      console.log("we ready to fetch the data")
+    }
+  },[])
+   
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -193,9 +218,9 @@ const Terrain = () => {
 
 
     return () => {
-         ContainerScrollRef.current.removeEventListener("wheel", HandelMouseOn)
-         ContainerScrollRef.current.removeEventListener("pointerleave", HandelMouseLeave)
-         ContainerScrollRef.current.removeEventListener("pointerdown", HandelMouseDown)
+         ContainerScrollRef?.current?.removeEventListener("wheel", HandelMouseOn)
+         ContainerScrollRef?.current?.removeEventListener("pointerleave", HandelMouseLeave)
+         ContainerScrollRef?.current?.removeEventListener("pointerdown", HandelMouseDown)
     }
   }, [])
 
@@ -220,15 +245,15 @@ const Terrain = () => {
 
 
 
-    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY}])
-    SetDeck((p)=> [...p].filter((x) => x.id != item.id))
+    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY,id:item.membersId}])
+    SetDeck((p)=> [...p].filter((x) => x.membersId != item.membersId))
 
 
   }
   const HandelRemovePlayer = (item) => {
 
     SetDeck((p) => [...p, item])
-    SetMapPlayer((p) => [...p].filter(player => player.id != item.id))
+    SetMapPlayer((p) => [...p].filter(player => player.membersId != item.membersId))
     popRef.current = true
     setTimeout(() => {
       popRef.current = false
@@ -245,7 +270,7 @@ const Terrain = () => {
   const HandelAddAll = () => {
     SetDeck([])
     let get = TerrainRef?.current?.getBoundingClientRect()
-    let right = get.right - 50
+    let right = get.width - 50
     let bottom  =  (get.bottom /2)-100
 
 
@@ -273,9 +298,47 @@ const Terrain = () => {
 
   }
 
+    
+  const HandelUpdateDeck = async()=>{
+    if(MapPlayer.length<4){
+
+        popRefIssue.current = true 
+        setx((p)=>p+1)
+        setTimeout(() => {
+          popRefIssue.current = false 
+          setx((p)=>p+1)
+
+        }, 1000);
+      return
+    }                 
+      let body =  {
+          "matchId":matchId,
+         
+          "roomId": id,
+
+          "map":MapPlayer
+    }
 
 
+    const {err,data} = await use("/create/match/setdeck","post",body,setloading)
+    if(err!=null){
 
+      console.log(err)
+      return 
+    }
+
+    
+      popSucess2.current = true 
+     setTimeout(() => {
+          popSucess2.current = false 
+        setx((p)=>p+1)
+
+        }, 1000);
+        
+        
+  }
+
+ 
   return (
       <>
       {
@@ -294,6 +357,28 @@ const Terrain = () => {
         </div>
 
     }
+
+    {
+        popRefIssue.current &&
+         <div className="pop-up-issue">
+        <h1>you can't play with this number of player</h1>
+      
+        </div>
+
+    }
+
+
+  {
+        popSucess2.current &&
+         <div className="Pop-up-sucess2">
+          <h1>The deck has been updated !</h1>
+          
+        </div>
+
+    }
+
+
+
 
       <div className="terrain-container" ref={TerrainRef}>
 
@@ -334,15 +419,20 @@ const Terrain = () => {
 
 
           {
-            Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.id} >  <img    src={item.img} loading="lazy" /></div>)
+            Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.membersId} >  <img    src={item.img} loading="lazy" /></div>)
            }
 
 
         </div>
 
-
-
-
+    
+       
+        {
+          loading ?  <div className="componentLoad">
+          <SimpleLoader/>
+        </div>  :     <button className="__update__deck" onClick={()=>HandelUpdateDeck()}>update deck </button>
+        }
+  
 
 
 
