@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./CreateMatch.css";
 
 import {
@@ -16,6 +16,7 @@ import GhostLoad from "../Loader/Ghost.jsx";
 import { useNavigate } from "react-router-dom";
 const CreateMatch = () => {
   const { roomId } = useParams();
+  const idmatchRef  = useRef(null)
   const [load, setLoad] = useState(false);
   const [showModal, SetshowModal] = useState(false)
   const Nav = useNavigate()
@@ -44,6 +45,7 @@ const CreateMatch = () => {
       return;
     }
     console.log(data);
+    idmatchRef.current  = data.genreateKey
     if (data) {
      SetshowModal(true)
     }
@@ -58,7 +60,7 @@ const CreateMatch = () => {
 
           <div className="edit-mode">
           <X size={19} className="close-edit-mode" onClick={()=>SetshowModal(false)}/>
-        <button className="custom-player-button">Custom Player</button>
+        <button className="custom-player-button" onClick={()=>Nav(`/terrain/${roomId}/${idmatchRef.current}/custom`)}>Custom Player</button>
         <button className="return-home-button" onClick={()=> Nav(`/home/Scores/${roomId}`)}>return  Home</button>
         </div>
 

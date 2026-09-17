@@ -2,11 +2,12 @@ import React from 'react'
 import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 const CardInfo = ({data,teamFull}) => {
-
+     
   const Nav = useNavigate()
   const handleVibrate = () => { navigator.vibrate(700) }
-
+ 
   return (
     <div className='card-info'>
 
