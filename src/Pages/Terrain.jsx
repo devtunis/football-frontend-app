@@ -5,11 +5,13 @@ import { useEffect } from "react";
 import SimpleLoader from "../Loader/SimpleLoader";
 import {use} from "../axios/usehook"
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Terrain = () => {
 
   const [_, setx] = useState(0)
   const TerrainRef = useRef(null)
   const {id,matchId  ,type} = useParams()
+  const Nav = useNavigate()
  
 
 
@@ -60,7 +62,13 @@ const Terrain = () => {
       const fetchmyDeck = async()=>{
             const  {err,data} = await use("/create/match/getUsersCustomDeck","post",{"roomId":id})
             if(err!=null){
-              console.log(err)
+             
+              switch(err.err){
+                case "you can't do this action":{
+                  Nav("/myTeam")
+                  break
+                }
+              }
               
               return
             }
@@ -74,7 +82,6 @@ const Terrain = () => {
       console.log("we ready to fetch the data")
     }
   },[])
-   
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -224,7 +231,18 @@ const Terrain = () => {
     }
   }, [])
 
+ useEffect(()=>{
 
+  const HandeLOffContextMenu = (e) =>{
+    e.preventDefault()
+  }
+  window.addEventListener("contextmenu",HandeLOffContextMenu)
+
+  return()=>{
+    window.removeEventListener("contextmenu",HandeLOffContextMenu)
+
+  }
+ },[])
 
   const AddPlayerToDeck = (item) => {
     let get = TerrainRef?.current?.getBoundingClientRect()
@@ -278,9 +296,10 @@ const Terrain = () => {
     Deck.forEach((item) => {
       let RandomX = Math.floor(Math.random() * right)
     let RandomY = Math.floor(Math.random() *bottom)
-    SetMapPlayer(p=>[...p,{...item , x:RandomX ,y:RandomY}])
+    SetMapPlayer(p=>[...p,{...item ,id:item.membersId, x:RandomX ,y:RandomY}])
     })
 
+    console.log(Deck)
   }
   const HandelEnableSwiper = (e) => {
       isHoldingSwiper.current = true
@@ -289,16 +308,18 @@ const Terrain = () => {
 
   }
   const HandelFirstDrag = (e,item) => {
-      isHoldingItem.current = true
-      currentHoldingId.current = item.id
-      offset.current.x = e.clientX
-      offset.current.y = e.clientY
+        
+      if(e.button==0){
+          isHoldingItem.current = true
+          currentHoldingId.current = item.id
+          offset.current.x = e.clientX
+          offset.current.y = e.clientY
+      }
+  
 
 
 
-  }
-
-    
+  }   
   const HandelUpdateDeck = async()=>{
     if(MapPlayer.length<4){
 
@@ -337,6 +358,12 @@ const Terrain = () => {
         
         
   }
+
+
+
+
+
+
 
  
   return (
@@ -386,7 +413,9 @@ const Terrain = () => {
 
 
         {
+          
           MapPlayer.map((item) =>
+            
             <div
 
               onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${item.id == currentHoldingId.current && 'specialFloat'}`} style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import   { useEffect, useState } from "react";
 import "./LoginYourAccount.css";
-import { Mail, Lock, LogIn, AwardIcon, User, LampFloor, TabletSmartphone } from "lucide-react";
+import {   Lock, LogIn,   User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../useContext/UseContext";
 
 import axiosClient from "../axios/endPoint";
 import LoaderLogin from "../Component/LoaderLogin";
 import socket from "../socketClient/socket";
+
 
 
 
@@ -19,7 +20,7 @@ const LoginYourAccount = () => {
     const [Loading,setLoading] = useState(false)
     const [LoadingUsP,setLoadingUsp] = useState(false)
     const [istypePassworsd, SetIsTypePassword] = useState(true)
-  const [autoCompliNames] = useState(() => JSON.parse(localStorage.getItem("names")) || [])
+    const [autoCompliNames] = useState(() => JSON.parse(localStorage.getItem("names")) || [])
 
 
 

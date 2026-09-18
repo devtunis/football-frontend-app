@@ -3,8 +3,15 @@ import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useState } from 'react'
 const CardInfo = ({data,teamFull}) => {
-     
+  const [users] = useState(
+    ()=>{
+      const currentPlayer = [...data.currentPlayer]
+      return currentPlayer.slice(0,5)
+    }
+
+  )
   const Nav = useNavigate()
   const handleVibrate = () => { navigator.vibrate(700) }
  
@@ -29,15 +36,16 @@ const CardInfo = ({data,teamFull}) => {
          <div className="numberOfPlayer-in-room">
             <span className='firstn'>{data?data.maxplayer:0}</span>
             <span className='divn'>/</span>
-            <span className='seconden'>{data?data.currentPlayer:6}</span>
+            <span className='seconden'>{data?data.currentPlayer.length:6}</span>
          </div>
 
          <div className="personJoin">
-        <Avtar url="https://randomuser.me/api/portraits/men/1.jpg" />
-        <Avtar url="https://randomuser.me/api/portraits/women/2.jpg" />
-        <Avtar url="https://randomuser.me/api/portraits/men/3.jpg" />
-        <Avtar url="https://randomuser.me/api/portraits/women/4.jpg" />
-        <Avtar url="https://randomuser.me/api/portraits/men/5.jpg" />
+       
+        {
+          users.map((item)=> 
+             <Avtar key={item.membersId} url={item.img} />
+         )
+        }
         <Avtar url="plus6" />
 
          </div>
