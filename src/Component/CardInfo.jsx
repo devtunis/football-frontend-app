@@ -1,11 +1,12 @@
 import React from 'react'
 import "./CardInfo.css"
 import Avtar from './Avtar'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useState } from 'react'
 const CardInfo = ({data}) => {
  
+  const {roomId} = useParams()
   const teamFull  = data.currentPlayer.length>=data.maxplayer
   const [users] = useState(
     ()=>{
@@ -14,8 +15,13 @@ const CardInfo = ({data}) => {
     }
 
   )
+ 
   const Nav = useNavigate()
-  const handleVibrate = () => { navigator.vibrate(700) }
+  const  HandelViewDetails = ()=>{
+    console.log(roomId, data.matchId)
+     Nav(`/terrain/${roomId}/${data.matchId}/custom`)
+
+  }
  
   return (
     <div className='card-info'>
@@ -47,8 +53,9 @@ const CardInfo = ({data}) => {
          <div className="personJoin">
        
         {
-          users.map((item)=> 
-             <Avtar key={item.id} url={item.img} />
+          users.map((item,index)=> 
+            
+             <Avtar key={item.img} url={item.img} />
          )
         }
         <Avtar url="plus6" />
@@ -57,7 +64,7 @@ const CardInfo = ({data}) => {
 
 
 
-         {teamFull ?  <>
+         {true ?  <>
 
          <div className="inforamtionLockedProfile">
 
@@ -77,14 +84,14 @@ const CardInfo = ({data}) => {
 
          </div>
          <div className="butttonSession2">
-          <button onClick={()=>handleVibrate()}>View Details</button>
+          <button onClick={()=>HandelViewDetails()} >View Details</button>
          </div>
 
          </>:
 
 
           <div className="butttonSession">
-          <button style={{cursor:"pointer"}} onMouseUp={()=>handleVibrate()}>Join Session</button>
+          <button style={{cursor:"pointer"}}  >Join Session</button>
          </div>
             }
      </div>

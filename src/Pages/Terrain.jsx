@@ -6,14 +6,16 @@ import SimpleLoader from "../Loader/SimpleLoader";
 import {use} from "../axios/usehook"
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
- 
- 
+import { useAuth } from '../useContext/UseContext'
+
 const Terrain = () => {
 
   const [_, setx] = useState(0)
   const TerrainRef = useRef(null)
   const {id,matchId  ,type} = useParams()
   const Nav = useNavigate()
+   
+ 
  
 
 
@@ -57,6 +59,7 @@ const Terrain = () => {
   const popRefIssue = useRef(false)
   const popSucess2  = useRef(false)
   const [loading,setloading] = useState(false)
+  const [permision,setPermision] = useState(false)
 
 
  
@@ -64,62 +67,60 @@ const Terrain = () => {
    
  
 
+ 
+  useEffect(() => {
+    if (type !== "custom") return;
 
-  // Deck.filter((item)=>!(MapPlayer.find((x)=>x.id==item.membersId))).
+    const fetchData = async () => {
+      try {
+        const [mapResult, deckResult] = await Promise.all([
+          use("/create/match/getMapPlayer", "post", {
+            "matchId":matchId,
+            "roomId": id,
+          }),
+          use("/create/match/getUsersCustomDeck", "post", {
+            "roomId": id,
+          }),
+        ]);
 
-  
- useEffect(() => {
-  if (type !== "custom") return;
-
-  const fetchData = async () => {
-    try {
-      const [mapResult, deckResult] = await Promise.all([
-        use("/create/match/getMapPlayer", "post", {
-          "matchId":matchId,
-          "roomId": id,
-        }),
-        use("/create/match/getUsersCustomDeck", "post", {
-          "roomId": id,
-        }),
-      ]);
-
-     
-      // Map players
-      if (mapResult.err) {
-        console.log(mapResult.err);
-      } else if (mapResult.data) {
-        SetMapPlayer(mapResult.data.mapPlayers);
-    
-      }
-
-      // Custom deck
-      if (deckResult.err) {
-        if (deckResult.err.err === "you can't do this action") {
-          Nav("/myTeam");
-          return;
+      
+        // Map players
+        if (mapResult.err) {
+          console.log(mapResult.err);
+        } else if (mapResult.data) {
+        
+          SetMapPlayer(mapResult.data.mapPlayers);
+          setPermision(mapResult.data.isOwner)
+          
+          if(!mapResult.data.isMember)
+          {
+            Nav("/myTeam");
+            
+            return;
+          }
+      
         }
 
-     
-      } else if (deckResult.data) {
-        console.log(mapResult.data.mapPlayers)
+        // Custom deck
+        if (deckResult.err) {
+          if (deckResult.err.err === "you can't do this action") {
+            Nav("/myTeam");
+            return;
+          }
+
+      
+        } else if (deckResult.data) {
         
-        SetDeck(deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))));
+          
+          SetDeck(deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))));
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    };
 
-  fetchData();
-}, [type, matchId, id]);
-
-
-
-
-
-
-
-
+    fetchData();
+  }, [type, matchId, id])
 
   useEffect(() => {
     const HandelPointer = (e) => {
@@ -257,9 +258,9 @@ const Terrain = () => {
     }
 
 
-    ContainerScrollRef.current.addEventListener("wheel", HandelMouseOn)
-    ContainerScrollRef.current.addEventListener("pointerleave", HandelMouseLeave)
-    ContainerScrollRef.current.addEventListener("pointerdown", HandelMouseDown)
+    ContainerScrollRef?.current?.addEventListener("wheel", HandelMouseOn)
+    ContainerScrollRef?.current?.addEventListener("pointerleave", HandelMouseLeave)
+    ContainerScrollRef?.current?.addEventListener("pointerdown", HandelMouseDown)
 
 
 
@@ -281,6 +282,9 @@ const Terrain = () => {
 
     }
   },[])
+
+
+
 
   const AddPlayerToDeck = (item) => {
     let get = TerrainRef?.current?.getBoundingClientRect()
@@ -352,7 +356,7 @@ const Terrain = () => {
   }
   const HandelFirstDrag = (e,item) => {
         
-      if(e.button==0){
+      if(e.button==0 && permision){
           isHoldingItem.current = true
           currentHoldingId.current = item.id
           offset.current.x = e.clientX
@@ -462,9 +466,11 @@ const Terrain = () => {
             <div
 
               onPointerDown={(e) => HandelFirstDrag(e, item)} key={item.id} className={`floatAvtar  ${item.id == currentHoldingId.current && 'specialFloat'}`} style={{ position: "absolute", top: `${item.y}px`, left: `${item.x}px` }}>
-              <div className="close-terrain" onClick={() => HandelRemovePlayer(item)}>
+              {
+                permision && <div className="close-terrain" onClick={() => HandelRemovePlayer(item)}>
                   <img src="/terrainAssets/red-trash.svg" loading="lazy"/>
               </div>
+              }
             <img src={item.img}/>
           </div >)
        }
@@ -472,6 +478,8 @@ const Terrain = () => {
       </div>
 
 
+{
+  permision && 
 
       <div   onPointerDown={(e) => HandelEnableSwiper(e)}   className={`swiper-slide ${tranisationOn.current && 'animationSmoothSwiper'}`} style={{ height: `${currentHeight.current}%` }}  >
 
@@ -510,7 +518,7 @@ const Terrain = () => {
 
 
       </div>
-
+}
 
 
       </>

@@ -178,7 +178,7 @@ const Scores = () => {
 
 
       </div>
-
+ 
 
      <div className="viewAllList">
 
