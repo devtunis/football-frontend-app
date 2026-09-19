@@ -4,7 +4,9 @@ import Avtar from './Avtar'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useState } from 'react'
-const CardInfo = ({data,teamFull}) => {
+const CardInfo = ({data}) => {
+ 
+  const teamFull  = data.currentPlayer.length>=data.maxplayer
   const [users] = useState(
     ()=>{
       const currentPlayer = [...data.currentPlayer]
@@ -34,16 +36,19 @@ const CardInfo = ({data,teamFull}) => {
 
          <div className='Player'><h1>Players</h1></div>
          <div className="numberOfPlayer-in-room">
-            <span className='firstn'>{data?data.maxplayer:0}</span>
-            <span className='divn'>/</span>
-            <span className='seconden'>{data?data.currentPlayer.length:6}</span>
+           
+          
+             <span className='seconden'>{data?data.currentPlayer.length:6}</span>
+             <span className='divn'>/</span>
+             <span className='firstn'>{data?data.maxplayer:0}</span>
+            
          </div>
 
          <div className="personJoin">
        
         {
           users.map((item)=> 
-             <Avtar key={item.membersId} url={item.img} />
+             <Avtar key={item.id} url={item.img} />
          )
         }
         <Avtar url="plus6" />

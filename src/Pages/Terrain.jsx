@@ -6,6 +6,8 @@ import SimpleLoader from "../Loader/SimpleLoader";
 import {use} from "../axios/usehook"
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+ 
+ 
 const Terrain = () => {
 
   const [_, setx] = useState(0)
@@ -56,32 +58,69 @@ const Terrain = () => {
   const popSucess2  = useRef(false)
   const [loading,setloading] = useState(false)
 
-  useEffect(()=>{
-    if(type=="custom")
-    {
-      const fetchmyDeck = async()=>{
-            const  {err,data} = await use("/create/match/getUsersCustomDeck","post",{"roomId":id})
-            if(err!=null){
-             
-              switch(err.err){
-                case "you can't do this action":{
-                  Nav("/myTeam")
-                  break
-                }
-              }
-              
-              return
-            }
-            console.log(data)
-            if(data){
-              SetDeck(data.members)
-            }
-      } 
 
-      fetchmyDeck()
-      console.log("we ready to fetch the data")
+ 
+
+   
+ 
+
+
+  // Deck.filter((item)=>!(MapPlayer.find((x)=>x.id==item.membersId))).
+
+  
+ useEffect(() => {
+  if (type !== "custom") return;
+
+  const fetchData = async () => {
+    try {
+      const [mapResult, deckResult] = await Promise.all([
+        use("/create/match/getMapPlayer", "post", {
+          "matchId":matchId,
+          "roomId": id,
+        }),
+        use("/create/match/getUsersCustomDeck", "post", {
+          "roomId": id,
+        }),
+      ]);
+
+     
+      // Map players
+      if (mapResult.err) {
+        console.log(mapResult.err);
+      } else if (mapResult.data) {
+        SetMapPlayer(mapResult.data.mapPlayers);
+    
+      }
+
+      // Custom deck
+      if (deckResult.err) {
+        if (deckResult.err.err === "you can't do this action") {
+          Nav("/myTeam");
+          return;
+        }
+
+     
+      } else if (deckResult.data) {
+        console.log(mapResult.data.mapPlayers)
+        
+        SetDeck(deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))));
+      }
+    } catch (err) {
+      console.log(err);
     }
-  },[])
+  };
+
+  fetchData();
+}, [type, matchId, id]);
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -230,19 +269,18 @@ const Terrain = () => {
          ContainerScrollRef?.current?.removeEventListener("pointerdown", HandelMouseDown)
     }
   }, [])
+  useEffect(()=>{
 
- useEffect(()=>{
+    const HandeLOffContextMenu = (e) =>{
+      e.preventDefault()
+    }
+    window.addEventListener("contextmenu",HandeLOffContextMenu)
 
-  const HandeLOffContextMenu = (e) =>{
-    e.preventDefault()
-  }
-  window.addEventListener("contextmenu",HandeLOffContextMenu)
+    return()=>{
+      window.removeEventListener("contextmenu",HandeLOffContextMenu)
 
-  return()=>{
-    window.removeEventListener("contextmenu",HandeLOffContextMenu)
-
-  }
- },[])
+    }
+  },[])
 
   const AddPlayerToDeck = (item) => {
     let get = TerrainRef?.current?.getBoundingClientRect()
@@ -270,8 +308,15 @@ const Terrain = () => {
   }
   const HandelRemovePlayer = (item) => {
 
-    SetDeck((p) => [...p, item])
-    SetMapPlayer((p) => [...p].filter(player => player.membersId != item.membersId))
+
+ 
+    
+      SetMapPlayer((p) => [...p].filter(player => player.id != item.id))
+    
+ 
+   
+     SetDeck((p) => [...p, {...item,membersId:item.id}])
+   
     popRef.current = true
     setTimeout(() => {
       popRef.current = false
@@ -280,26 +325,24 @@ const Terrain = () => {
 
 }
   const HnadelClearDeck = () => {
-
+    
     SetDeck(p=>[...p,...MapPlayer])
     SetMapPlayer([])
 
   }
   const HandelAddAll = () => {
-    SetDeck([])
+ 
     let get = TerrainRef?.current?.getBoundingClientRect()
     let right = get.width - 50
     let bottom  =  (get.bottom /2)-100
+ 
 
+   let newDeck =  Deck.map((item) => ({...item,id:item.membersId,x:Math.floor(Math.random() * right) ,y: Math.floor(Math.random() *bottom)}))
+   console.log(newDeck)
+   
 
-
-    Deck.forEach((item) => {
-      let RandomX = Math.floor(Math.random() * right)
-    let RandomY = Math.floor(Math.random() *bottom)
-    SetMapPlayer(p=>[...p,{...item ,id:item.membersId, x:RandomX ,y:RandomY}])
-    })
-
-    console.log(Deck)
+   SetMapPlayer(p=>[...p,...newDeck])  
+    SetDeck([])
   }
   const HandelEnableSwiper = (e) => {
       isHoldingSwiper.current = true
@@ -321,7 +364,7 @@ const Terrain = () => {
 
   }   
   const HandelUpdateDeck = async()=>{
-    if(MapPlayer.length<4){
+    if(MapPlayer.length<1){
 
         popRefIssue.current = true 
         setx((p)=>p+1)
@@ -448,7 +491,7 @@ const Terrain = () => {
 
 
           {
-            Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.membersId} >  <img    src={item.img} loading="lazy" /></div>)
+          Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.membersId ||  item.id} >  <img    src={item.img} loading="lazy" /></div>)
            }
 
 

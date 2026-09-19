@@ -144,7 +144,7 @@ const PendingAcceptPersonRequest = () => {
                                        type={"Pending"}/>  )
 
 
-                : <h1 style={{color:"white"}}>you dont have notification</h1>
+                : <h1 style={{color:"white",fontSize:"20px"}}>you dont have notification</h1>
               }
 
             </div>
