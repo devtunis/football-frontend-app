@@ -93,8 +93,8 @@ axiosClient.interceptors.response.use(
 
         try{
           await RefreshTheToken()
-          socket.disconnect().connect()
           processQueue()
+          socket.disconnect().connect()
           return axiosClient(origingalRequest)
 
 

@@ -182,9 +182,10 @@
         font-weight: bold;
         letter-spacing: 1px;
         border: none;
-          user-select: none;
+        user-select: none;
 
      }
+    
 }
 .inforamtionLockedProfile{
     width: 100%;
@@ -228,6 +229,7 @@
        display: flex;
        align-items: center;
        gap:5px;
+       transform: translateX(6px);
 
 
         img{
@@ -508,6 +510,7 @@
        display: flex;
        align-items: center;
        gap:5px;
+    transform: translateX(6px);
 
 
         img{
@@ -535,10 +538,11 @@
     display: flex;
     justify-content:flex-end;
     height: 25px;
+    cursor: pointer;
      button{
         background-color: var(--icon-color);
         width: 50%;
-
+ cursor: pointer;
         border-radius: 30px;
         color: black;
         font-weight: bold;
@@ -550,6 +554,10 @@
         font-size: 10px;
         transform: translateX(-8px);
 
+     } button:active{
+        transform: scale(1.1);
+         transform: translateX(0px);
+         cursor: pointer;
      }
 }
 

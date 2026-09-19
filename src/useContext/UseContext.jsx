@@ -36,6 +36,7 @@ const UseContext = ({ children }) => {
           socket.disconnect().connect();
           console.log("we try to connect again");
         } else {
+          alert("im in line 39")
           await axiosClient.post("/api/deleteCookies");
 
           Nav("/login");
@@ -78,6 +79,7 @@ const UseContext = ({ children }) => {
           err.message === "missing Token" ||
           err.message == "expired Refresh token"
         ) {
+          alert("line 82")
           await axiosClient.post("/api/deleteCookies");
 
           Nav("/login");
