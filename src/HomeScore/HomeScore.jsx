@@ -1,4 +1,4 @@
-
+ 
 import "./HomeScore.css"
 import { NavLink, Outlet, useParams } from 'react-router-dom'
 import { use } from "../axios/usehook"
@@ -7,15 +7,13 @@ import { useNavigate } from "react-router-dom"
 const HomeScore = () => {
   const { roomId } = useParams()
   const Nav = useNavigate()
-    const HandelVibrate = ()=>{
-        navigator.vibrate(100)
-  }
+   
   const HandelLogout = async() => {
      const { err, data } = await use("/api/deleteCookies", "post", {})
-    if (err != null) {
-      console.log(err)
-      return
-    }
+        if (err != null) {
+        console.log(err)
+        return
+        }
 
 
     localStorage.removeItem('pathname');
@@ -47,7 +45,7 @@ const HomeScore = () => {
                     }
 
                     >
-                     <img onClick={()=>HandelVibrate()} src='/myTeamIcon/homee.svg' />
+                     <img   src='/myTeamIcon/homee.svg' />
 
                      </NavLink>
 

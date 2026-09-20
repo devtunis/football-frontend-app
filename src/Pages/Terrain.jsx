@@ -113,6 +113,7 @@ const Terrain = () => {
         
           
           SetDeck(deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))));
+         
         }
       } catch (err) {
         console.log(err);
@@ -407,7 +408,10 @@ const Terrain = () => {
   }
 
 
+  const TacticsOneTowThree  = ()=>{
 
+    console.log(MapPlayer)
+  }
 
 
 
@@ -492,7 +496,9 @@ const Terrain = () => {
           </div>
           <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
           <button onClick={() => HandelAddAll()}>Add All</button>
-
+          <button onClick={() => TacticsOneTowThree()} >1-2-3</button>
+      
+      
         </div>
 
         <div className="img-holiding" ref={ContainerScrollRef}  >
@@ -519,8 +525,7 @@ const Terrain = () => {
 
       </div>
 }
-
-
+ 
       </>
 
       )

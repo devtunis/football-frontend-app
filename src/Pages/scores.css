@@ -424,6 +424,7 @@
   .navbar .avatar-logo img{
     width: 140%;
     height: 140%;
+    object-fit: contain;
 
 
  }

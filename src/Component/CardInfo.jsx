@@ -2,27 +2,61 @@ import React from 'react'
 import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useState } from 'react'
-const CardInfo = ({data}) => {
  
+import { useState } from 'react'
+import { use } from '../axios/usehook'
+import { useAuth } from '../useContext/UseContext'
+import { useEffect } from 'react'
+
+const CardInfo = ({data,update}) => {
+  const {id} = useAuth()
+  const [isinRoom,SetisinRoom]  = useState(false)
+  console.log("draw Component again")
+
+
+  
+  useEffect(()=>{
+     
+    if(id){
+       const existPlayer = data.currentPlayer.find((item)=>item.id === id) ? true : false 
+       SetisinRoom(existPlayer)
+    }
+  },[id])
+ 
+
+
   const {roomId} = useParams()
   const teamFull  = data.currentPlayer.length>=data.maxplayer
-  const [users] = useState(
-    ()=>{
-      const currentPlayer = [...data.currentPlayer]
-      return currentPlayer.slice(0,5)
-    }
+  const users = data.currentPlayer.slice(0, 5)
 
-  )
+
+   
  
-  const Nav = useNavigate()
-  const  HandelViewDetails = ()=>{
-    console.log(roomId, data.matchId)
+
+
+  
+ 
+    const Nav = useNavigate()
+    const  HandelViewDetails = ()=>{
+ 
      Nav(`/terrain/${roomId}/${data.matchId}/custom`)
 
   }
  
+  const HandelJoinSession = async (item)=>{
+   
+    const {err,data:d} = await use("/create/match/joinSession","post",{
+     "matchId":data.matchId,
+     "roomId":roomId
+})
+    if(err!=null){
+      console.log(err)
+      return
+    }
+     
+    update(item.matchId)
+     
+  }
   return (
     <div className='card-info'>
 
@@ -58,13 +92,16 @@ const CardInfo = ({data}) => {
              <Avtar key={item.img} url={item.img} />
          )
         }
-        <Avtar url="plus6" />
+       
+       {
+        users.length>4 &&  <Avtar url="plus6" />
+       }
 
          </div>
 
 
 
-         {true ?  <>
+         {(teamFull || isinRoom)?  <>
 
          <div className="inforamtionLockedProfile">
 
@@ -91,7 +128,7 @@ const CardInfo = ({data}) => {
 
 
           <div className="butttonSession">
-          <button style={{cursor:"pointer"}}  >Join Session</button>
+          <button style={{cursor:"pointer"}} onClick={()=>HandelJoinSession(data)} >Join Session</button>
          </div>
             }
      </div>
