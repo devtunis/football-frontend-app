@@ -20,9 +20,15 @@ const Scores = () => {
  const [messageNews,SetMessagesNews] = useState("no")
  const [count,seetCount] = useState(33)
  const [off,Setoff] = useState(false)
-
  const idRoom   = useParams()
-  const Nav = useNavigate()
+ const Nav = useNavigate()
+
+
+
+
+
+
+
 
   useEffect(()=>{
     if(!idRoom.roomId)
@@ -30,8 +36,6 @@ const Scores = () => {
       Nav("/login")
     }
   },[])
-
-
   useEffect(()=>{
 
     const FetchUncomingMatches = async()=>{
@@ -45,9 +49,8 @@ const Scores = () => {
       }
       return
     }
-
-    console.log(data,"here the best moment")
-
+    console.log(data.uncomingMatches)
+    
     SetuncomingMatches(data.uncomingMatches)
     Setfinishedmatches(data.finishedmatches)
     SetPermision(data.permision)
@@ -56,23 +59,13 @@ const Scores = () => {
     FetchUncomingMatches()
 
   },[])
-
-
-
-
     useEffect(()=>{
 
     const HandelGetLastNews = async()=>{
 
     const {err,data} = await use("/room/getlastnews","post",{"roomId":idRoom.roomId})
-    if(err!=null)
-    {
-
-
-      return
-    }
-
-
+    if(err!=null)return
+ 
     SetMessagesNews(data.news)
     }
 
@@ -88,7 +81,12 @@ const Scores = () => {
 
 
 
-
+ const HandelUpdateUncoming = (matchId) =>  {
+ 
+   const filterNewUncomingMatches = uncomingMatches.map((item)=>item.matchId ===matchId  ?{...item,currentPlayer:[...item.currentPlayer,{id,img,x:0,y:0}]} : item)
+   SetuncomingMatches(filterNewUncomingMatches)
+   
+ }
 
 
 
@@ -185,7 +183,11 @@ const Scores = () => {
 
        {
         uncomingMatches.length>0  ?
-        uncomingMatches.map((item)=>  <CardInfo key={item.matchId} data={item}  />    )
+        uncomingMatches.map((item)=>  <CardInfo
+          key={item.matchId} 
+          data={item}
+          update={HandelUpdateUncoming}  />  
+            )
 
 
         :
