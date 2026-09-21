@@ -26,6 +26,23 @@ const Scores = () => {
 
 
 
+ const FetchUncomingMatches = async()=>{
+
+    const {err,data} = await use("/room/verifyAndBringData","post",{"roomId":idRoom.roomId})
+    if(err!=null)
+    {
+
+      if(!err.isMember){
+        Nav("/login")
+      }
+      return
+    }
+    console.log(data.uncomingMatches)
+    
+    SetuncomingMatches(data.uncomingMatches)
+    Setfinishedmatches(data.finishedmatches)
+    SetPermision(data.permision)
+    }
 
 
 
@@ -81,10 +98,10 @@ const Scores = () => {
 
 
 
- const HandelUpdateUncoming = (matchId) =>  {
+ const HandelUpdateUncoming = async (matchId) =>  {
  
-   const filterNewUncomingMatches = uncomingMatches.map((item)=>item.matchId ===matchId  ?{...item,currentPlayer:[...item.currentPlayer,{id,img,x:0,y:0}]} : item)
-   SetuncomingMatches(filterNewUncomingMatches)
+  
+  await  FetchUncomingMatches()
    
  }
 

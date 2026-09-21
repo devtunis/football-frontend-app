@@ -88,7 +88,7 @@ const Terrain = () => {
         if (mapResult.err) {
           console.log(mapResult.err);
         } else if (mapResult.data) {
-        
+           console.log(mapResult,"all result is here")
           SetMapPlayer(mapResult.data.mapPlayers);
           setPermision(mapResult.data.isOwner)
           
