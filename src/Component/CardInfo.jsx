@@ -11,17 +11,19 @@ import { useEffect } from 'react'
 const CardInfo = ({data,update}) => {
   const {id} = useAuth()
   const [isinRoom,SetisinRoom]  = useState(false)
-  console.log("draw Component again")
+ 
 
 
   
   useEffect(()=>{
      
     if(id){
-       const existPlayer = data.currentPlayer.find((item)=>item.id === id) ? true : false 
-       SetisinRoom(existPlayer)
+      //  const existPlayer = data.currentPlayer.find((item)=>item.id === id) ? true : false 
+      //   SetisinRoom(existPlayer)
+        SetisinRoom(data.registerPlayer.find((item)=>item.id === id) ? true : data.currentPlayer.find((item)=>item.id === id) )
+         
     }
-  },[id])
+  },[id,data])
  
 
 
@@ -38,8 +40,10 @@ const CardInfo = ({data,update}) => {
  
     const Nav = useNavigate()
     const  HandelViewDetails = ()=>{
- 
-     Nav(`/terrain/${roomId}/${data.matchId}/custom`)
+      
+      
+         Nav(`/terrain/${roomId}/${data.matchId}/custom`)
+     
 
   }
  
@@ -101,14 +105,16 @@ const CardInfo = ({data,update}) => {
 
 
 
-         {(teamFull || isinRoom)?  <>
+         {(isinRoom)?  <>
 
          <div className="inforamtionLockedProfile">
-
+           {teamFull && 
+           <> 
            <div className="TeamFull">
             <img src='/VerfiedIcon/green.svg'/>
             <h1>Team is Full</h1>
            </div>
+           
 
            <div className="middleitem"></div>
 
@@ -116,8 +122,8 @@ const CardInfo = ({data,update}) => {
             <img src='/VerfiedIcon/lock.svg'/>
             <h1>Reserve of</h1>
            </div>
-
-
+          </>
+}
 
          </div>
          <div className="butttonSession2">
