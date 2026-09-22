@@ -100,7 +100,9 @@ const Scores = () => {
 
  const HandelUpdateUncoming = async (matchId) =>  {
  
-  
+  //  const filterNewUncomingMatches = uncomingMatches.map((item)=>item.matchId ===matchId  ?{...item,currentPlayer:[...item.currentPlayer,{id,img,x:0,y:0}]} : item)
+  //  SetuncomingMatches(filterNewUncomingMatches)
+
   await  FetchUncomingMatches()
    
  }
