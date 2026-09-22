@@ -1,4 +1,4 @@
-import React from 'react'
+
 import "./CardInfo.css"
 import Avtar from './Avtar'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -18,8 +18,7 @@ const CardInfo = ({data,update}) => {
   useEffect(()=>{
      
     if(id){
-      //  const existPlayer = data.currentPlayer.find((item)=>item.id === id) ? true : false 
-      //   SetisinRoom(existPlayer)
+    
         SetisinRoom(data.registerPlayer.find((item)=>item.id === id) ? true : data.currentPlayer.find((item)=>item.id === id) )
          
     }
