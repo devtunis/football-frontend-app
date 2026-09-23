@@ -6,7 +6,7 @@ import {
   Clock3,
   MapPin,
   Users,
-  FileText,
+   
   Sparkles,
   X,
 } from "lucide-react";
@@ -26,7 +26,10 @@ const CreateMatch = () => {
     maxPlayer: 0,
     desc: "",
   });
-  const HandeLCreateMatch = async () => {
+  const createMatch = async (type) => {
+   
+    SetshowModal(false)
+     
     const { err, data } = await use(
       "/create/match",
       "post",
@@ -36,7 +39,8 @@ const CreateMatch = () => {
         time: state.time,
         location: state.location,
         maxplayer: state.maxPlayer,
-        description: "no description"
+        description: "no description",
+        typeMatch:type
       },
       setLoad,
     );
@@ -44,13 +48,20 @@ const CreateMatch = () => {
       console.log(err);
       return;
     }
-    console.log(data);
-    idmatchRef.current  = data.genreateKey
-    if (data) {
-     SetshowModal(true)
-    }
+     
+ 
+    console.log(data)
+     type=="custom" ?   Nav(`/terrain/${roomId}/${data.genreateKey}/custom`) :Nav(`/home/Scores/${roomId}`)
+     
+   
   };
-  // Nav(`/home/Scores/${roomId}`)
+
+  const HandelSeeTypeOfMatch = ()=>{
+    SetshowModal(true)
+    
+  }
+ 
+ 
   return (
     <>
 
@@ -60,8 +71,8 @@ const CreateMatch = () => {
 
           <div className="edit-mode">
           <X size={19} className="close-edit-mode" onClick={()=>SetshowModal(false)}/>
-        <button className="custom-player-button" onClick={()=>Nav(`/terrain/${roomId}/${idmatchRef.current}/custom`)}>Custom Player</button>
-        <button className="return-home-button" onClick={()=> Nav(`/home/Scores/${roomId}`)}>return  Home</button>
+        <button className="custom-player-button" onClick={()=>createMatch("custom")}>Custom Player</button>
+        <button className="return-home-button" onClick={()=> createMatch("competitive")}>return  Home</button>
         </div>
 
       }
@@ -142,7 +153,7 @@ const CreateMatch = () => {
             />
           </div>*/}
 
-          <button className="cm__button" onMouseUp={() => HandeLCreateMatch()}>
+          <button className="cm__button" onMouseUp={() => HandelSeeTypeOfMatch()}>
            Create Match
           </button>
 
