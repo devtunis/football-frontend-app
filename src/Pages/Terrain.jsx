@@ -6,7 +6,7 @@ import SimpleLoader from "../Loader/SimpleLoader";
 import {use} from "../axios/usehook"
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../useContext/UseContext'
+ 
 
 const Terrain = () => {
 
@@ -89,7 +89,7 @@ const Terrain = () => {
         if (mapResult.err) {
           console.log(mapResult.err);
         } else if (mapResult.data) {
-           console.log(mapResult,"all result is here")
+            
           SetMapPlayer(mapResult.data.mapPlayers);
           setPermision(mapResult.data.isOwner)
           
@@ -112,8 +112,10 @@ const Terrain = () => {
       
         } else if (deckResult.data) {
         
-          
-          SetDeck(deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))));
+          let resultFilter = deckResult.data.members.filter(item =>!(mapResult.data.mapPlayers.find(x=>x.id==item.membersId))).map((item)=>({...item,id:item.membersId})) 
+
+      
+          SetDeck(resultFilter);
          
         }
       } catch (err) {
@@ -123,7 +125,6 @@ const Terrain = () => {
 
     fetchData();
   }, [type, matchId, id])
-
   useEffect(() => {
     const HandelPointer = (e) => {
 
@@ -297,7 +298,7 @@ const Terrain = () => {
 
     let RandomX = Math.floor(Math.random() * width)
     let RandomY = Math.floor(Math.random() * bottom)
-    console.log(RandomX)
+ 
 
     popRefsucces.current = true
     setTimeout(() => {
@@ -305,10 +306,13 @@ const Terrain = () => {
       setx(p=>p+1)
     },1000)
 
+    
+     
 
-
-    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY,id:item.membersId}])
-    SetDeck((p)=> [...p].filter((x) => x.membersId != item.membersId))
+    SetMapPlayer((p) => [...p, {...item,x:RandomX,y:RandomY,id:item.id}])
+    console.log(Deck)
+   
+    SetDeck((p)=> [...p].filter((x) => x.id != item.id))
 
 
   }
@@ -321,7 +325,7 @@ const Terrain = () => {
     
  
    
-     SetDeck((p) => [...p, {...item,membersId:item.id}])
+     SetDeck((p) => [...p, ...item])
    
     popRef.current = true
     setTimeout(() => {
@@ -331,7 +335,8 @@ const Terrain = () => {
 
 }
   const HnadelClearDeck = () => {
-    
+     
+ 
     SetDeck(p=>[...p,...MapPlayer])
     SetMapPlayer([])
 
@@ -343,11 +348,11 @@ const Terrain = () => {
     let bottom  =  (get.bottom /2)-100
  
 
-   let newDeck =  Deck.map((item) => ({...item,id:item.membersId,x:Math.floor(Math.random() * right) ,y: Math.floor(Math.random() *bottom)}))
-   console.log(newDeck)
+   let newDeck =  Deck.map((item) => ({...item,x:Math.floor(Math.random() * right) ,y: Math.floor(Math.random() *bottom)}))
+   
    
 
-   SetMapPlayer(p=>[...p,...newDeck])  
+    SetMapPlayer(p=>[...p,...newDeck])  
     SetDeck([])
   }
   const HandelEnableSwiper = (e) => {
@@ -421,8 +426,34 @@ const Terrain = () => {
 
 
   const TacticsOneTowThree  = ()=>{
+    const middleOne  = Math.floor(MapPlayer.length/2)
+     let get = TerrainRef?.current?.getBoundingClientRect()
+     let widthTerrain  = get.width
+     let heightTerrain  = get.bottom
 
-    console.log(MapPlayer)
+
+     const positions = [
+      { x: (widthTerrain / 2) - 35, y: 13 },                  // 0
+      { x: (widthTerrain / 2) - 200, y: 150 },                 // 1
+      { x: (widthTerrain / 2) - 35, y: 150 },                  // 2
+      { x: (widthTerrain / 2) + 150, y: 150 },                 // 3
+      { x: (widthTerrain / 2) - 79, y: (heightTerrain / 2) - 80 }, // 4,
+       { x: (widthTerrain / 2) + 30, y: (heightTerrain / 2) - 80 } // 4
+    ];
+
+
+
+     // {0 :{x:(widthTerrain/2)-35,y:13}}
+     // {1 :x:(widthTerrain/2)-200,y:150}
+     //{2:x:(widthTerrain/2)-35,y:150}} 
+     //{3:x:(widthTerrain/2)+150,y:150}} 
+     //{3:x:(widthTerrain/2)+150,y:150}} 
+     // {4:x:(widthTerrain/2)-35,y:(heightTerrain/2)-80 }
+     console.log(MapPlayer)
+     
+     let newTacticsOneTowThree =  MapPlayer.map((item,index)=> ({...item , x:positions[index].x , y:positions[index].y}) )
+     SetMapPlayer(newTacticsOneTowThree)
+    console.log(MapPlayer,middleOne,heightTerrain)
   }
 
 
@@ -520,7 +551,7 @@ const Terrain = () => {
           </div>
           <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
           <button onClick={() => HandelAddAll()}>Add All</button>
-          <button onClick={() => TacticsOneTowThree()} >1-2-3</button>
+          <button onClick={() => TacticsOneTowThree()} >2-3-1</button>
       
       
         </div>
@@ -529,7 +560,7 @@ const Terrain = () => {
 
 
           {
-          Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.membersId ||  item.id} >  <img    src={item.img} loading="lazy" /></div>)
+          Deck.map((item) => <div onClick={()=>AddPlayerToDeck(item)}  className="floatAvtar" key={item.id} >  <img    src={item.img} loading="lazy" /></div>)
            }
 
 
