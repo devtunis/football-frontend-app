@@ -58,6 +58,7 @@ const Terrain = () => {
   const popRefsucces = useRef(false)
   const popRefIssue = useRef(false)
   const popSucess2  = useRef(false)
+  const warningSucess = useRef(false)
   const [loading,setloading] = useState(false)
   const [permision,setPermision] = useState(false)
 
@@ -92,12 +93,12 @@ const Terrain = () => {
           SetMapPlayer(mapResult.data.mapPlayers);
           setPermision(mapResult.data.isOwner)
           
-          if(!mapResult.data.isMember)
-          {
-            Nav("/myTeam");
+          // if(!mapResult.data.isMember)
+          // {
+          //   Nav("/myTeam");
             
-            return;
-          }
+          //   return;
+          // }
       
         }
 
@@ -391,7 +392,18 @@ const Terrain = () => {
 
     const {err,data} = await use("/create/match/setdeck","post",body,setloading)
     if(err!=null){
+       if(err.err=="the room Pretty full !!"){
+         
+      warningSucess.current = true 
+     setTimeout(() => {
+          warningSucess.current = false 
+        setx((p)=>p+1)
 
+        }, 1000);
+        
+
+
+       }
       console.log(err)
       return 
     }
@@ -419,6 +431,18 @@ const Terrain = () => {
  
   return (
       <>
+
+      {
+        warningSucess.current && 
+
+          <div className="pop-up-issue">
+          <h1>max number of player</h1>
+      
+        </div>
+
+
+
+      }
       {
         popRef.current &&
          <div className="Pop-up-delete">

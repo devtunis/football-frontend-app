@@ -9,6 +9,7 @@ import { useAuth } from '../useContext/UseContext'
 import { useEffect } from 'react'
 
 const CardInfo = ({data,update}) => {
+ 
   const {id} = useAuth()
   const [isinRoom,SetisinRoom]  = useState(false)
  
@@ -104,7 +105,7 @@ const CardInfo = ({data,update}) => {
 
 
 
-         {(isinRoom)?  <>
+         {(isinRoom || data?.typeMatch=="custom")?  <>
 
          <div className="inforamtionLockedProfile">
            {teamFull && 
