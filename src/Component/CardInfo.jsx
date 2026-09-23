@@ -105,7 +105,7 @@ const CardInfo = ({data,update}) => {
 
 
 
-         {(isinRoom || data?.typeMatch=="custom")?  <>
+         {(isinRoom || data?.typeMatch=="custom" || teamFull)?  <>
 
          <div className="inforamtionLockedProfile">
            {teamFull && 

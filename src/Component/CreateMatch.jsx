@@ -50,7 +50,7 @@ const CreateMatch = () => {
     }
      
  
-    console.log(data)
+      
      type=="custom" ?   Nav(`/terrain/${roomId}/${data.genreateKey}/custom`) :Nav(`/home/Scores/${roomId}`)
      
    
@@ -61,6 +61,7 @@ const CreateMatch = () => {
     
   }
  
+   
  
   return (
     <>
