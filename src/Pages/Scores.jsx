@@ -126,8 +126,7 @@ const [isLike,SeetIslike]  = useState(false)
 
 
 
-
-
+ 
 
 const HandelUpdateUncoming = async (matchId) =>  {
  
@@ -183,7 +182,7 @@ const UpdateBestPlayer = (item)=>{
       showLegnedPLayer &&  
       
       <>  
-      <BestLegnedPlayer list={legendUser} updateFn ={UpdateBestPlayer} /> 
+      <BestLegnedPlayer  HandelCLoseModalLegend={()=>setshowLegnedPLayer(false)} list={legendUser} updateFn ={UpdateBestPlayer} /> 
       <div className="wrapperTerrain"></div>  
       </>
     }
