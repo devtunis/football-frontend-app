@@ -426,14 +426,19 @@ const Terrain = () => {
   }
 
 
-  const TacticsOneTowThree  =async (type)=>{
-      if(type=="save"){
+  const TacticsOneTowThree  =async (type,foo)=>{
+    
+    
+    if(foo=="click")
+    {
+          await HandelUpdateDeck()
+          SetshowOptionTerrain(false)
+    }
+   
 
-       await HandelUpdateDeck()
+     
 
-        return
-
-      }
+     
 
      
       if(MapPlayer.length!=12 )return 
@@ -445,7 +450,7 @@ const Terrain = () => {
    
   }
 
-const [Tactics] = useState(["2-3-1","1-2-2-1","2-1-2-1","2-2-1","save"])
+const [Tactics] = useState(["2-3-1","1-2-2-1","2-1-2-1","2-2-1"])
  
 const backToHome = ()=>{
   
@@ -528,7 +533,11 @@ const backToHome = ()=>{
 
  <div className="moreTactics"  >
     {
-      Tactics.map((item)=>  <button key={item} onClick={() => TacticsOneTowThree(item)} >{item}</button>)
+      Tactics.map((item)=>  <button key={item}
+      
+      onMouseEnter={() => TacticsOneTowThree(item,"mouseenter")} 
+      
+      onClick={() => TacticsOneTowThree(item,"click")} >{item}</button>)
     }
         
         
