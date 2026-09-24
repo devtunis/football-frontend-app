@@ -37,6 +37,7 @@ const MyTeam = () => {
       try{
       SetSkeleten(true)
       const roomListResponse =  await axiosClient.get("/room/getrooms")
+ 
 
       if(roomListResponse.data.err =="you dont follow any rooms ."){
         console.log("no room ")

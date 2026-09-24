@@ -1,0 +1,55 @@
+.container-legend-player{
+    width: 300px;
+    height: 300px;
+    z-index: 9999999999;
+    background-color: rgb(238, 235, 235);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    
+    background-color: rgba(0, 0, 0, 0.808);
+    padding: 2px;
+    gap: 3px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    cursor: pointer;
+    border-radius:30px;
+    padding: 10px;
+    border: 1px solid var(--icon-color);
+    
+    scrollbar-width: none;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+
+    
+}
+
+.legend_user{
+    width: 95%;
+    border-radius: 10px;
+    height: 50px;
+  
+ 
+
+    background: rgba(8, 10, 11, 0.8); /* Semi-transparent */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari/iOS */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    color: white;
+    font-size: 12px;
+
+    img{
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        object-fit: cover;
+        transform: translateX(10px);
+    }
+    
+}

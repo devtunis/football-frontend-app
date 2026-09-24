@@ -85,7 +85,7 @@ const Card = ({info}) => {
           </div>
           <div className="first__trophy_blok">
             <img src='/myteamPics/svgicon/community-.svg'/>
-            <h1>{info.NumberOfComunnity}</h1>
+            <h1>{info.members.length}</h1>
           </div>
 
          
