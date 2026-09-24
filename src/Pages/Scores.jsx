@@ -4,27 +4,36 @@ import CardInfo from "../Component/CardInfo.jsx"
 import FinshedMatches  from "../Component/FinshedMatches.jsx"
 
 
-import {  Plus   } from 'lucide-react'
+import {  Loader, Plus   } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../useContext/UseContext.jsx'
 import PendingAcceptPersonRequest from './PendingAcceptPersonRequest.jsx'
 import Online from '../online/Online.jsx'
 import  {use} from "../axios/usehook.js"
 import BestLegnedPlayer from '../Component/BestLegnedPlayer.jsx'
+import SimpleLoader from '../Loader/SimpleLoader.jsx'
 const Scores = () => {
+ const Nav = useNavigate()
+ const idRoom   = useParams()
 
  const {Username , id ,img }  =  useAuth()
  const [uncomingMatches,SetuncomingMatches]  = useState([])
  const [finishedmatches,Setfinishedmatches]  = useState([])
- const [Permision,SetPermision] = useState(false)
- const [TheirNews , SetTheirNews] =  useState(false)
- const [messageNews,SetMessagesNews] = useState("no")
- const [count,seetCount] = useState(33)
- const [off,Setoff] = useState(false)
- const idRoom   = useParams()
- const Nav = useNavigate()
- const [showLegnedPLayer,setshowLegnedPLayer] = useState(false)
  const [legendUser,setlegendUser] = useState([])
+
+ const [Permision,SetPermision] = useState(false)
+ const [off,Setoff] = useState(false)
+const [showLegnedPLayer,setshowLegnedPLayer] = useState(false)
+const [isLike,SeetIslike]  = useState(false)
+
+ const [messageNews,SetMessagesNews] = useState("no")
+ const [bestPlayer,setbestPlayer] = useState({})
+ 
+
+
+
+
+
 
 
 
@@ -40,7 +49,7 @@ const Scores = () => {
       }
       return
     }
-    console.log(data.uncomingMatches)
+    
     
     SetuncomingMatches(data.uncomingMatches)
     Setfinishedmatches(data.finishedmatches)
@@ -50,6 +59,25 @@ const Scores = () => {
 
 
 
+  useEffect(()=>{
+
+    const FetchBestPlayer = async()=>{
+
+    const {err,data} = await use("/room/getsetBestPlayers","post",{"roomId":idRoom.roomId})
+    if(err!=null)
+    {
+
+      console.log(err)
+      return
+    }
+     
+    setbestPlayer(data)
+ 
+    }
+
+    FetchBestPlayer()
+
+  },[])
   useEffect(()=>{
     if(!idRoom.roomId)
     {
@@ -69,7 +97,7 @@ const Scores = () => {
       }
       return
     }
-    console.log(data.uncomingMatches)
+    
     
     SetuncomingMatches(data.uncomingMatches)
     Setfinishedmatches(data.finishedmatches)
@@ -79,7 +107,7 @@ const Scores = () => {
     FetchUncomingMatches()
 
   },[])
-    useEffect(()=>{
+  useEffect(()=>{
 
     const HandelGetLastNews = async()=>{
 
@@ -101,19 +129,12 @@ const Scores = () => {
 
 
 
- const HandelUpdateUncoming = async (matchId) =>  {
+const HandelUpdateUncoming = async (matchId) =>  {
  
-  //  const filterNewUncomingMatches = uncomingMatches.map((item)=>item.matchId ===matchId  ?{...item,currentPlayer:[...item.currentPlayer,{id,img,x:0,y:0}]} : item)
-  //  SetuncomingMatches(filterNewUncomingMatches)
-
+  
   await  FetchUncomingMatches()
    
  }
-
-
-
-
-
 const HandelGetListOfLegend = async ()=>{
   setshowLegnedPLayer(p=>!p)
   const {err,data} = await use("/room/getMembers", "post",{
@@ -124,24 +145,45 @@ const HandelGetListOfLegend = async ()=>{
     console.log(err)
     return
   }
-  console.log(data)
+   
   setlegendUser(data)
 }
+const HandelIncrmeantHeart  =async ()=>{
+    
+    const {err,data} = await use("/room/setBestPlayers", "post",{
+    "roomId":idRoom.roomId,
+    "name":bestPlayer.name,
+    "likes":bestPlayer.likes+10,
+    "img":bestPlayer.img,
+    "goals":bestPlayer.goals
+},SeetIslike
+)
 
+  if(err!=null){
+    console.log(err)
+    return
+  } 
+ 
+  setbestPlayer(data)
 
-
-
+  
+}
+const UpdateBestPlayer = (item)=>{
+   
+  setbestPlayer(item)
+  setshowLegnedPLayer(false)
+}
 
 
   return (
 
       <>
- 
+  
     {
       showLegnedPLayer &&  
       
       <>  
-      <BestLegnedPlayer list={legendUser} /> 
+      <BestLegnedPlayer list={legendUser} updateFn ={UpdateBestPlayer} /> 
       <div className="wrapperTerrain"></div>  
       </>
     }
@@ -294,7 +336,7 @@ const HandelGetListOfLegend = async ()=>{
     <div className="news_card">
 
          <div className="left_news_cards">
-          <img src='/Memories/b.jpg'/>
+          <img src={bestPlayer.img}/>
          </div>
 
           <div className="right_news_cards">
@@ -303,7 +345,7 @@ const HandelGetListOfLegend = async ()=>{
              <div className="leftnew_card__">
               <h1>Goals</h1>
 
-              <div className='spnumber'>4</div>
+              <div className='spnumber'>{bestPlayer.goals}</div>
              </div>
 
 
@@ -312,10 +354,16 @@ const HandelGetListOfLegend = async ()=>{
              <div className="right_news_cards__">
 
               <h1>Likes</h1>
-              <div className="info_button_likes">
-               <h1>{count}</h1>
-               <img src='/myTeamIcon/heart.svg' onClick={()=>seetCount((prev)=>prev+10)}/>
+              
+
+              {
+                 isLike ? <div style={{ display:"flex",justifyContent:"center"}}><SimpleLoader/></div>   : 
+                 <div className="info_button_likes">
+                 <h1>{bestPlayer.likes}</h1>
+               
+               <img src='/myTeamIcon/heart.svg' onClick={()=>HandelIncrmeantHeart()}/>
               </div>
+              }
              </div>
 
 

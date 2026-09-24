@@ -3924,7 +3924,7 @@
             -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-
+        
 
 
 
@@ -3969,6 +3969,7 @@
             /* background-color: red; */
             overflow-x: auto;
             gap: 10px;
+              scrollbar-width: none;
         }
 
         .Banner-Finsih::-webkit-scrollbar {
