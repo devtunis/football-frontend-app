@@ -115,8 +115,8 @@ const PendingAcceptPersonRequest = () => {
    {
       loading && <FirstView/>
     }
-     <div className="PendingAcceptPersonRequest">
-        <div className="headerPendingNotifaction"> <ArrowLeft onClick={()=>Nav(`/home/Scores/${idRoom.roomId}`)} size={30}/> <h2>Welcome {name}</h2> </div>
+     <div className="PendingAcceptPersonRequest" >
+        <div className="headerPendingNotifaction" style={{cursor:"pointer"}}> <ArrowLeft onClick={()=>Nav(`/home/Scores/${idRoom.roomId}`)} size={30}/> <h2>Welcome {name}</h2> </div>
         <div className="PendingRequest">
 
 

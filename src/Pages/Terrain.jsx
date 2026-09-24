@@ -6,6 +6,7 @@ import SimpleLoader from "../Loader/SimpleLoader";
 import {use} from "../axios/usehook"
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import HandelGetTactic from "../Tactics/tactics";
  
 
 const Terrain = () => {
@@ -49,7 +50,7 @@ const Terrain = () => {
   const isHoldingItem = useRef(false)
   const isHoldingSwiper = useRef(false)
   const currentHoldingId = useRef(null)
-  const currentHeight = useRef(50)
+  const currentHeight = useRef(4)
   const offModelWheel = useRef(true)
   const ContainerScrollRef = useRef(null)
   const offset = useRef({ x: null, y: null })
@@ -61,6 +62,7 @@ const Terrain = () => {
   const warningSucess = useRef(false)
   const [loading,setloading] = useState(false)
   const [permision,setPermision] = useState(false)
+  const [showOptionTerrain,SetshowOptionTerrain] = useState(false)
 
 
  
@@ -276,7 +278,7 @@ const Terrain = () => {
   useEffect(()=>{
 
     const HandeLOffContextMenu = (e) =>{
-      e.preventDefault()
+      //e.preventDefault()
     }
     window.addEventListener("contextmenu",HandeLOffContextMenu)
 
@@ -319,13 +321,12 @@ const Terrain = () => {
   const HandelRemovePlayer = (item) => {
 
 
- 
-    
+  
       SetMapPlayer((p) => [...p].filter(player => player.id != item.id))
     
- 
-   
-     SetDeck((p) => [...p, ...item])
+     
+       
+     SetDeck((p) => [...p,item])
    
     popRef.current = true
     setTimeout(() => {
@@ -425,41 +426,39 @@ const Terrain = () => {
   }
 
 
-  const TacticsOneTowThree  = ()=>{
-    const middleOne  = Math.floor(MapPlayer.length/2)
-     let get = TerrainRef?.current?.getBoundingClientRect()
-     let widthTerrain  = get.width
-     let heightTerrain  = get.bottom
+  const TacticsOneTowThree  =async (type)=>{
+      if(type=="save"){
 
+       await HandelUpdateDeck()
 
-     const positions = [
-      { x: (widthTerrain / 2) - 35, y: 13 },                  // 0
-      { x: (widthTerrain / 2) - 200, y: 150 },                 // 1
-      { x: (widthTerrain / 2) - 35, y: 150 },                  // 2
-      { x: (widthTerrain / 2) + 150, y: 150 },                 // 3
-      { x: (widthTerrain / 2) - 79, y: (heightTerrain / 2) - 80 }, // 4,
-       { x: (widthTerrain / 2) + 30, y: (heightTerrain / 2) - 80 } // 4
-    ];
+        return
 
+      }
 
-
-     // {0 :{x:(widthTerrain/2)-35,y:13}}
-     // {1 :x:(widthTerrain/2)-200,y:150}
-     //{2:x:(widthTerrain/2)-35,y:150}} 
-     //{3:x:(widthTerrain/2)+150,y:150}} 
-     //{3:x:(widthTerrain/2)+150,y:150}} 
-     // {4:x:(widthTerrain/2)-35,y:(heightTerrain/2)-80 }
-     console.log(MapPlayer)
      
-     let newTacticsOneTowThree =  MapPlayer.map((item,index)=> ({...item , x:positions[index].x , y:positions[index].y}) )
-     SetMapPlayer(newTacticsOneTowThree)
-    console.log(MapPlayer,middleOne,heightTerrain)
+      if(MapPlayer.length!=12 )return 
+     
+     
+   
+    
+      SetMapPlayer(MapPlayer.map((item,index)=> ({...item , x:HandelGetTactic(type, TerrainRef?.current)[index].x  , y:HandelGetTactic(type, TerrainRef?.current)[index].y}) ))
+   
   }
 
-
-
-
+const [Tactics] = useState(["2-3-1","1-2-2-1","2-1-2-1","2-2-1","save"])
  
+const backToHome = ()=>{
+  
+  Nav(`/home/Scores/${id}`)
+}
+
+ const SetModalPage = ()=>{
+    SetshowOptionTerrain(p=>!p)
+    currentHeight.current = 4
+    setx(p => p + 1)
+
+
+ }
   return (
       <>
 
@@ -512,6 +511,35 @@ const Terrain = () => {
 
 
 
+   <div className="ScorePage" onClick={()=>backToHome()}>
+    <img src="/myTeamIcon/arrow.svg"/>
+   </div>
+
+   {permision &&   <div className="ClosePage" onClick={()=>SetModalPage()} >
+  
+    {showOptionTerrain ?  <img src="/myTeamIcon/close.svg"/> :   <img src="/myTeamIcon/Option.svg"/>}
+   </div>}
+
+{
+
+
+ ( showOptionTerrain && permision ) && 
+<>  
+
+ <div className="moreTactics"  >
+    {
+      Tactics.map((item)=>  <button key={item} onClick={() => TacticsOneTowThree(item)} >{item}</button>)
+    }
+        
+        
+
+   </div>
+
+
+ 
+<div className="wrapperTerrain"></div>  
+</>
+  }
 
       <div className="terrain-container" ref={TerrainRef}>
 
@@ -542,7 +570,9 @@ const Terrain = () => {
 
       <div   onPointerDown={(e) => HandelEnableSwiper(e)}   className={`swiper-slide ${tranisationOn.current && 'animationSmoothSwiper'}`} style={{ height: `${currentHeight.current}%` }}  >
 
+       
         <div className={`holiding-swiper ${isHoldingSwiper.current && 'specialSwiper'}`} ></div>
+        
         <div className="clear-holding">
           <div className="overNumberClose ">
 
@@ -551,9 +581,8 @@ const Terrain = () => {
           </div>
           <button onClick={()=>HnadelClearDeck()}>clearDeck</button>
           <button onClick={() => HandelAddAll()}>Add All</button>
-          <button onClick={() => TacticsOneTowThree()} >2-3-1</button>
-      
-      
+         
+
         </div>
 
         <div className="img-holiding" ref={ContainerScrollRef}  >

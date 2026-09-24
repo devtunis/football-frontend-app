@@ -10,6 +10,7 @@ import { useAuth } from '../useContext/UseContext.jsx'
 import PendingAcceptPersonRequest from './PendingAcceptPersonRequest.jsx'
 import Online from '../online/Online.jsx'
 import  {use} from "../axios/usehook.js"
+import BestLegnedPlayer from '../Component/BestLegnedPlayer.jsx'
 const Scores = () => {
 
  const {Username , id ,img }  =  useAuth()
@@ -22,6 +23,8 @@ const Scores = () => {
  const [off,Setoff] = useState(false)
  const idRoom   = useParams()
  const Nav = useNavigate()
+ const [showLegnedPLayer,setshowLegnedPLayer] = useState(false)
+ const [legendUser,setlegendUser] = useState([])
 
 
 
@@ -111,7 +114,19 @@ const Scores = () => {
 
 
 
+const HandelGetListOfLegend = async ()=>{
+  setshowLegnedPLayer(p=>!p)
+  const {err,data} = await use("/room/getMembers", "post",{
+    "roomId":idRoom.roomId
+})
 
+  if(err!=null){
+    console.log(err)
+    return
+  }
+  console.log(data)
+  setlegendUser(data)
+}
 
 
 
@@ -121,7 +136,15 @@ const Scores = () => {
   return (
 
       <>
-
+ 
+    {
+      showLegnedPLayer &&  
+      
+      <>  
+      <BestLegnedPlayer list={legendUser} /> 
+      <div className="wrapperTerrain"></div>  
+      </>
+    }
 
      <div className="Container">
 
@@ -146,7 +169,7 @@ const Scores = () => {
 
           <div className="notifaction"   onClick={()=>{  Nav(`/home/notifaction/${idRoom.roomId}`)}}>
                 <span className="popup"></span>
-                <img src="/myTeamIcon/notifaction.svg"/>
+                <img src="/myTeamIcon/notifaction.svg" style={{cursor:"pointer"}}/>
           </div>
 
           <div className="avatar-user" onClick={()=>{Nav(`/home/profile/${idRoom.roomId}`)}}>
@@ -165,7 +188,7 @@ const Scores = () => {
         <img src="/testpic/bbg.png" loading="lazy" />
 
           {
-            messageNews=="no"?  <p className="description">Welcome back , {Username&& Username} 👋  </p>
+            messageNews=="no"?  <p className="description">Welcome back , {Username&& Username}    </p>
 
 
               : <>
@@ -300,10 +323,18 @@ const Scores = () => {
 
 
           </div>
+{
 
+  Permision&&
 
+  
+        <div className='edit-section-card' onClick={()=>HandelGetListOfLegend()} >
+          <img src='/myTeamIcon/edit1.svg'/>  
+        </div>
 
+}
 
+    
     </div>
 
 
