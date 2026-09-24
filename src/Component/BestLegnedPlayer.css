@@ -10,7 +10,35 @@
 }
 
  
+.close_legened{
+ 
+border-radius: 10px;
+display: flex;
+justify-content: flex-end;
+align-items: center;
+position: sticky;
+top: 0;
+z-index: 9999;
+&&:active{
+   filter: brightness(150%);  
+}
+img{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    transform: translateX(-5px);
+ 
+    border-radius: 100%;
+    background: rgba(8, 10, 11, 0.8); /* Semi-transparent */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari/iOS */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    
 
+}
+
+}
 
 .container-legend-player{
     width: 300px;

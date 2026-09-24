@@ -5,7 +5,7 @@ import "./BestLegnedPlayer.css"
 import { useParams } from "react-router-dom"
 import GhostLoad from "../Loader/Ghost"
 import { useState } from "react"
-const BestLegnedPlayer = ({list ,updateFn}) => {
+const BestLegnedPlayer = ({list ,updateFn,HandelCLoseModalLegend}) => {
   const [lodaingChangePlayer,SetlodaingChangePlayer] = useState(false)
    const {roomId} = useParams()
   const HandelsetBestPlayers = async(item)=>{
@@ -43,7 +43,9 @@ const BestLegnedPlayer = ({list ,updateFn}) => {
 }
      
     <div className="container-legend-player"> 
-    
+    <div className="close_legened" onClick={()=>HandelCLoseModalLegend()}>
+      <img src="/myTeamIcon/close.svg"/>
+    </div>
        
      {
         list.members?.map((item)=>   
