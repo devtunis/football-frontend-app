@@ -829,3 +829,13 @@ transform: translateX(30px) ;
 transform: translateX(0px) ;
 }
 }
+
+
+.user-select{
+  user-select: none;
+}
+
+
+.user-drag{
+           -webkit-user-drag: none; pointer-events: none;
+}
