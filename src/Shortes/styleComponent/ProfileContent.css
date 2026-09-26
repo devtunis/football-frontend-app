@@ -1,0 +1,70 @@
+.ProfileContent{
+
+    width: 90%;
+    height: 100px;
+   
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    border-radius: 10px;
+}
+
+.owner-video-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: black;
+}
+
+
+.owner-name-verify {
+    
+   display: flex;
+   gap: 5px;
+   padding: 2px;
+   display: flex;
+   align-items: center;
+
+}
+
+
+
+.owner-name-verify img{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+.ProfileContent-view{
+    display: flex;
+    gap: 10px;
+    
+    align-items: center;
+    margin-top: 5px;
+    transform: translateX(2px);
+
+}
+.ProfileContent-view button{
+    width: 80px;
+    height: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    border: .6px solid grey;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.description-file-content{
+  
+    height: 100%;
+    overflow-y: auto;
+}
+
+.description-file-content  p{
+    letter-spacing: .5px;
+    padding: 3px;
+    font-size: 12px;
+    
+}

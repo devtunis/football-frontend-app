@@ -1,4 +1,4 @@
-import React from 'react'
+ 
 import "./Avtar.css"
 const Avtar = ({url}) => {
   return (

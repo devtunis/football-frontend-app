@@ -450,12 +450,12 @@ const Terrain = () => {
    
   }
 
-const [Tactics] = useState(["2-3-1","1-2-2-1","2-1-2-1","2-2-1"])
- 
-const backToHome = ()=>{
+  const [Tactics] = useState(["2-3-1","1-2-2-1","2-1-2-1","2-2-1"])
   
-  Nav(`/home/Scores/${id}`)
-}
+  const backToHome = ()=>{
+    
+    Nav(`/home/Scores/${id}`)
+  }
 
  const SetModalPage = ()=>{
     SetshowOptionTerrain(p=>!p)

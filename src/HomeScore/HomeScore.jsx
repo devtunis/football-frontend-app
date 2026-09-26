@@ -9,7 +9,7 @@ const HomeScore = () => {
   const Nav = useNavigate()
    
   const HandelLogout = async() => {
-     const { err, data } = await use("/api/deleteCookies", "post", {})
+     const { err } = await use("/api/deleteCookies", "post", {})
         if (err != null) {
         console.log(err)
         return
@@ -69,7 +69,7 @@ const HomeScore = () => {
                     }
 
                     >
-                       <img  onClick={()=>HandelVibrate()} src='/pictuerSwitchBar/social.svg' />
+                       <img    src='/pictuerSwitchBar/social.svg' />
 
                      </NavLink>
 
@@ -101,7 +101,7 @@ const HomeScore = () => {
                         }
 
                     >
-                   <img onClick={()=>HandelVibrate()}  src='/myTeamIcon/shorts.png' />
+                   <img    src='/myTeamIcon/shorts.png' />
 
 
 
