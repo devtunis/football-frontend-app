@@ -1,10 +1,12 @@
+import { useAuth } from "../../useContext/UseContext"
 import "../styleComponent/ProfileContent.css"
 const ProfileContent = () => {
+  const {img} = useAuth()
   return (
     <div className="ProfileContent">
 
         <div className="ProfileContent-view">
-            <div className="owner-video-img"></div>
+            <div className="owner-video-img"><img src={img}/></div>
              <div className="owner-name-verify">
                 <h3>nahdiGhaith</h3>
                 <img src="/VerfiedIcon/blue.svg"/>
@@ -15,7 +17,7 @@ const ProfileContent = () => {
 
         <div className="description-file-content">
            <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus facilis necessitatibus maxime commodi sit et laboriosam vitae tenetur, magnam praesentium.
+            مرحباً، أتمنى الخير للجميع في هذا العالم.
            </p>
         </div>
     </div>

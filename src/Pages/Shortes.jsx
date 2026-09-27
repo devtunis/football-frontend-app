@@ -22,26 +22,26 @@ const Shortes = () => {
     // "/VideoDemos/v7.mp4",
     "/VideoDemos/v19.mp4",
     "/VideoDemos/v2.mp4",
-    // "/VideoDemos/v14.mp4",
-    // "/VideoDemos/v0.mp4",
-    // "/VideoDemos/v21.mp4",
-    // "/VideoDemos/v9.mp4",
-    // "/VideoDemos/v4.mp4",
-    // "/VideoDemos/v17.mp4",
-    // "/VideoDemos/v11.mp4",
-    // "/VideoDemos/v22.mp4",
-    // "/VideoDemos/v5.mp4",
-    // "/VideoDemos/v13.mp4",
-    // "/VideoDemos/v1.mp4",
-    // "/VideoDemos/v20.mp4",
-    // "/VideoDemos/v8.mp4",
-    // "/VideoDemos/v15.mp4",
-    // "/VideoDemos/v3.mp4",
-    // "/VideoDemos/v18.mp4",
-    // "/VideoDemos/v10.mp4",
-    // "/VideoDemos/v6.mp4",
-    // "/VideoDemos/v16.mp4",
-    // "/VideoDemos/v12.mp4",
+    "/VideoDemos/v14.mp4",
+    "/VideoDemos/v0.mp4",
+    "/VideoDemos/v21.mp4",
+    "/VideoDemos/v9.mp4",
+    "/VideoDemos/v4.mp4",
+    "/VideoDemos/v17.mp4",
+    "/VideoDemos/v11.mp4",
+    "/VideoDemos/v22.mp4",
+    "/VideoDemos/v5.mp4",
+    "/VideoDemos/v13.mp4",
+    "/VideoDemos/v1.mp4",
+    "/VideoDemos/v20.mp4",
+    "/VideoDemos/v8.mp4",
+    "/VideoDemos/v15.mp4",
+    "/VideoDemos/v3.mp4",
+    "/VideoDemos/v18.mp4",
+    "/VideoDemos/v10.mp4",
+    "/VideoDemos/v6.mp4",
+    "/VideoDemos/v16.mp4",
+    "/VideoDemos/v12.mp4",
   ]);
 
     useEffect(()=>{
@@ -123,12 +123,17 @@ const Shortes = () => {
     
   }
 
+
+  const HandelCurrentFeeds = (typeFeeds)=>{
+    console.log(typeFeeds)
+
+  }
  
   return (
     <div className='Shortes ' ref={ContainerShortRef} >
 
 
-      <HeaderOptions/>
+      <HeaderOptions Feeds={HandelCurrentFeeds}/>
     
 
     
