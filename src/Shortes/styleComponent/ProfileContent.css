@@ -1,24 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Original+Surfer&display=swap');
+
+
 .ProfileContent{
 
     width: 90%;
     height: 100px;
-   
+  
     position: absolute;
     bottom: 2px;
     left: 2px;
     border-radius: 10px;
+     
 }
 
 .owner-video-img{
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    background-color: black;
+    
+    border: 2px solid var(--icon-color);
+   
+    img{
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        object-fit: cover;
+        object-position: center; transition: 150ms all ease-in-out;
+    }
+    img:hover{
+        transform: scale(1.02);
+        filter:brightness(120%);
+    }
 }
 
 
 .owner-name-verify {
-    
+   
    display: flex;
    gap: 5px;
    padding: 2px;
@@ -54,17 +71,28 @@
     color: white;
     font-weight: bold;
     letter-spacing: .5px;
+
+    
 }
 
 .description-file-content{
-  
-    height: 100%;
+    
+    height:55px;
     overflow-y: auto;
 }
 
 .description-file-content  p{
-    letter-spacing: .5px;
-    padding: 3px;
-    font-size: 12px;
-    
+     letter-spacing: .5px;
+     padding: 3px;
+     font-size: 12px;
+     /* font-family: "Original Surfer", sans-serif;
+     font-weight: 400;
+     font-style: normal; */
+     font-weight: bold;
+     color: rgb(185, 182, 182);
+     margin-top: 3px;
+
+  
+    font-family: "Helvetica", "Arial", sans-serif;
+
 }

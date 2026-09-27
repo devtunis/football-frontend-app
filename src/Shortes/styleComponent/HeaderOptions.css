@@ -4,27 +4,45 @@
     height: 40px;
     position: absolute;
     top: 0;
-   
+ 
     display: flex;
     align-items: center;
-    
-    z-index: 99;
+      z-index: 99;
 
 }
 
 .icon-header-option {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
+         
+        border-radius: 100%;
+        
+        background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        cursor: pointer;
+        
+        width: 22px;
+        height: 22px;
+        object-fit: cover;
+        transform: translateY(-1px);
+        transform: translateX(3px);
+    
+
+
 }
 .center-inforamtion{
 
     display: flex;
-    gap: 10px;  margin-left: auto;
+    gap: 10px;  
+    margin-left: auto;
     margin-right: auto;
-    padding: 0px 10px 0px 10px;
+    padding: 0px 10px 0px 10px;  cursor: pointer;
+ 
+    transform: translateX(50px);
+    
     h1{
-        font-size: 26px;
+        font-size: 22px;
     }
 }
 .imges-containers{
@@ -52,11 +70,15 @@
     
 }
 
+ 
 .active{
-    opacity: 0.5;
+   color: white;
+}
+.no_active{
+     opacity: 0.5;
 }
 
-
+ 
 @media (max-width: 800px) {
 
 .HeaderOptions{
@@ -65,16 +87,18 @@
     height: 40px;
     position: absolute;
     top: 0;
-   
+ 
     display: flex;
     align-items: center;
 
 }
 
 .icon-header-option {
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     object-fit: cover;
+    transform: translateY(-1px);
+    transform: translateX(3px);
 }
 .center-inforamtion{
 
@@ -82,8 +106,10 @@
     gap: 10px;  margin-left: auto;
     margin-right: auto;
     padding: 0px 10px 0px 10px;
+    cursor: pointer;
+     transform: translateX(0px);
     h1{
-        font-size: 26px;
+        font-size: 20px;
     }
 }
 .imges-containers{
@@ -91,8 +117,8 @@
     gap: 3px;
   
     img {
-        width:22px;
-        height: 22px;
+        width:20px;
+        height: 20px;
         border-radius: 100%;
         object-fit: cover;
         
@@ -111,9 +137,9 @@
     
 }
 
-.active{
-    opacity: 0.5;
-}
+
 
 
 }
+
+ 

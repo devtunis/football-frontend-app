@@ -25,7 +25,7 @@ const Player = ({src,pauseVideo,on,toggleSound,isPause,currentvideoTrack}) => {
   
 
      
-     <video
+      <video
         src={src}
         autoPlay
         loop

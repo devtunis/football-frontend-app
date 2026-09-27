@@ -22,6 +22,7 @@ import HomeScore from "./HomeScore/HomeScore";
 import Scores from "./Pages/Scores";
 
 import Profile from "./Pages/Profile";
+import Upload from "./Shortes/Upload/Upload";
 
 const Shortes = lazy(() => import("./Pages/Shortes"));
 const News = lazy(() => import("./SocialMedia/News"));
@@ -46,6 +47,11 @@ const App = () => {
     <SocketProvider>
       <Suspense fallback={<FirstView />}>
         <Routers>
+
+        
+
+
+
           <Path path="/terrain/:id/:matchId/:type" element={<Terrain />} />
           <Path path="/login" element={<Login />} />
           <Path path="/myTeam" element={<MyTeam />} />
@@ -73,6 +79,8 @@ const App = () => {
             {/* PROFILE = NORMAL LOAD */}
             <Path path="profile/:roomId" element={<Profile />} />
           </Path>
+
+          <Path path="/video/upload" element={<Upload />} />
 
           <Path
             path="/home/notifaction/:roomId"
