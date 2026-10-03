@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import HandelGetTactic from "../Tactics/tactics";
  
-
+// do custom web socket for people how join this room to see something emit all the time in 
 const Terrain = () => {
 
   const [_, setx] = useState(0)
