@@ -1,135 +1,126 @@
-import "./upload.css"
+import React, { useRef, useState } from "react";
+import {
+  UploadCloud,
+  Video,
+  FileVideo,
+  Clock3,
+  Ratio,
+  Home,
+  MessageSquare,
+  BarChart3,
+  Trophy,
+  CheckCircle2,
+  LoaderCircle,
+  CircleAlert,
+  MoreVertical,
+  SlidersHorizontal,
+  Plus,
+} from "lucide-react";
 
-
-
-
-import  { useRef, useState } from "react";
- 
+import "./upload.css";
 
 const videos = [
   {
     id: 1,
-    title: "Nature Sunset",
-    size: "2.4 MB",
+    title: "Amazing Goal vs City",
+    size: "142.6 MB",
     time: "2 minutes ago",
-    duration: "01:42",
-    status: "completed",
+    duration: "02:42",
     image:
-      "https://images.unsplash.com/photo-1500534623283-312aade485b7?w=300&q=80",
+      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+    status: "completed",
   },
   {
     id: 2,
     title: "City Walk",
-    size: "12.8 MB",
-    time: "5 minutes ago",
-    duration: "03:15",
+    size: "368.4 MB",
+    time: "12 minutes ago",
+    duration: "05:18",
+    image:
+      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
     status: "uploading",
     progress: 68,
-    image:
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=300&q=80",
   },
   {
     id: 3,
-    title: "Underwater",
-    size: "8.3 MB",
-    time: "12 minutes ago",
-    duration: "02:27",
-    status: "processing",
+    title: "Underwater Training",
+    size: "98.7 MB",
+    time: "28 minutes ago",
+    duration: "01:24",
     image:
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&q=80",
+      "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
+    status: "processing",
   },
   {
     id: 4,
-    title: "Mountain View",
-    size: "18.6 MB",
-    time: "28 minutes ago",
-    duration: "04:12",
-    status: "queued",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=300&q=80",
-  },
-  {
-    id: 5,
     title: "Forest Path",
-    size: "6.7 MB",
-    time: "35 minutes ago",
-    duration: "01:05",
-    status: "failed",
+    size: "215.3 MB",
+    time: "46 minutes ago",
+    duration: "03:56",
     image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&q=80",
+      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+    status: "failed",
   },
 ];
 
-function Status({ video }) {
-  if (video.status === "completed") {
+function Status({ type, progress }) {
+  if (type === "completed") {
     return (
-      <span className="upload-status upload-status--completed">
-        <span className="status-icon">✓</span>
-        Completed
-      </span>
+      <div className="upload-status upload-status--completed">
+        <CheckCircle2 size={15} />
+        <span>Completed</span>
+      </div>
     );
   }
 
-  if (video.status === "uploading") {
+  if (type === "uploading") {
     return (
       <div className="upload-progress">
         <div className="upload-progress__top">
           <span>Uploading...</span>
-          <span>{video.progress}%</span>
+          <span>{progress}%</span>
         </div>
 
         <div className="upload-progress__bar">
-          <div style={{ width: `${video.progress}%` }} />
+          <div style={{ width: `${progress}%` }} />
         </div>
       </div>
     );
   }
 
-  if (video.status === "processing") {
+  if (type === "processing") {
     return (
-      <span className="upload-status upload-status--processing">
-        <span className="status-icon">◷</span>
-        Processing
-      </span>
-    );
-  }
-
-  if (video.status === "queued") {
-    return (
-      <span className="upload-status upload-status--queued">
-        <span className="status-icon">◷</span>
-        Queued
-      </span>
+      <div className="upload-status upload-status--processing">
+        <LoaderCircle size={14} />
+        <span>Processing</span>
+      </div>
     );
   }
 
   return (
-    <span className="upload-status upload-status--failed">
-      <span className="status-icon">!</span>
-      Failed
-    </span>
+    <div className="upload-status upload-status--failed">
+      <CircleAlert size={15} />
+      <span>Failed</span>
+    </div>
   );
 }
 
-const  Upload = () =>{
-  const inputRef = useRef(null);
+ function Upload() {
+  const fileInputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
-
-  const chooseVideo = () => {
-    inputRef.current?.click();
-  };
 
   const handleFiles = (files) => {
     if (!files?.length) return;
 
     const file = files[0];
 
-    if (!file.type.startsWith("video/")) {
-      alert("Please select a video file.");
-      return;
-    }
-
     console.log("Selected video:", file);
+
+    // Your upload logic here
+  };
+
+  const handleInput = (e) => {
+    handleFiles(e.target.files);
   };
 
   const handleDrop = (e) => {
@@ -141,138 +132,228 @@ const  Upload = () =>{
 
   return (
     <div className="upload-page">
-      <div className="upload-card">
 
-        {/* Header */}
-        <div className="upload-header">
-          <div className="upload-title-wrapper">
-            <div className="upload-logo">
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="5" width="18" height="14" rx="4" />
-                <path d="M10 9l5 3-5 3z" />
-              </svg>
+      {/* ================= SIDEBAR ================= */}
+      <aside className="upload-sidebar">
+
+        <div className="upload-brand">
+          <div className="upload-brand__logo">
+            ⚽
+          </div>
+
+          <div>
+            <h2>Koura</h2>
+            <span>Football. More than a game.</span>
+          </div>
+        </div>
+
+        <nav className="upload-navigation">
+
+       
+
+          <a
+            href="#"
+            className="upload-nav-item upload-nav-item--active"
+          >
+            <UploadCloud size={19} />
+            <span>Upload</span>
+          </a>
+
+        </nav>
+
+        <div className="upload-sidebar__quote">
+          <span>BETTER PLAYERS</span>
+          <span>BIGGER DREAMS</span>
+          <i />
+        </div>
+
+      </aside>
+
+      {/* ================= MAIN ================= */}
+      <main className="upload-main">
+
+        {/* HEADER */}
+        <header className="upload-header">
+
+          <div className="upload-header__left">
+
+            <div className="upload-header__icon">
+              <UploadCloud size={28} />
             </div>
 
             <div>
               <h1>Upload Video</h1>
-              <p>Add your video and it will be processed.</p>
+              <p>Share your football moments</p>
             </div>
+
           </div>
 
-          <div className="your-videos">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 16V4" />
-              <path d="M8 8l4-4 4 4" />
-              <path d="M5 15v2a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-2" />
-            </svg>
-
+          <div className="upload-video-count">
+            <Video size={17} />
             <span>Your videos</span>
-            <b>{videos.length}</b>
+            <strong>{videos.length}</strong>
           </div>
-        </div>
 
-        {/* Upload zone */}
-        <div
+        </header>
+
+        {/* ================= DROPZONE ================= */}
+        <section
           className={`upload-dropzone ${
             dragging ? "upload-dropzone--dragging" : ""
           }`}
-          onClick={chooseVideo}
           onDragOver={(e) => {
             e.preventDefault();
             setDragging(true);
           }}
           onDragLeave={() => setDragging(false)}
           onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
         >
-          <div className="upload-cloud">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 16V4" />
-              <path d="M8 8l4-4 4 4" />
-              <path d="M5 15v2a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-2" />
-            </svg>
-          </div>
-
-          <button
-            className="choose-video-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              chooseVideo();
-            }}
-          >
-            <span>+</span>
-            Choose Video
-          </button>
-
-          <p>or drag and drop here</p>
-          <small>MP4, MOV, AVI • Max 2GB</small>
 
           <input
-            ref={inputRef}
+            ref={fileInputRef}
             type="file"
             accept="video/*"
             hidden
-            onChange={(e) => handleFiles(e.target.files)}
+            onChange={handleInput}
           />
-        </div>
 
-        {/* Videos header */}
-        <div className="videos-heading">
-          <h2>Your Uploads</h2>
+          <div className="upload-dropzone__pitch">
 
-          <button className="sort-button">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 6h16" />
-              <path d="M7 12h10" />
-              <path d="M10 18h4" />
-            </svg>
+            <div className="pitch-line pitch-line--left" />
+            <div className="pitch-line pitch-line--right" />
 
-            Newest first
+          </div>
 
-            <span>⌄</span>
+          <div className="upload-dropzone__content">
+
+            <div className="upload-dropzone__icon">
+              <Video size={30} />
+              <UploadCloud size={20} />
+            </div>
+
+            <h2>Select video to upload</h2>
+
+            <p>or drag and drop here</p>
+
+            <button
+              type="button"
+              className="upload-select-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                fileInputRef.current?.click();
+              }}
+            >
+              <Plus size={18} />
+              Choose video
+            </button>
+
+          </div>
+
+        </section>
+
+        {/* ================= INFO ================= */}
+        <section className="upload-info">
+
+          <div className="upload-info__item">
+            <div className="upload-info__icon">
+              <FileVideo size={20} />
+            </div>
+
+            <div>
+              <h3>File formats</h3>
+              <p>MP4, MOV, AVI, MKV, WebM</p>
+            </div>
+          </div>
+
+          <div className="upload-info__divider" />
+
+          <div className="upload-info__item">
+            <div className="upload-info__icon">
+              <UploadCloud size={20} />
+            </div>
+
+            <div>
+              <h3>Max size & duration</h3>
+              <p>Max 30 GB • Max 60 minutes</p>
+            </div>
+          </div>
+
+          <div className="upload-info__divider" />
+
+          <div className="upload-info__item">
+            <div className="upload-info__icon">
+              <Ratio size={20} />
+            </div>
+
+            <div>
+              <h3>Aspect ratios</h3>
+              <p>16:9 landscape • 9:16 vertical</p>
+            </div>
+          </div>
+
+        </section>
+
+        {/* ================= UPLOADS HEADER ================= */}
+        <div className="upload-list-header">
+
+          <h2>Your uploads</h2>
+
+          <button className="upload-sort">
+            <SlidersHorizontal size={15} />
+            <span>Newest first</span>
+            <span className="upload-sort__arrow">⌄</span>
           </button>
+
         </div>
 
-        {/* Queue */}
-        <div className="video-list">
-          {videos.map((video) => (
-            <div className="video-item" key={video.id}>
+        {/* ================= VIDEO LIST ================= */}
+        <section className="upload-list">
 
-              <div className="video-thumbnail">
-                <img src={video.image} alt={video.title} />
+          {videos.map((video) => (
+            <div className="upload-video" key={video.id}>
+
+              <div className="upload-video__thumbnail">
+
+                <img
+                  src={video.image}
+                  alt={video.title}
+                />
+
                 <span>{video.duration}</span>
+
               </div>
 
-              <div className="video-info">
+              <div className="upload-video__details">
+
                 <h3>{video.title}</h3>
 
-                <p>
-                  {video.size}
-                  <span>•</span>
-                  {video.time}
-                </p>
+                <div className="upload-video__meta">
+                  <span>{video.size}</span>
+                  <b>•</b>
+                  <span>{video.time}</span>
+                </div>
+
               </div>
 
-              <div className="video-status">
-                <Status video={video} />
+              <div className="upload-video__status">
+                <Status
+                  type={video.status}
+                  progress={video.progress}
+                />
               </div>
 
-              <button className="video-menu">
-                <span />
-                <span />
-                <span />
+              <button className="upload-video__menu">
+                <MoreVertical size={19} />
               </button>
 
             </div>
           ))}
-        </div>
 
-      </div>
+        </section>
+
+      </main>
     </div>
   );
 }
-
-
-
- 
-
-export default Upload
+export default  Upload
