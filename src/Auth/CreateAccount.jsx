@@ -4,8 +4,6 @@ import {
   Lock,
   Camera,
   ArrowLeft,
-  Cone,
-  Percent,
   RefreshCw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
