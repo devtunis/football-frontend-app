@@ -72,7 +72,7 @@ const SocketProvider = ({ children }) => {
      }
 
 
-   },[document.visibilityStat])
+   },[document.visibilityState])
 
   return <>
     {

@@ -15,54 +15,16 @@ import {
   MoreVertical,
   SlidersHorizontal,
   Plus,
+  EyeClosed,
 } from "lucide-react";
 
 import "./upload.css";
-
-const videos = [
-  {
-    id: 1,
-    title: "Amazing Goal vs City",
-    size: "142.6 MB",
-    time: "2 minutes ago",
-    duration: "02:42",
-    image:
-      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    status: "completed",
-  },
-  {
-    id: 2,
-    title: "City Walk",
-    size: "368.4 MB",
-    time: "12 minutes ago",
-    duration: "05:18",
-    image:
-      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    status: "uploading",
-    progress: 68,
-  },
-  {
-    id: 3,
-    title: "Underwater Training",
-    size: "98.7 MB",
-    time: "28 minutes ago",
-    duration: "01:24",
-    image:
-      "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
-    status: "processing",
-  },
-  {
-    id: 4,
-    title: "Forest Path",
-    size: "215.3 MB",
-    time: "46 minutes ago",
-    duration: "03:56",
-    image:
-      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    status: "failed",
-  },
-];
-
+import socket  from "../../socketClient/socket"
+import { useEffect } from "react";
+import axios from "axios";
+import { generateId } from "../../utils/generateId";
+const APICloudinary = import.meta.env.VITE_API_KEY;
+ 
 function Status({ type, progress }) {
   if (type === "completed") {
     return (
@@ -78,11 +40,11 @@ function Status({ type, progress }) {
       <div className="upload-progress">
         <div className="upload-progress__top">
           <span>Uploading...</span>
-          <span>{progress}%</span>
+          <span>{progress}</span>
         </div>
 
         <div className="upload-progress__bar">
-          <div style={{ width: `${progress}%` }} />
+          <div style={{ width: `${progress}` }} />
         </div>
       </div>
     );
@@ -92,7 +54,7 @@ function Status({ type, progress }) {
     return (
       <div className="upload-status upload-status--processing">
         <LoaderCircle size={14} />
-        <span>Processing</span>
+        <span>Analyze</span>
       </div>
     );
   }
@@ -106,15 +68,124 @@ function Status({ type, progress }) {
 }
 
  function Upload() {
+
+
+
+
   const fileInputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  const [_,setx] = useState(0)
+  const videos = useRef([
+    {
+      id: 1,
+      title: "Amazing Goal vs City",
+      size: "142.6 MB",
+      time: "2 minutes ago",
+      duration: "02:42",
+      image:
+        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+      status: "completed",
+    },
+    {
+      id: 2,
+      title: "City Walk",
+      size: "368.4 MB",
+      time: "12 minutes ago",
+      duration: "05:18",
+      image:
+        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+      status: "uploading",
+      progress: "68%",
+    },
+    {
+      id: 3,
+      title: "Underwater Training",
+      size: "98.7 MB",
+      time: "28 minutes ago",
+      duration: "01:24",
+      image:
+        "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
+      status: "processing",
+    },
+    {
+      id: 4,
+      title: "Forest Path",
+      size: "215.3 MB",
+      time: "46 minutes ago",
+      duration: "03:56",
+      image:
+        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+      status: "failed",
+    },
+    
+  ])
 
-  const handleFiles = (files) => {
+ 
+
+
+
+
+  const handleFiles = async (files) => {
     if (!files?.length) return;
 
     const file = files[0];
 
     console.log("Selected video:", file);
+
+
+      let createAssetVideo =   {
+        id: generateId(),
+        title: file.name,
+        size: `${((file.size/1024)/1024).toFixed(1)} MB`,
+        time: "2 minutes ago",
+        duration: "02:42",
+        image:"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+        status: "uploading",
+        progress:"0%"
+      }
+
+    
+     
+     videos.current.push(createAssetVideo)
+     
+     setx(p=>p+1)
+
+
+
+       try {
+      
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "football-app");
+   
+      const uploadResponse = await axios.post(APICloudinary, formData 
+        ,
+          {
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+       
+        const Idvideo = createAssetVideo.id 
+        videos.current = videos.current.
+        map((item)=>Idvideo==item.id ?percentCompleted==100 ? {...item,status:"processing"}:  {...item , progress:`${percentCompleted}%`}: item)
+
+        setx(p=>p+1)
+         
+        console.log(`Upload Progress: ${percentCompleted}% for video ID ${createAssetVideo.id}`);
+        // Update your UI progress bar state here
+      },
+    }
+    
+      );
+
+      let CloudinaryImage = uploadResponse.data.secure_url;
+      console.log(CloudinaryImage)
+    
+    }catch(err){
+      console.log(err)
+    }
+
 
     // Your upload logic here
   };
@@ -129,6 +200,18 @@ function Status({ type, progress }) {
 
     handleFiles(e.dataTransfer.files);
   };
+
+
+
+
+
+  useEffect(()=>{
+    socket.on("test",message =>  console.log(message,"weyy"))
+  },[])
+
+
+
+
 
   return (
     <div className="upload-page">
@@ -310,7 +393,7 @@ function Status({ type, progress }) {
         {/* ================= VIDEO LIST ================= */}
         <section className="upload-list">
 
-          {videos.map((video) => (
+          {videos.current.map((video) => (
             <div className="upload-video" key={video.id}>
 
               <div className="upload-video__thumbnail">
