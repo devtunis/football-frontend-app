@@ -613,6 +613,10 @@
   border-radius: 13px;
 
   background: rgba(255, 255, 255, 0.012);
+  height: 340px;
+  overflow-y: auto;
+
+   
 }
 
 .upload-video {
@@ -643,7 +647,7 @@
 
 .upload-video__thumbnail {
   width: 120px;
-  height: 66px;
+  height: 80px;
 
   position: relative;
 
@@ -652,6 +656,8 @@
   border-radius: 7px;
 
   background: #111;
+  cursor: pointer;
+  
 }
 
 .upload-video__thumbnail img {
@@ -695,7 +701,7 @@
 
   color: #edf3ef;
 
-  font-size: 13px;
+  font-size:18px;
   font-weight: 700;
 }
 
@@ -706,7 +712,7 @@
 
   color: #687872;
 
-  font-size: 10px;
+  font-size: 17px;
 }
 
 .upload-video__meta b {
@@ -736,7 +742,7 @@
 
   border-radius: 20px;
 
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 650;
 }
 
@@ -774,7 +780,7 @@
 
   color: #74847e;
 
-  font-size: 9px;
+  font-size: 14px;
 }
 
 .upload-progress__bar {
@@ -867,6 +873,8 @@
 
 
 @media (max-width: 780px) {
+
+ 
   .upload-sidebar {
     width: 70px;
     min-width: 70px;
@@ -902,13 +910,10 @@
     padding: 25px 18px;
   }
 
-  .upload-info {
-    grid-template-columns: 1fr;
-
-    gap: 15px;
-
-    padding: 18px;
-  }
+ .upload-info {
+   
+  display: none;
+}
 
   .upload-info__divider {
     display: none;
@@ -936,6 +941,24 @@
   .upload-progress {
     width: 170px;
   }
+
+  .upload-list {
+  margin-top: 13px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.012);
+  height: 200px;
+  overflow-y: auto;
+   
+}
+.upload-video__thumbnail{
+  transform: translateY(15px);
+}
+
 }
 
 
@@ -969,14 +992,15 @@
   .upload-video__thumbnail {
     width: 80px;
     height: 53px;
+    
   }
 
   .upload-video__details h3 {
-    font-size: 11px;
+    font-size: 15px;
   }
 
   .upload-video__meta {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .upload-progress {

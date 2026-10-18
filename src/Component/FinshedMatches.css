@@ -5,7 +5,6 @@
 
 
  
- 
 
 
        .FinshedMatchesS{
@@ -227,6 +226,120 @@
 
 
 
+
+
+
+ @media (min-width: 801px) and (max-width: 1254px) {
+  
+
+       .FinshedMatchesS{
+            
+            width: 30%;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: rgba(8, 10, 11, 0.90); /* Semi-transparent */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* Safari/iOS */
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        
+        
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            color: white;
+            height: 90%;
+            user-select: none;
+             
+            
+            
+            
+        }
+  
+        .FinshedMatchesS .down h1{
+            font-size: 13px;
+            
+            color: var(--nest-text-color);
+            display: flex;
+            justify-content:  center;
+            align-items: center;
+            
+        }
+
+   .FinshedMatchesS .top{
+    width: 100%;
+    height:70%;
+    /* background-color: red; */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    
+    
+   }
+
+   .FinshedMatchesS .left{
+    width: 30%;
+    height: 100%;
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+   }
+      .FinshedMatchesS .middle-score{
+    width: 40%;
+    /* background-color: aqua; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+   }
+
+      .FinshedMatchesS .right{
+    width: 30%;
+    height: 100%;
+    /* background-color: blueviolet; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+   }
+
+
+
+   .avtarVlag{
+    width: 23px;
+    height: 23px;
+  
+    margin-top: 13px;
+    margin-bottom: 5px;
+    /* background-color: black; */
+    
+   }
+   .avtarVlag img{
+    width: 100%;
+    height: 100%;
+
+   }
+   .left h1{
+     font-size: 10px;
+   }
+ 
+
+
+     .right h1{
+     font-size: 10px;
+   }
+
+
+ 
+
+
+
+
+
+
+ }
 
 
 

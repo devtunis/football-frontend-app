@@ -80,7 +80,7 @@ const App = () => {
             <Path path="profile/:roomId" element={<Profile />} />
           </Path>
 
-          <Path path="/video/upload" element={<Upload />} />
+          <Path path="/video/upload/:roomId" element={<Upload />} />
 
           <Path
             path="/home/notifaction/:roomId"
