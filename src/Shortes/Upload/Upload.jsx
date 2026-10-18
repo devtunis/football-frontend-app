@@ -23,6 +23,9 @@ import socket  from "../../socketClient/socket"
 import { useEffect } from "react";
 import axios from "axios";
 import { generateId } from "../../utils/generateId";
+import { useParams } from "react-router-dom";
+import { use } from "../../axios/usehook";
+import { timeAgo } from "../../utils/timeAgo";
 const APICloudinary = import.meta.env.VITE_API_KEY;
  
 function Status({ type, progress }) {
@@ -75,48 +78,52 @@ function Status({ type, progress }) {
   const fileInputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [_,setx] = useState(0)
+
+  const {roomId} = useParams()
+
+
   const videos = useRef([
-    {
-      id: 1,
-      title: "Amazing Goal vs City",
-      size: "142.6 MB",
-      time: "2 minutes ago",
-      duration: "02:42",
-      image:
-        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-      status: "completed",
-    },
-    {
-      id: 2,
-      title: "City Walk",
-      size: "368.4 MB",
-      time: "12 minutes ago",
-      duration: "05:18",
-      image:
-        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-      status: "uploading",
-      progress: "68%",
-    },
-    {
-      id: 3,
-      title: "Underwater Training",
-      size: "98.7 MB",
-      time: "28 minutes ago",
-      duration: "01:24",
-      image:
-        "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
-      status: "processing",
-    },
-    {
-      id: 4,
-      title: "Forest Path",
-      size: "215.3 MB",
-      time: "46 minutes ago",
-      duration: "03:56",
-      image:
-        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-      status: "failed",
-    },
+    // {
+    //   id: 1,
+    //   caption: "Amazing Goal vs City",
+    //   size: "142.6 MB",
+    //   time: "2 minutes ago",
+    //   duration: "02:42",
+    //   image:
+    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+    //   status: "completed",
+    // },
+    // {
+    //   id: 2,
+    //   caption: "City Walk",
+    //   size: "368.4 MB",
+    //   time: "12 minutes ago",
+    //   duration: "05:18",
+    //   image:
+    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+    //   status: "uploading",
+    //   progress: "68%",
+    // },
+    // {
+    //   id: 3,
+    //   caption: "Underwater Training",
+    //   size: "98.7 MB",
+    //   time: "28 minutes ago",
+    //   duration: "01:24",
+    //   image:
+    //     "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
+    //   status: "processing",
+    // },
+    // {
+    //   id: 4,
+    //   caption: "Forest Path",
+    //   size: "215.3 MB",
+    //   time: "46 minutes ago",
+    //   duration: "03:56",
+    //   image:
+    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+    //   status: "failed",
+    // },
     
   ])
 
@@ -133,54 +140,96 @@ function Status({ type, progress }) {
     console.log("Selected video:", file);
 
 
+
       let createAssetVideo =   {
-        id: generateId(),
-        title: file.name,
+        videoId: generateId(),
+        filename: file.name,
+        caption:"test",
         size: `${((file.size/1024)/1024).toFixed(1)} MB`,
-        time: "2 minutes ago",
-        duration: "02:42",
-        image:"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+        duration:'00.00',
         status: "uploading",
-        progress:"0%"
+        progress:"0%",
+        videoLink:null,
+        image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
+
       }
 
+     
+
+      const video = document.createElement("video");
+
+      video.preload = "metadata";
+      video.src = URL.createObjectURL(file);
+
+      video.onloadedmetadata = () => {
+        const duration = video.duration;  
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        console.log(`${minutes} min ${seconds} sec`);
+        createAssetVideo.duration = `${minutes} min ${seconds} sec`
+
+
+         
+        
+      };
+
+
+      console.log(createAssetVideo)
+
+    
     
      
-     videos.current.push(createAssetVideo)
+        videos.current.unshift(createAssetVideo)
+        
      
-     setx(p=>p+1)
-
-
 
        try {
       
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "football-app");
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "football");
    
-      const uploadResponse = await axios.post(APICloudinary, formData 
-        ,
-          {
-      onUploadProgress: (progressEvent) => {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
-       
-        const Idvideo = createAssetVideo.id 
-        videos.current = videos.current.
-        map((item)=>Idvideo==item.id ?percentCompleted==100 ? {...item,status:"processing"}:  {...item , progress:`${percentCompleted}%`}: item)
+          const uploadResponse = await axios.post(APICloudinary, formData 
+              ,
+                {
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+            
+              const Idvideo = createAssetVideo.videoId 
+              videos.current = videos.current.
+              map((item)=>Idvideo==item.videoId ?  {...item , progress:`${percentCompleted}%`}: item)
 
-        setx(p=>p+1)
-         
-        console.log(`Upload Progress: ${percentCompleted}% for video ID ${createAssetVideo.id}`);
-        // Update your UI progress bar state here
-      },
-    }
-    
-      );
+              setx(p=>p+1)
+              
+              console.log(`Upload Progress: ${percentCompleted}% for video ID ${createAssetVideo.videoId}`);
+              
+            },
+          }
+          
+            );
 
-      let CloudinaryImage = uploadResponse.data.secure_url;
-      console.log(CloudinaryImage)
+          let Cloudinarysecure_url = uploadResponse.data.secure_url;
+        
+          console.log("Sending To Database ...")
+
+          const UploadVideo  = await use("/upload/video","post",{
+            roomId,
+            videoId:createAssetVideo.videoId,
+            caption:"test!!",
+            duration:createAssetVideo.duration,
+            videoLink:Cloudinarysecure_url,
+            fileName:createAssetVideo.filename,
+            size:createAssetVideo.size
+
+          })
+
+          videos.current = videos.current.map((item)=>createAssetVideo.videoId==item.videoId ?  {...item,videoLink:Cloudinarysecure_url,status:"processing"}:   item)
+          setx(p=>p+1)
+
+          console.log(UploadVideo)
+        
     
     }catch(err){
       console.log(err)
@@ -210,6 +259,22 @@ function Status({ type, progress }) {
   },[])
 
 
+
+  useEffect(()=>{
+    const HandelFetchMyUploadVideos = async ()=>{
+      try{
+
+        const {data} = await use("/upload/myvideos","post",{"roomId":"dY94aGuC"})
+        console.log(data)
+        videos.current = data.myvideo
+        setx(p=>p+1)
+
+      }catch(err){
+        console.log(err)
+      }
+    }
+    HandelFetchMyUploadVideos()
+  },[])
 
 
 
@@ -394,14 +459,18 @@ function Status({ type, progress }) {
         <section className="upload-list">
 
           {videos.current.map((video) => (
-            <div className="upload-video" key={video.id}>
+            <div className="upload-video" key={video.videoId}>
 
               <div className="upload-video__thumbnail">
-
-                <img
-                  src={video.image}
-                  alt={video.title}
-                />
+                {
+                  video.videoLink? <video
+                  controls
+                  src={video.videoLink}
+                
+                /> : 
+                <img src={video.image} alt={video.caption}/>
+                }
+               
 
                 <span>{video.duration}</span>
 
@@ -409,12 +478,12 @@ function Status({ type, progress }) {
 
               <div className="upload-video__details">
 
-                <h3>{video.title}</h3>
+                <h3>{video.caption}</h3>
 
                 <div className="upload-video__meta">
                   <span>{video.size}</span>
                   <b>•</b>
-                  <span>{video.time}</span>
+                  <span>{timeAgo(video.createdAt)}</span>
                 </div>
 
               </div>
