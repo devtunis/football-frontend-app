@@ -23,13 +23,14 @@ import socket  from "../../socketClient/socket"
 import { useEffect } from "react";
 import axios from "axios";
 import { generateId } from "../../utils/generateId";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { use } from "../../axios/usehook";
 import { timeAgo } from "../../utils/timeAgo";
+import { formatVideo } from "../utils/formatVideo";
 const APICloudinary = import.meta.env.VITE_API_KEY;
  
 function Status({ type, progress }) {
-  if (type === "completed") {
+  if (type === "Completed") {
     return (
       <div className="upload-status upload-status--completed">
         <CheckCircle2 size={15} />
@@ -79,6 +80,7 @@ function Status({ type, progress }) {
   const [dragging, setDragging] = useState(false);
   const [_,setx] = useState(0)
 
+  const Nav = useNavigate()
   const {roomId} = useParams()
 
 
@@ -131,15 +133,7 @@ function Status({ type, progress }) {
 
 
 
-
-  const handleFiles = async (files) => {
-    if (!files?.length) return;
-
-    const file = files[0];
-
-    console.log("Selected video:", file);
-
-
+  const HostByCloudinary = async(file)=>{
 
       let createAssetVideo =   {
         videoId: generateId(),
@@ -165,7 +159,6 @@ function Status({ type, progress }) {
         const duration = video.duration;  
         const minutes = Math.floor(duration / 60);
         const seconds = Math.floor(duration % 60);
-        console.log(`${minutes} min ${seconds} sec`);
         createAssetVideo.duration = `${minutes} min ${seconds} sec`
 
 
@@ -174,7 +167,7 @@ function Status({ type, progress }) {
       };
 
 
-      console.log(createAssetVideo)
+ 
 
     
     
@@ -203,7 +196,7 @@ function Status({ type, progress }) {
 
               setx(p=>p+1)
               
-              console.log(`Upload Progress: ${percentCompleted}% for video ID ${createAssetVideo.videoId}`);
+              console.log(`Upload Progress: ${percentCompleted}%`);
               
             },
           }
@@ -211,8 +204,9 @@ function Status({ type, progress }) {
             );
 
           let Cloudinarysecure_url = uploadResponse.data.secure_url;
+          console.log(Cloudinarysecure_url)
         
-          console.log("Sending To Database ...")
+       
 
           const UploadVideo  = await use("/upload/video","post",{
             roomId,
@@ -228,12 +222,56 @@ function Status({ type, progress }) {
           videos.current = videos.current.map((item)=>createAssetVideo.videoId==item.videoId ?  {...item,videoLink:Cloudinarysecure_url,status:"processing"}:   item)
           setx(p=>p+1)
 
-          console.log(UploadVideo)
+          
+
+          if(UploadVideo.data.message=="good"){
+
+              await use(
+                  "/upload/video/analyze",
+                  "post",
+                    {
+                  "videoId":createAssetVideo.videoId,
+                  "roomId":roomId,
+                  "img":Cloudinarysecure_url
+            }
+            
+            )
+              
+          
+            
+
+          }
         
     
     }catch(err){
       console.log(err)
     }
+
+  }
+
+
+ 
+
+
+
+  const handleFiles = async (files) => {
+    if (!files?.length) return;
+
+    const file = files[0];
+
+    
+    if((file.size/1024)/1024>100){
+    console.log("should be use in s3 bucket")
+  
+    }
+    else{
+      await HostByCloudinary(file)
+    }
+
+    
+
+    
+
 
 
     // Your upload logic here
@@ -255,7 +293,15 @@ function Status({ type, progress }) {
 
 
   useEffect(()=>{
-    socket.on("test",message =>  console.log(message,"weyy"))
+    const  HandelUpdateVideos = async (message)=>{
+      console.log(message,"<== result")
+        videos.current =  videos.current.map((v)=>v.videoId==message.stream.videoId ? {...v,categorie:message.result,status:message.status} : v)
+        setx((p)=>p+1)
+    }
+    socket.on("updateProgress",HandelUpdateVideos)
+    return ()=>{
+      socket.off("updateProgress",HandelUpdateVideos)
+    }
   },[])
 
 
@@ -264,10 +310,11 @@ function Status({ type, progress }) {
     const HandelFetchMyUploadVideos = async ()=>{
       try{
 
-        const {data} = await use("/upload/myvideos","post",{"roomId":"dY94aGuC"})
-        console.log(data)
+        const {data} = await use("/upload/myvideos","post",{"roomId":roomId})
+  
         videos.current = data.myvideo
         setx(p=>p+1)
+        console.log(data)
 
       }catch(err){
         console.log(err)
@@ -276,6 +323,9 @@ function Status({ type, progress }) {
     HandelFetchMyUploadVideos()
   },[])
 
+  const HandelNavigateReelsSection = ()=>{
+        Nav(`/home/shorts/${roomId}`)
+  }
 
 
   return (
@@ -284,7 +334,7 @@ function Status({ type, progress }) {
       {/* ================= SIDEBAR ================= */}
       <aside className="upload-sidebar">
 
-        <div className="upload-brand">
+        <div className="upload-brand" style={{cursor:"pointer"}} onClick={()=>HandelNavigateReelsSection()}>
           <div className="upload-brand__logo">
             ⚽
           </div>
@@ -462,15 +512,28 @@ function Status({ type, progress }) {
             <div className="upload-video" key={video.videoId}>
 
               <div className="upload-video__thumbnail">
-                {
-                  video.videoLink? <video
-                  controls
-                  src={video.videoLink}
-                
-                /> : 
-                <img src={video.image} alt={video.caption}/>
-                }
-               
+                  {
+                video.videoLink ? (
+                  <video
+                  muted
+                    controls
+                    playsInline
+                    preload="metadata"
+                    onClick={(e) => {
+                      if (e.currentTarget.requestFullscreen) {
+                        e.currentTarget.requestFullscreen();
+                      }
+                    }}
+                    style={{ width: "100%", height: "auto" }}
+                  >
+                    <source src={formatVideo(video.videoLink)} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img src={video.image} alt={video.caption} />
+                )
+              }
+                    
 
                 <span>{video.duration}</span>
 
@@ -484,8 +547,14 @@ function Status({ type, progress }) {
                   <span>{video.size}</span>
                   <b>•</b>
                   <span>{timeAgo(video.createdAt)}</span>
+                  
                 </div>
-
+               <div className="upload-video__meta">
+                
+                  <div className="hastag">#{video?.categorie?.split("=>")[1]}</div>
+                   
+                  
+                </div>
               </div>
 
               <div className="upload-video__status">
