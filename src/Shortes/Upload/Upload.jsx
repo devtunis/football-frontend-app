@@ -3,19 +3,15 @@ import {
   UploadCloud,
   Video,
   FileVideo,
-  Clock3,
+
   Ratio,
-  Home,
-  MessageSquare,
-  BarChart3,
-  Trophy,
   CheckCircle2,
   LoaderCircle,
   CircleAlert,
   MoreVertical,
   SlidersHorizontal,
   Plus,
-  EyeClosed,
+  
 } from "lucide-react";
 
 import "./upload.css";
@@ -27,6 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { use } from "../../axios/usehook";
 import { timeAgo } from "../../utils/timeAgo";
 import { formatVideo } from "../utils/formatVideo";
+import axiosClient from "../../axios/endPoint";
 const APICloudinary = import.meta.env.VITE_API_KEY;
  
 function Status({ type, progress }) {
@@ -84,56 +81,13 @@ function Status({ type, progress }) {
   const {roomId} = useParams()
 
 
-  const videos = useRef([
-    // {
-    //   id: 1,
-    //   caption: "Amazing Goal vs City",
-    //   size: "142.6 MB",
-    //   time: "2 minutes ago",
-    //   duration: "02:42",
-    //   image:
-    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    //   status: "completed",
-    // },
-    // {
-    //   id: 2,
-    //   caption: "City Walk",
-    //   size: "368.4 MB",
-    //   time: "12 minutes ago",
-    //   duration: "05:18",
-    //   image:
-    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    //   status: "uploading",
-    //   progress: "68%",
-    // },
-    // {
-    //   id: 3,
-    //   caption: "Underwater Training",
-    //   size: "98.7 MB",
-    //   time: "28 minutes ago",
-    //   duration: "01:24",
-    //   image:
-    //     "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500",
-    //   status: "processing",
-    // },
-    // {
-    //   id: 4,
-    //   caption: "Forest Path",
-    //   size: "215.3 MB",
-    //   time: "46 minutes ago",
-    //   duration: "03:56",
-    //   image:
-    //     "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500",
-    //   status: "failed",
-    // },
-    
-  ])
+  const videos = useRef([])
 
  
 
 
 
-  const HostByCloudinary = async(file)=>{
+   const HostByCloudinary = async(file)=>{
 
       let createAssetVideo =   {
         videoId: generateId(),
@@ -252,7 +206,103 @@ function Status({ type, progress }) {
 
  
 
+const uploadToB2 = (presignedUrl, file, onProgress) => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
 
+    xhr.open("PUT", presignedUrl);
+
+    xhr.setRequestHeader("Content-Type", "video/mp4");
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round(
+          (event.loaded / event.total) * 100
+        );
+
+        onProgress(percent);
+        console.log(`Uploading: ${percent}%`);
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(100);
+        resolve();
+      } else {
+        reject(
+          new Error(`B2 upload failed: ${xhr.status} ${xhr.responseText}`)
+        );
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(new Error("Network or CORS error during upload"));
+    };
+
+    xhr.onabort = () => {
+      reject(new Error("Upload cancelled"));
+    };
+
+    xhr.send(file);
+  });
+};
+
+
+ 
+ 
+const uploadVideo = async (file) => {
+  try {
+    // 1. Request the presigned upload URL
+    const { data } = await axiosClient.post("s3/get-presigned-url",);
+
+    console.log("Presigned URL received", data);
+
+    // 2. Upload the video directly to Backblaze
+    await uploadToB2(data.presigned, file, (percent) => {
+      console.log(`Video upload progress: ${percent}%`);
+    });
+
+    console.log("Video uploaded successfully!");
+    console.log("Video key:", data.key);
+
+    // 3. Request the playable video URL
+    const response2 = await axiosClient.post( "s3/get-video-url", { key: data.key} );
+
+    const data2 = response2.data;
+
+    console.log("Working video URL:", data2.url);
+
+    // Return the video URL for use in React
+    return data2.url;
+
+  } catch (error) {
+    console.error(
+      "Upload error:",
+      error.response?.data || error.message
+    );
+
+    return null;
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
 
   const handleFiles = async (files) => {
     if (!files?.length) return;
@@ -261,11 +311,11 @@ function Status({ type, progress }) {
 
     
     if((file.size/1024)/1024>100){
-    console.log("should be use in s3 bucket")
-  
+      console.log("should be use in s3 bucket")
+       await uploadVideo(file)
     }
     else{
-      await HostByCloudinary(file)
+      await uploadVideo(file)
     }
 
     
@@ -294,7 +344,7 @@ function Status({ type, progress }) {
 
   useEffect(()=>{
     const  HandelUpdateVideos = async (message)=>{
-      console.log(message,"<== result")
+        console.log(message,"<== result")
         videos.current =  videos.current.map((v)=>v.videoId==message.stream.videoId ? {...v,categorie:message.result,status:message.status} : v)
         setx((p)=>p+1)
     }

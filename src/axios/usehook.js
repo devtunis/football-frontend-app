@@ -27,6 +27,9 @@ export const use  = async(url,methode,body,onLoad=null)=>{
          case "delete":{
            data = await axios.delete(url,body)
            break
+        }case "put":{
+          data = await axios.put(url,body)
+          break
         }
 
       }
